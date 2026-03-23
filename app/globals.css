@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #060606;
+  color: #f3f3f3;
+}
+
+::selection {
+  background: rgba(255,255,255,.16);
+  color: white;
+}
+
+@layer utilities {
+  .container-shell {
+    @apply mx-auto w-full max-w-7xl px-6 md:px-8 lg:px-10;
+  }
+
+  .section-space {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+
+  .eyebrow {
+    @apply mb-4 inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.22em] text-white/70;
+  }
+
+  .section-title {
+    @apply max-w-4xl text-4xl font-semibold tracking-[-0.04em] text-white md:text-5xl lg:text-6xl;
+  }
+
+  .section-copy {
+    @apply max-w-2xl text-base leading-7 text-zinc-400 md:text-lg;
+  }
+
+  .surface {
+    @apply rounded-[28px] border border-white/10 bg-white/[0.03] shadow-glow backdrop-blur;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:opacity-90;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.02] px-5 py-3 text-sm font-medium text-white transition hover:bg-white/[0.05];
+  }
+
+  .grid-fade {
+    background-size: 24px 24px;
+    background-image: radial-gradient(circle at center, rgba(255,255,255,.07) 1px, transparent 1px);
+  }
+
+  .mask-bottom {
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  }
+}
+
+/* ── Demo page themes ──────────────────────────────────── */
+
+/* SaaS: cyan/blue product feel */
+.theme-saas {
+  background:
+    radial-gradient(ellipse 60% 40% at 30% 0%, rgba(56,189,248,.08), transparent),
+    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(99,102,241,.06), transparent),
+    #060606;
+}
+.theme-saas .eyebrow {
+  border-color: rgba(56,189,248,.2);
+  color: rgba(56,189,248,.8);
+}
+.theme-saas .button-primary {
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: white;
+}
+
+/* Agency: purple/violet premium feel */
+.theme-agency {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(139,92,246,.1), transparent),
+    radial-gradient(ellipse 40% 40% at 10% 60%, rgba(236,72,153,.05), transparent),
+    #08060e;
+}
+.theme-agency .eyebrow {
+  border-color: rgba(139,92,246,.25);
+  color: rgba(196,167,255,.8);
+}
+.theme-agency .button-primary {
+  background: linear-gradient(135deg, #a78bfa, #ec4899);
+  color: white;
+}
+.theme-agency .surface {
+  border-color: rgba(139,92,246,.12);
+  background: rgba(139,92,246,.03);
+}
+
+/* Portfolio: warm neutral / monochrome minimal */
+.theme-portfolio {
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 0%, rgba(255,255,255,.04), transparent),
+    #060606;
+}
+.theme-portfolio .eyebrow {
+  border-color: rgba(255,255,255,.15);
+  color: rgba(255,255,255,.6);
+}
+.theme-portfolio .button-primary {
+  background: white;
+  color: black;
+}
+.theme-portfolio .surface {
+  border-color: rgba(255,255,255,.08);
+}
