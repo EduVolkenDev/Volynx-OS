@@ -10,7 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@opennextjs/cloudflare": "^1.17.3",
     "@supabase/supabase-js": "^2.100.0",
     "clsx": "2.1.1",
     "lucide-react": "0.469.0",
