@@ -1,0 +1,5 @@
+{
+  "name": "volynx-os",
+  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "2026-03-23"
+}
