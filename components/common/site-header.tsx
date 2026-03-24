@@ -2,10 +2,10 @@ import Link from "next/link"
 import { Button } from "@/components/common/button"
 
 const nav = [
-  { href: "#system", label: "System" },
-  { href: "#sections", label: "Sections" },
+  { href: "/demo/saas", label: "SaaS" },
+  { href: "/demo/agency", label: "Agency" },
+  { href: "/demo/portfolio", label: "Portfolio" },
   { href: "#pricing", label: "Pricing" },
-  { href: "/demo/saas", label: "Demo" }
 ]
 
 export function SiteHeader() {

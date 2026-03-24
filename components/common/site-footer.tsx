@@ -1,9 +1,10 @@
 import Link from "next/link"
 
 const footerLinks = [
-  { href: "/docs", label: "Docs" },
+  { href: "/demo/saas", label: "SaaS demo" },
   { href: "/demo/agency", label: "Agency demo" },
-  { href: "/demo/portfolio", label: "Portfolio demo" }
+  { href: "/demo/portfolio", label: "Portfolio demo" },
+  { href: "https://volynx.world/products/", label: "All products", external: true },
 ]
 
 export function SiteFooter() {
