@@ -1,4 +1,6 @@
+import Image from "next/image"
 import { workflow } from "@/content/site"
+import { volynxCardIcons } from "@/content/volynx-card-icons"
 import { SectionHeading } from "@/components/common/section-heading"
 
 export function WorkflowSteps() {
@@ -8,17 +10,24 @@ export function WorkflowSteps() {
         <SectionHeading
           badge="Workflow"
           title="A repeatable launch process, not a gallery of disconnected pages."
-          copy="Use the system the same way serious studios operate: pick an archetype, swap the right blocks, then ship with documentation and speed."
+          copy="Use VolynxOS the same way serious studios operate: pick the product line, attach the right blocks, then ship with documentation and speed."
           align="center"
         />
         <div className="grid gap-5 md:grid-cols-3">
-          {workflow.map((item) => (
-            <article key={item.step} className="surface p-6 text-center">
-              <p className="text-xs uppercase tracking-[0.25em] text-zinc-500">{item.step}</p>
-              <h3 className="mt-6 text-2xl font-semibold tracking-[-0.04em]">{item.title}</h3>
-              <p className="mt-4 text-sm leading-7 text-zinc-400">{item.copy}</p>
-            </article>
-          ))}
+          {workflow.map((item, index) => {
+            const icon = volynxCardIcons.workflow[index % volynxCardIcons.workflow.length]
+
+            return (
+              <article key={item.step} className="surface p-6 text-center">
+                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-lg border border-white/10 bg-black/30">
+                  <Image src={icon} alt="" width={140} height={140} className="h-20 w-20 object-contain" />
+                </div>
+                <p className="mt-6 text-xs uppercase tracking-[0.25em] text-zinc-500">{item.step}</p>
+                <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">{item.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-zinc-400">{item.copy}</p>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>

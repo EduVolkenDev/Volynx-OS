@@ -1,11 +1,13 @@
 import Link from "next/link"
 import { Button } from "@/components/common/button"
+import { ThemeSwitcher } from "@/components/common/theme-switcher"
 
 const nav = [
+  { href: "/#kits", label: "Kits" },
+  { href: "/icons-store", label: "Icons" },
   { href: "/demo/saas", label: "SaaS" },
   { href: "/demo/agency", label: "Agency" },
-  { href: "/demo/portfolio", label: "Portfolio" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "/#pricing", label: "Pricing" },
 ]
 
 export function SiteHeader() {
@@ -13,7 +15,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur-xl">
       <div className="container-shell flex h-18 items-center justify-between py-4">
         <Link href="/" className="text-sm font-semibold tracking-[0.28em] text-white">
-          VOLYNX SYSTEM
+          VolynxOS
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
@@ -24,9 +26,12 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Button href="/docs" className="hidden md:inline-flex">
-          Documentation
-        </Button>
+        <div className="flex items-center gap-3">
+          <ThemeSwitcher />
+          <Button href="https://volynx.world/products/" className="hidden md:inline-flex">
+            Get VolynxOS
+          </Button>
+        </div>
       </div>
     </header>
   )

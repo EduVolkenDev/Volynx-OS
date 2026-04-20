@@ -6,35 +6,36 @@ import { LogoCloud } from "@/components/sections/logo-cloud"
 import { MetricsBand } from "@/components/sections/metrics-band"
 import { ValueGrid } from "@/components/sections/value-grid"
 import { FeatureSplit } from "@/components/sections/feature-split"
+import { KitPackageMap } from "@/components/sections/kit-package-map"
 import { Pricing } from "@/components/sections/pricing"
 import { FAQ } from "@/components/sections/faq"
 import { FinalCTA } from "@/components/sections/final-cta"
 
 const saasMetrics = [
-  { value: "99.9%", label: "Uptime" },
-  { value: "2.4k+", label: "Teams" },
-  { value: "< 200ms", label: "Response time" },
-  { value: "SOC 2", label: "Compliance" },
+  { value: "12", label: "Core sections" },
+  { value: "3", label: "Pricing blocks" },
+  { value: "< 1 day", label: "Launch window" },
+  { value: "SEO", label: "Ready structure" },
 ]
 
-const saasLogos = ["TECH CORP", "SCALE AI", "CLOUD OPS", "DATA FLOW", "INFRA LABS"]
+const saasLogos = ["PRODUCT LED", "AI TOOLS", "DEV SAAS", "B2B PLATFORM", "STARTUP LAB"]
 
 const saasCards = [
   {
-    title: "Unified workspace",
-    description: "Replace scattered tools with a single platform. Projects, communication and analytics in one place.",
+    title: "Section-first story",
+    description: "Move from problem, proof and product value into pricing without rebuilding the page logic.",
   },
   {
-    title: "Real-time collaboration",
-    description: "Work together without version conflicts. Live cursors, instant sync and smart conflict resolution.",
+    title: "Speed-aware layout",
+    description: "Lean blocks, controlled effects and clear hierarchy keep the product feeling expensive.",
   },
   {
-    title: "Enterprise-grade security",
-    description: "SOC 2 compliant, end-to-end encryption, role-based access and audit logs built in from day one.",
+    title: "Conversion-ready pricing",
+    description: "Launch, Growth and Scale tiers give the buyer a clean path from curiosity to commitment.",
   },
   {
-    title: "Developer-first API",
-    description: "REST and GraphQL APIs, webhooks, SDKs in 6 languages. Build on top of the platform, not around it.",
+    title: "Launch documentation",
+    description: "Copy prompts, section map and deployment notes help the kit become a repeatable workflow.",
   },
 ]
 
@@ -49,7 +50,7 @@ const saasFaqs = [
   },
   {
     question: "Is this a template or a system?",
-    answer: "A system. You get reusable sections, structured variants, design tokens and launch-ready pages — not a one-off layout you need to reverse-engineer.",
+    answer: "A system. You get reusable sections, structured variants, design tokens and launch-ready pages - not a one-off layout you need to reverse-engineer.",
   },
 ]
 
@@ -64,22 +65,25 @@ export default function SaaSDemoPage() {
       <SiteHeader />
       <main>
         <Hero
-          variant="split"
-          title="Stop duct-taping your stack. One platform for your entire workflow."
-          subtitle="Replace scattered tools and legacy software with a single system built for modern teams. Set up in minutes, not months."
-          primaryCta="Start free trial"
-          secondaryCta="Watch demo"
+          variant="product"
+          title="Turn product value into conviction with a SaaS page that moves fast."
+          subtitle="A section-first landing system for founders and teams that need premium positioning, clean proof and a page they can ship without rebuilding from zero."
+          primaryCta="View pricing"
+          primaryHref="#pricing"
+          secondaryCta="Open kit"
+          secondaryHref="https://volynx.world/products/saas-landing-system/"
         />
         <LogoCloud logos={saasLogos} />
         <MetricsBand items={saasMetrics} />
+        <KitPackageMap kit="saas" />
         <ValueGrid
           badge="Platform"
-          title="Everything your team needs, nothing it doesn't."
-          copy="Built for modern teams that want speed, clarity and control without tool sprawl."
+          title="The page structure follows the sales argument."
+          copy="Each block has a job: establish trust, make the product concrete and give the buyer a confident next step."
           cards={saasCards}
         />
         <FeatureSplit />
-        <Pricing variant="tiered" />
+        <Pricing kit="saas" variant="tiered" />
         <FAQ
           badge="About the kit"
           title="What you need to know about the SaaS Landing System."
@@ -88,9 +92,9 @@ export default function SaaSDemoPage() {
         />
         <FinalCTA
           eyebrow="Ready to ship?"
-          title="Join 2,400+ teams already on the platform."
-          subtitle="Start your free trial today. No credit card required."
-          primaryCta="Start free trial"
+          title="Launch the SaaS page before the momentum cools."
+          subtitle="Use the system as the foundation, swap the content layer and ship the page with enough structure to sell."
+          primaryCta="View pricing"
           primaryHref="#pricing"
           secondaryCta="Get the SaaS Kit"
           secondaryHref="https://volynx.world/products/saas-landing-system/"

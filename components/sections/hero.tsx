@@ -9,6 +9,8 @@ type HeroProps = {
   subtitle: string
   primaryCta?: string
   secondaryCta?: string
+  primaryHref?: string
+  secondaryHref?: string
 }
 
 function Metric({ value, label }: { value: string; label: string }) {
@@ -24,8 +26,10 @@ export function Hero({
   variant = "centered",
   title,
   subtitle,
-  primaryCta = "Get the system",
-  secondaryCta = "Live preview"
+  primaryCta = "Get VolynxOS",
+  secondaryCta = "Live preview",
+  primaryHref = "#pricing",
+  secondaryHref = "/demo/saas"
 }: HeroProps) {
   if (variant === "split") {
     return (
@@ -39,8 +43,8 @@ export function Hero({
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-400">{subtitle}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button href="#pricing">{primaryCta}</Button>
-              <Button href="/demo/saas" variant="secondary">{secondaryCta}</Button>
+              <Button href={primaryHref}>{primaryCta}</Button>
+              <Button href={secondaryHref} variant="secondary">{secondaryCta}</Button>
             </div>
           </div>
 
@@ -64,7 +68,7 @@ export function Hero({
               </div>
               <div className="mt-6 rounded-[20px] border border-white/10 bg-white/[0.03] p-4">
                 <p className="text-sm text-zinc-400">
-                  A page system engineered for clean conversion, coherent tokens and premium perception.
+                  VolynxOS is engineered for clean conversion, coherent tokens and premium perception.
                 </p>
               </div>
             </div>
@@ -84,8 +88,8 @@ export function Hero({
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-400">{subtitle}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button href="#sections">{primaryCta}</Button>
-            <Button href="/docs" variant="secondary">{secondaryCta}</Button>
+            <Button href={primaryHref}>{primaryCta}</Button>
+            <Button href={secondaryHref} variant="secondary">{secondaryCta}</Button>
           </div>
         </div>
       </section>
@@ -97,27 +101,27 @@ export function Hero({
       <section className="section-space relative overflow-hidden">
         <div className="absolute inset-x-0 top-0 -z-10 h-[520px] bg-hero-glow opacity-70" />
         <div className="container-shell text-center">
-          <span className="eyebrow">System, not one-offs</span>
+          <span className="eyebrow">VolynxOS, not one-offs</span>
           <h1 className="mx-auto max-w-5xl text-hero-sm font-semibold tracking-[-0.06em] text-white md:text-hero-md lg:text-hero-lg">
             {title}
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-zinc-400">{subtitle}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button href="#pricing">{primaryCta}</Button>
-            <Button href="/demo/agency" variant="secondary">{secondaryCta}</Button>
+            <Button href={primaryHref}>{primaryCta}</Button>
+            <Button href={secondaryHref} variant="secondary">{secondaryCta}</Button>
           </div>
 
           <div className="surface mask-bottom mt-14 grid gap-5 p-5 text-left md:grid-cols-[1.3fr_.7fr]">
             <div className="rounded-[24px] border border-white/10 bg-black/50 p-6">
               <div className="mb-6 flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-zinc-500">Demo stack</p>
-                  <p className="mt-2 text-2xl font-semibold tracking-[-0.05em]">SaaS landing layout</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-zinc-500">Launch stack</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-[-0.05em]">Three monetizable kit lines</p>
                 </div>
                 <div className="rounded-full border border-white/10 px-3 py-1 text-xs text-zinc-400">Next.js + Tailwind</div>
               </div>
               <div className="grid gap-4 md:grid-cols-3">
-                {["Hero / feature split", "Trust / metrics row", "Pricing / FAQ / final CTA"].map((item) => (
+                {["Portfolio Pro Kit", "Agency Launch Kit", "SaaS Landing System"].map((item) => (
                   <div key={item} className="rounded-[18px] border border-white/10 bg-white/[0.02] p-4 text-sm text-zinc-400">
                     {item}
                   </div>
@@ -125,9 +129,9 @@ export function Hero({
               </div>
             </div>
             <div className="grid gap-4">
-              <Metric value="v2" label="Current release" />
-              <Metric value="DX" label="Developer-first" />
-              <Metric value="A+" label="Visual restraint" />
+              <Metric value="v3" label="Launch-ready" />
+              <Metric value="3" label="Core kits" />
+              <Metric value="A+" label="Premium feel" />
             </div>
           </div>
         </div>
@@ -145,8 +149,8 @@ export function Hero({
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-zinc-400">{subtitle}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button href="#pricing">{primaryCta}</Button>
-          <Button href="/demo/portfolio" variant="secondary">{secondaryCta}</Button>
+          <Button href={primaryHref}>{primaryCta}</Button>
+          <Button href={secondaryHref} variant="secondary">{secondaryCta}</Button>
         </div>
       </div>
     </section>

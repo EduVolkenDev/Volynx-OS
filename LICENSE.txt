@@ -1,4 +1,4 @@
-VOLYNX System V2 License
+VolynxOS License
 
 You may use this project for personal websites, commercial websites and client delivery.
 You may modify the source code and adapt sections for unlimited end products.

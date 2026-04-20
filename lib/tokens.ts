@@ -1,7 +1,7 @@
 export const tokens = {
   brand: {
-    name: "VOLYNX System V2",
-    tagline: "Build premium positioning with system-level landing pages."
+    name: "VolynxOS",
+    tagline: "Premium launch operating system for commercial product kits."
   },
   spacing: {
     section: "section-space",

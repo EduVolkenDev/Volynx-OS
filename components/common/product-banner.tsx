@@ -9,9 +9,9 @@ type ProductBannerProps = {
 export function ProductBanner({ label, productName, href }: ProductBannerProps) {
   return (
     <div className="border-b border-white/5 bg-white/[0.02]">
-      <div className="container-shell flex items-center justify-between py-3">
+      <div className="container-shell flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-zinc-500">
-          <span className="text-zinc-400">{label}</span> — this demo showcases the <strong className="text-white">{productName}</strong> from Volynx
+          <span className="text-zinc-400">{label}</span> - this demo showcases the <strong className="text-white">{productName}</strong> from Volynx
         </p>
         <a
           href={href}

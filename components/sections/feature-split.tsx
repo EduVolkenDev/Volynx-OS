@@ -15,8 +15,8 @@ export function FeatureSplit() {
         <div>
           <SectionHeading
             badge="Feature split"
-            title="Built as a system library you can actually scale."
-            copy="The goal is not to impress with noise. The goal is to help your product, agency or portfolio look expensive and launch faster."
+            title="Built as launch infrastructure you can actually scale."
+            copy="The goal is not to impress with noise. The goal is to help each VolynxOS product line look expensive and launch faster."
           />
           <div className="grid gap-4">
             {points.map((item) => (

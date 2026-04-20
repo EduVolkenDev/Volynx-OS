@@ -1,4 +1,4 @@
-# Product roadmap
+# VolynxOS roadmap
 
 ## V2 delivered
 - Foundation architecture in Next.js
@@ -7,11 +7,14 @@
 - Pricing variants
 - Documentation shell
 
-## Recommended V3
+## V3 delivered
 - Theme switcher
-- CMS content layer
+- Centralized commercial content layer
 - motion primitives
 - testimonials / case studies / comparison sections
+- product kit map and monetization CTAs
+
+## Recommended V4
 - command line installer
 - MDX docs
 - screenshot generation workflow

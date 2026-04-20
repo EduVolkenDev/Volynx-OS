@@ -1,5 +1,7 @@
 import { Button } from "@/components/common/button"
 import { SectionHeading } from "@/components/common/section-heading"
+import { kitOffers, launchGuarantee, proUpsell, type KitSlug, type KitTier } from "@/content/kit-offers"
+import { pricingTiers } from "@/content/site"
 import { cn } from "@/lib/utils"
 
 type PricingVariant = "single" | "tiered" | "comparison"
@@ -10,32 +12,34 @@ type Tier = {
   description: string
   features: string[]
   highlight?: boolean
+  href?: string
 }
 
-const tiers: Tier[] = [
-  {
-    name: "Starter",
-    price: "$49",
-    description: "For solo builders who want a fast premium launch.",
-    features: ["Core sections", "3 hero variants", "1 demo page", "Commercial use"]
-  },
-  {
-    name: "Pro",
-    price: "$99",
-    description: "For agencies, products and serious client delivery.",
-    features: ["Full section library", "3 demo pages", "Tokens + docs", "Priority updates"],
-    highlight: true
-  },
-  {
-    name: "Lifetime",
-    price: "$149",
-    description: "For studios building multiple premium websites.",
-    features: ["Everything in Pro", "Future packs", "All demo variants", "Extended license"]
-  }
-]
+type PricingProps = {
+  variant?: PricingVariant
+  kit?: KitSlug
+}
 
-function SingleCard() {
-  const pro = tiers[1]
+const platformTiers: Tier[] = pricingTiers
+
+function toTier(tier: KitTier, href: string): Tier {
+  return {
+    name: tier.name,
+    price: tier.price,
+    description: tier.description,
+    features: [
+      `${tier.sectionCount} sections${tier.pageCount ? ` + ${tier.pageCount}` : ""}`,
+      tier.bestFor,
+      ...tier.sections,
+      ...(tier.additions ?? [])
+    ],
+    highlight: tier.highlight,
+    href
+  }
+}
+
+function SingleCard({ tiers }: { tiers: Tier[] }) {
+  const pro = tiers.find((tier) => tier.highlight) ?? tiers[1] ?? tiers[0]
   return (
     <div className="mx-auto max-w-xl surface p-8 text-center">
       <p className="text-sm uppercase tracking-[0.24em] text-zinc-500">{pro.name}</p>
@@ -43,15 +47,15 @@ function SingleCard() {
       <p className="mx-auto mt-4 max-w-md text-zinc-400">{pro.description}</p>
       <div className="mt-8 grid gap-3 text-left">
         {pro.features.map((feature) => (
-          <div key={feature} className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-zinc-300">{feature}</div>
+          <div key={feature} className="rounded-lg border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-zinc-300">{feature}</div>
         ))}
       </div>
-      <Button href="#" className="mt-8 w-full">Get Pro</Button>
+      <Button href={pro.href ?? "#pricing"} className="mt-8 w-full">Get Pro</Button>
     </div>
   )
 }
 
-function TieredCards() {
+function TieredCards({ tiers }: { tiers: Tier[] }) {
   return (
     <div className="grid gap-5 lg:grid-cols-3">
       {tiers.map((tier) => (
@@ -64,10 +68,10 @@ function TieredCards() {
           <p className="mt-4 text-sm leading-7 text-zinc-400">{tier.description}</p>
           <div className="mt-6 grid gap-3">
             {tier.features.map((feature) => (
-              <div key={feature} className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-zinc-300">{feature}</div>
+              <div key={feature} className="rounded-lg border border-white/10 bg-black/30 px-4 py-3 text-sm text-zinc-300">{feature}</div>
             ))}
           </div>
-          <Button href="#" variant={tier.highlight ? "primary" : "secondary"} className="mt-7 w-full">
+          <Button href={tier.href ?? "#pricing"} variant={tier.highlight ? "primary" : "secondary"} className="mt-7 w-full">
             Choose {tier.name}
           </Button>
         </article>
@@ -76,22 +80,33 @@ function TieredCards() {
   )
 }
 
-function ComparisonTable() {
-  return (
-    <div className="overflow-hidden rounded-[28px] border border-white/10">
-      <div className="grid grid-cols-4 border-b border-white/10 bg-white/[0.03] px-6 py-4 text-sm text-zinc-400">
-        <div>Feature</div>
-        <div>Starter</div>
-        <div>Pro</div>
-        <div>Lifetime</div>
-      </div>
-      {[
+function ComparisonTable({ kit, tiers }: { kit?: KitSlug; tiers: Tier[] }) {
+  const offer = kit ? kitOffers[kit] : null
+  const kitRows = offer
+    ? [
+        ["Price", ...offer.tiers.map((tier) => tier.price)],
+        ["Core count", ...offer.tiers.map((tier) => `${tier.sectionCount} sections${tier.pageCount ? " + pages" : ""}`)],
+        ["Hero depth", ...offer.tiers.map((tier) => tier.sections.filter((item) => item.toLowerCase().includes("hero")).join(", ") || "Included")],
+        ["Pricing depth", ...offer.tiers.map((tier) => tier.sections.filter((item) => item.toLowerCase().includes("pricing")).join(", ") || "Not included")],
+        ["Expansion", ...offer.tiers.map((tier) => (tier.additions ?? ["Core page"]).join(", "))]
+      ]
+    : [
         ["Demo pages", "1", "3", "3 + future"],
         ["Hero variants", "3", "4", "4"],
         ["Pricing variants", "1", "3", "3"],
         ["Commercial usage", "Yes", "Yes", "Extended"],
         ["Future updates", "No", "Yes", "Yes"]
-      ].map((row) => (
+      ]
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-white/10">
+      <div className="grid grid-cols-4 border-b border-white/10 bg-white/[0.03] px-6 py-4 text-sm text-zinc-400">
+        <div>Feature</div>
+        {tiers.slice(0, 3).map((tier) => (
+          <div key={tier.name}>{tier.name}</div>
+        ))}
+      </div>
+      {kitRows.map((row) => (
         <div key={row[0]} className="grid grid-cols-4 border-b border-white/5 px-6 py-4 text-sm">
           {row.map((cell, i) => (
             <div key={cell + i} className={i === 0 ? "text-zinc-500" : "text-zinc-300"}>{cell}</div>
@@ -102,19 +117,51 @@ function ComparisonTable() {
   )
 }
 
-export function Pricing({ variant = "tiered" }: { variant?: PricingVariant }) {
+function ProUpsell({ kit }: { kit?: KitSlug }) {
+  return (
+    <div className="mt-8 grid gap-4 rounded-lg border border-emerald-300/20 bg-emerald-300/10 p-5 md:grid-cols-[1fr_auto] md:items-center">
+      <div>
+        <p className="text-xs uppercase tracking-[0.22em] text-emerald-200">Upsell central</p>
+        <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-white">
+          {proUpsell.name} at {proUpsell.price}
+        </h3>
+        <p className="mt-2 text-sm leading-6 text-zinc-300">
+          {kit ? proUpsell.checkoutLine : proUpsell.promise} Annual option: {proUpsell.annual}.
+        </p>
+      </div>
+      <Button href="https://volynx.world/pricing/">Compare Pro</Button>
+    </div>
+  )
+}
+
+export function Pricing({ variant = "tiered", kit }: PricingProps) {
+  const offer = kit ? kitOffers[kit] : null
+  const tiers = offer ? offer.tiers.map((tier) => toTier(tier, offer.href)) : platformTiers
+  const title = offer
+    ? `${offer.productName} pricing is packaged for the buyer's real moment.`
+    : "Price VolynxOS like launch infrastructure, not disposable templates."
+  const copy = offer
+    ? `${offer.starterLabel} gets the first launch live, the middle tier becomes the obvious upgrade, and ${proUpsell.name} turns one-time intent into recurring value.`
+    : "Every tier points toward commercial use: premium perception, reusable architecture and product packaging that can start selling today."
+
   return (
     <section id="pricing" className="section-space">
       <div className="container-shell">
         <SectionHeading
           badge="Pricing"
-          title="Price the product like infrastructure, not disposable templates."
-          copy="This V2 kit is structured to support global positioning: premium perception, usable architecture and commercial packaging."
+          title={title}
+          copy={copy}
           align="center"
         />
-        {variant === "single" ? <SingleCard /> : null}
-        {variant === "tiered" ? <TieredCards /> : null}
-        {variant === "comparison" ? <ComparisonTable /> : null}
+        {variant === "single" ? <SingleCard tiers={tiers} /> : null}
+        {variant === "tiered" ? <TieredCards tiers={tiers} /> : null}
+        {variant === "comparison" ? <ComparisonTable kit={kit} tiers={tiers} /> : null}
+        <ProUpsell kit={kit} />
+        {kit ? (
+          <p className="mx-auto mt-5 max-w-2xl text-center text-xs leading-6 text-zinc-500">
+            {launchGuarantee.title}: {launchGuarantee.copy}
+          </p>
+        ) : null}
       </div>
     </section>
   )

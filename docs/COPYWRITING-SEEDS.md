@@ -6,7 +6,7 @@
 - Stop shipping [pain]. Start shipping [system].
 
 ## CTA formulas
-- Get the system
+- Get VolynxOS
 - Launch with clarity
 - Build the premium version
 - Start with Pro

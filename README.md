@@ -1,6 +1,6 @@
-# VOLYNX System V2
+# VolynxOS
 
-A premium landing system built for developers, agencies and digital products.
+A premium launch operating system for portfolio, agency, SaaS and property product kits.
 
 ## Stack
 - Next.js 14
@@ -11,8 +11,11 @@ A premium landing system built for developers, agencies and digital products.
 ## Included
 - Modular section library
 - Hero variants
+- Launch offer strip
 - Pricing variants
 - Demo pages for SaaS, agency and portfolio
+- Theme switcher with three visual presets
+- Testimonials and comparison sections
 - Documentation page
 - Tokens and utility layer
 - Commercial packaging files
@@ -31,8 +34,10 @@ Open:
 - `/demo/portfolio`
 
 ## Product direction
-This kit is intentionally positioned as a system rather than a disposable template pack:
+VolynxOS is intentionally positioned as a commercial platform rather than a disposable template pack:
 - restrained premium visuals
 - section-first architecture
+- centralized commercial content
+- themeable presentation layer
 - faster launch workflows
-- better perceived value for client and product work
+- direct product links for monetization

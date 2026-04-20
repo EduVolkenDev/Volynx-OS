@@ -6,34 +6,37 @@ import { LogoCloud } from "@/components/sections/logo-cloud"
 import { MetricsBand } from "@/components/sections/metrics-band"
 import { ValueGrid } from "@/components/sections/value-grid"
 import { FeatureSplit } from "@/components/sections/feature-split"
+import { WorkflowSteps } from "@/components/sections/workflow-steps"
+import { KitPackageMap } from "@/components/sections/kit-package-map"
+import { Pricing } from "@/components/sections/pricing"
 import { FAQ } from "@/components/sections/faq"
 import { FinalCTA } from "@/components/sections/final-cta"
 
 const portfolioMetrics = [
-  { value: "8+", label: "Years building" },
-  { value: "40+", label: "Projects shipped" },
-  { value: "12", label: "Technologies" },
-  { value: "3", label: "Countries" },
+  { value: "Personal", label: "Brand system" },
+  { value: "Case", label: "Study blocks" },
+  { value: "CV", label: "Career bridge" },
+  { value: "Global", label: "Client-ready" },
 ]
 
 const portfolioLogos = ["VOLYNX", "STUDIOS VALCARCE", "STUDIO PRO", "DEV JOURNEY", "VOLYNX LAB"]
 
 const portfolioCards = [
   {
-    title: "Full-stack development",
-    description: "React, Vue, Node, Python, Java — end-to-end delivery from architecture to deployment.",
+    title: "Personal brand structure",
+    description: "Introduce what you do, why it matters and how people should evaluate your work.",
   },
   {
-    title: "Product & design thinking",
-    description: "Not just code. I think about conversion, UX, brand perception and commercial clarity.",
+    title: "Case study rhythm",
+    description: "Frame projects around context, contribution and outcome instead of a loose gallery.",
   },
   {
-    title: "Performance-first builds",
-    description: "Every project ships fast by default. Lighthouse scores, Core Web Vitals, real-world speed.",
+    title: "Career operating system",
+    description: "Connect portfolio, CV, services and contact into one coherent professional surface.",
   },
   {
-    title: "Clean, maintainable code",
-    description: "Production-grade architecture that teams can inherit, extend and scale without rewrites.",
+    title: "Premium first impression",
+    description: "Large type, controlled contrast and lean sections help the work feel more expensive.",
   },
 ]
 
@@ -64,20 +67,25 @@ export default function PortfolioDemoPage() {
       <main>
         <Hero
           variant="minimal"
-          title="I design and build digital products that people actually want to use."
-          subtitle="Full-stack developer with a design eye. I ship fast, write clean code and obsess over details. Based in Brazil, working globally."
-          primaryCta="See my work"
-          secondaryCta="Get in touch"
+          title="Launch fast, look expensive and give your personal brand an operating system."
+          subtitle="A portfolio kit for builders who need more than a gallery: positioning, proof, career context and a premium first impression."
+          primaryCta="Explore sections"
+          primaryHref="#sections"
+          secondaryCta="Open kit"
+          secondaryHref="https://volynx.world/products/portfolio-pro-kit/"
         />
         <LogoCloud logos={portfolioLogos} />
         <MetricsBand items={portfolioMetrics} />
+        <KitPackageMap kit="portfolio" />
         <ValueGrid
           badge="Skills"
-          title="What I bring to the table."
-          copy="Engineering depth, design sensibility and commercial awareness — not just technical execution."
+          title="Present the professional story, not only the project list."
+          copy="The kit turns experience, outcomes and availability into a clear path for clients, recruiters and collaborators."
           cards={portfolioCards}
         />
         <FeatureSplit />
+        <WorkflowSteps />
+        <Pricing kit="portfolio" variant="single" />
         <FAQ
           badge="Working together"
           title="Common questions from clients and collaborators."
@@ -86,10 +94,10 @@ export default function PortfolioDemoPage() {
         />
         <FinalCTA
           eyebrow="Available for hire"
-          title="Got a project? Let's scope it."
-          subtitle="I usually reply within 24 hours. No sales pitch — just a real conversation about what you need."
-          primaryCta="Get in touch"
-          primaryHref="#contact"
+          title="Turn scattered work into a premium professional surface."
+          subtitle="Use the kit to connect your projects, CV, services and next step without rebuilding your personal site from scratch."
+          primaryCta="Explore sections"
+          primaryHref="#sections"
           secondaryCta="Download CV"
           secondaryHref="#"
         />

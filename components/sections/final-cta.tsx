@@ -1,4 +1,5 @@
 import { Button } from "@/components/common/button"
+import { storeUrl } from "@/content/site"
 
 type FinalCTAProps = {
   eyebrow?: string
@@ -12,11 +13,11 @@ type FinalCTAProps = {
 
 export function FinalCTA({
   eyebrow = "Get started",
-  title = "Stop building random pages. Start shipping a premium system.",
-  subtitle = "The fastest way to look expensive is restraint, clarity and execution. This kit gives you the structure to do that repeatedly.",
-  primaryCta = "Buy the system",
-  primaryHref = "#",
-  secondaryCta = "Read documentation",
+  title = "Stop building random pages. Start shipping VolynxOS.",
+  subtitle = "The fastest way to look expensive is restraint, clarity and execution. VolynxOS gives you the structure to do that repeatedly.",
+  primaryCta = "Open product store",
+  primaryHref = storeUrl,
+  secondaryCta = "Read docs",
   secondaryHref = "/docs",
 }: FinalCTAProps) {
   return (
