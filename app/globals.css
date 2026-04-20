@@ -187,6 +187,18 @@ body {
   padding: 72px 0 28px;
 }
 
+.icons-store-hero-shell {
+  display: grid;
+  gap: 28px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .icons-store-hero-shell {
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+  }
+}
+
 .icons-store-brand {
   font-size: 11px;
   font-weight: 700;
@@ -230,6 +242,13 @@ body {
   }
 }
 
+@media (min-width: 1024px) {
+  .icons-store-stats {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 .icons-store-stat {
   border: 1px solid rgba(79,195,247,.16);
   border-radius: 8px;
@@ -254,6 +273,64 @@ body {
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+
+.icons-store-logo-card {
+  display: grid;
+  gap: 16px;
+  border: 1px solid rgba(79,195,247,.14);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(79,195,247,.16), transparent 24rem),
+    radial-gradient(circle at 78% 16%, rgba(124,77,255,.18), transparent 24rem),
+    linear-gradient(145deg, rgba(7,11,31,.94), rgba(14,19,38,.92));
+  padding: 18px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.24);
+}
+
+.icons-store-logo-frame {
+  display: flex;
+  min-height: 280px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(79,195,247,.16);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(79,195,247,.18), transparent 34%),
+    radial-gradient(circle at 65% 72%, rgba(124,77,255,.18), transparent 32%),
+    linear-gradient(145deg, #05070f 0%, #0b1223 50%, #120d24 100%);
+  padding: 28px;
+}
+
+.icons-store-logo-image {
+  width: min(100%, 260px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 28px rgba(79,195,247,.18));
+}
+
+.icons-store-logo-copy p {
+  color: #4fc3f7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.icons-store-logo-copy strong {
+  display: block;
+  margin-top: 6px;
+  color: white;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.icons-store-logo-copy span {
+  display: block;
+  margin-top: 10px;
+  color: #7c8a9a;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 .icons-store-filters {
@@ -522,6 +599,7 @@ body {
 
 .source-preview-card {
   display: flex;
+  cursor: pointer;
   aspect-ratio: 1;
   align-items: center;
   justify-content: center;
@@ -532,10 +610,78 @@ body {
     linear-gradient(145deg, #070b1f 0%, #10122c 46%, #160d31 100%);
 }
 
+.source-preview-card:hover {
+  border-color: rgba(79,195,247,.4);
+  box-shadow: 0 12px 40px rgba(79,195,247,.12);
+}
+
 .source-preview-card svg {
   width: min(74%, 72px);
   height: min(74%, 72px);
   filter: drop-shadow(0 8px 18px rgba(79,195,247,.16));
+}
+
+.featured-source-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.featured-source-card {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  min-height: 220px;
+  overflow: hidden;
+  border: 1px solid rgba(58,78,148,.42);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(79,195,247,.12), transparent 58%),
+    linear-gradient(145deg, #070b1f 0%, #10122c 46%, #160d31 100%);
+  padding: 18px;
+  text-align: left;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.featured-source-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(79,195,247,.4);
+  box-shadow: 0 16px 46px rgba(79,195,247,.12), 0 0 0 1px rgba(124,77,255,.14);
+}
+
+.featured-source-svg {
+  display: flex;
+  min-height: 122px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(79,195,247,.13);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 28% 18%, rgba(79,195,247,.22), transparent 36%),
+    radial-gradient(circle at 72% 82%, rgba(124,77,255,.24), transparent 42%),
+    linear-gradient(145deg, #071129 0%, #11133a 48%, #1a0e35 100%);
+}
+
+.featured-source-svg svg {
+  width: 92px;
+  height: 92px;
+  filter: drop-shadow(0 10px 22px rgba(79,195,247,.18));
+}
+
+.featured-source-copy p {
+  color: #4fc3f7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.featured-source-copy strong {
+  display: block;
+  margin-top: 8px;
+  color: white;
+  font-size: 18px;
+  line-height: 1.15;
 }
 
 .neon-icon-card {
@@ -670,6 +816,88 @@ body {
   .icons-store-pack {
     grid-template-columns: 1fr auto;
   }
+}
+
+.icons-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(3,6,18,.78);
+  padding: 20px;
+  backdrop-filter: blur(16px);
+}
+
+.icons-modal-card {
+  position: relative;
+  width: min(100%, 560px);
+  border: 1px solid rgba(79,195,247,.24);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(79,195,247,.18), transparent 58%),
+    linear-gradient(145deg, #070b1f 0%, #10122c 46%, #160d31 100%);
+  padding: 24px;
+  box-shadow: 0 30px 90px rgba(0,0,0,.32);
+}
+
+.icons-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,.04);
+  padding: 7px 12px;
+  color: #e8eaf6;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.icons-modal-svg {
+  display: flex;
+  min-height: 280px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(79,195,247,.13);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 24%, rgba(79,195,247,.24), transparent 34%),
+    radial-gradient(circle at 72% 76%, rgba(124,77,255,.2), transparent 36%),
+    linear-gradient(145deg, #071129 0%, #11133a 48%, #1a0e35 100%);
+  padding: 28px;
+}
+
+.icons-modal-svg svg {
+  width: min(100%, 220px);
+  height: auto;
+}
+
+.icons-modal-category {
+  margin-top: 18px;
+  color: #4fc3f7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.icons-modal-title {
+  margin-top: 10px;
+  color: white;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: .95;
+}
+
+.icons-modal-copy {
+  margin-top: 14px;
+  color: #7c8a9a;
+  font-size: 14px;
+  line-height: 1.8;
 }
 
 /* ── Demo page themes ──────────────────────────────────── */
