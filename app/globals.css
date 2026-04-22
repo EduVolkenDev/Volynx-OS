@@ -184,6 +184,7 @@ body {
 }
 
 .icons-store-hero {
+  overflow: hidden;
   padding: 72px 0 28px;
 }
 
@@ -191,6 +192,10 @@ body {
   display: grid;
   gap: 28px;
   align-items: center;
+}
+
+.icons-store-hero-shell > * {
+  min-width: 0;
 }
 
 @media (min-width: 1024px) {
@@ -276,8 +281,15 @@ body {
 }
 
 .icons-store-logo-card {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 16px;
+  width: 100%;
+  max-width: 430px;
+  justify-self: center;
+  overflow: hidden;
+  contain: paint;
   border: 1px solid rgba(79,195,247,.14);
   border-radius: 8px;
   background:
@@ -288,11 +300,19 @@ body {
   box-shadow: 0 24px 80px rgba(0,0,0,.24);
 }
 
+@media (min-width: 1024px) {
+  .icons-store-logo-card {
+    justify-self: end;
+  }
+}
+
 .icons-store-logo-frame {
   display: flex;
-  min-height: 280px;
+  aspect-ratio: 1;
+  min-height: 0;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   border: 1px solid rgba(79,195,247,.16);
   border-radius: 8px;
   background:
@@ -303,7 +323,9 @@ body {
 }
 
 .icons-store-logo-image {
-  width: min(100%, 260px);
+  display: block;
+  width: clamp(180px, 62%, 260px);
+  max-width: 100%;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 16px 28px rgba(79,195,247,.18));
@@ -392,12 +414,15 @@ body {
 
 .icons-pack-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(252px, 1fr));
   gap: 14px;
 }
 
 .icons-pack-card {
   position: relative;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(58,78,148,.42);
   border-radius: 8px;
@@ -504,11 +529,50 @@ body {
   letter-spacing: 0;
 }
 
+.icons-pack-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  border: 1px solid rgba(79,195,247,.16);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(79,195,247,.09), rgba(124,77,255,.08));
+  padding: 10px 11px;
+}
+
+.icons-pack-price-row strong {
+  color: #f8fbff;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.icons-pack-price-row span {
+  max-width: 132px;
+  color: #8ea0b4;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.icons-pack-card.is-premium .icons-pack-price-row {
+  border-color: rgba(255,183,77,.24);
+  background: linear-gradient(135deg, rgba(255,183,77,.12), rgba(124,77,255,.08));
+}
+
+.icons-pack-card.is-premium .icons-pack-price-row strong {
+  color: #ffcf80;
+}
+
 .icons-pack-cta {
   display: inline-flex;
   width: 100%;
   justify-content: center;
-  margin-top: 16px;
+  margin-top: auto;
   border: 1px solid rgba(79,195,247,.22);
   border-radius: 8px;
   background: rgba(79,195,247,.08);
@@ -519,6 +583,16 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+
+.icons-pack-price-row + .icons-pack-cta {
+  margin-top: 14px;
+}
+
+.icons-pack-card.is-premium .icons-pack-cta {
+  border-color: rgba(255,183,77,.3);
+  background: rgba(255,183,77,.1);
+  color: #fff3d6;
 }
 
 .icons-pack-cta:hover {

@@ -43,7 +43,7 @@ export function IconsStoreSection() {
               <h1 className="icons-store-title">Icons Store</h1>
               <p className="icons-store-subtitle">Premium · Textured · Futuristic</p>
               <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[#7c8a9a] lg:mx-0">
-                Seventeen launch-ready WebP packs plus the VolynxOS SVG source set, organized for free drops, premium sales and fast product publishing.
+                {iconPackStats.packs} catalogued WebP packs plus the VolynxOS SVG source set, organized for free drops, priced premium packs and fast product publishing.
               </p>
               <div className="icons-store-stats" aria-label="Icons Store stats">
                 <div className="icons-store-stat">
@@ -94,8 +94,8 @@ export function IconsStoreSection() {
         <div className="icons-section-heading">
           <p className="icons-store-brand">Ready Packs</p>
           <h2>Free drops and premium vaults ready to publish.</h2>
-          <p>
-            Each pack uses the WebP folders you separated for launch, with real previews, item counts and direct paths for free or premium conversion.
+              <p>
+            Each pack uses the WebP folders you separated for launch, with real previews, item counts, individual pricing and direct paths for free or premium conversion.
           </p>
         </div>
         <div className="icons-pack-grid">
@@ -114,13 +114,17 @@ export function IconsStoreSection() {
               </div>
               <p className="icons-pack-category">{pack.category}</p>
               <h3 className="icons-pack-title">{pack.name}</h3>
+              <div className="icons-pack-price-row">
+                <strong>{pack.price}</strong>
+                <span>{pack.priceDetail}</span>
+              </div>
               <a
                 href={pack.plan === "premium" ? storeUrl : pack.href}
                 target={pack.plan === "premium" ? "_blank" : undefined}
                 rel={pack.plan === "premium" ? "noopener noreferrer" : undefined}
                 className="icons-pack-cta"
               >
-                {pack.plan === "premium" ? "Open premium pack" : "Download free ZIP"}
+                {pack.plan === "premium" ? `Buy pack - ${pack.price}` : "Download free ZIP"}
               </a>
             </article>
           ))}
@@ -227,7 +231,9 @@ export function IconsStoreSection() {
       <section className="container-shell pb-20">
         <div className="icons-store-pack">
           <div>
-            <p className="icons-store-brand text-left">17 Packs · 645 WebP · 40 SVG Source Icons</p>
+            <p className="icons-store-brand text-left">
+              {iconPackStats.packs} Packs · {iconPackStats.icons} WebP · 40 SVG Source Icons
+            </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-5xl">
               The Icons Store is now a real VolynxOS product shelf.
             </h2>
