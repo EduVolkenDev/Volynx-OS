@@ -1,7 +1,7 @@
 export const storeUrl = "https://volynx.world/products/"
 
 export const metrics = [
-  { label: "Core kits", value: "3" },
+  { label: "Core kits", value: "4" },
   { label: "Sections", value: "39+" },
   { label: "Launch time", value: "< 1 day" },
   { label: "Pro upsell", value: "$19/mo" }
@@ -34,9 +34,9 @@ export const productKits = [
   {
     name: "PropertyFlow",
     label: "Real estate SaaS",
-    href: "https://volynx.world/products/propertyflow/",
-    description: "Bilingual property catalogue logic with polished filtering and a premium product-line feel.",
-    points: ["Smart catalogue", "Live filters", "Bilingual interface"]
+    href: "/products/propertyflow",
+    description: "Bilingual real-estate SaaS kit with tiered delivery, docs and white-label upgrade logic.",
+    points: ["Starts at $239", "15 templates", "White-label tier"]
   }
 ]
 

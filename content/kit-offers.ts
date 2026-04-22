@@ -40,6 +40,9 @@ export const launchGuarantee = {
 
 export const operationalGuards = [
   "Automatic email 2h after purchase: Got your kit? with resend link.",
+  "Public checkout must use Stripe LIVE sessions: cs_live_, pk_live_ and sk_live_.",
+  "USD must be the default buyer currency; add local currencies only when live Stripe prices exist.",
+  "Before launch, run one low-value real purchase and verify receipt, webhook delivery and ZIP contents.",
   "BRL prices stay fixed annually from USD x 5.8 instead of spot FX.",
   "Every kit page leads with a Who this is for block before pricing."
 ] as const

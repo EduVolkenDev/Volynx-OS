@@ -50,7 +50,9 @@ function SingleCard({ tiers }: { tiers: Tier[] }) {
           <div key={feature} className="rounded-lg border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-zinc-300">{feature}</div>
         ))}
       </div>
-      <Button href={pro.href ?? "#pricing"} className="mt-8 w-full">Get Pro</Button>
+      <Button href={pro.href ?? "#pricing"} className="mt-8 w-full" ariaLabel={`Get ${pro.name}`}>
+        Get {pro.name}
+      </Button>
     </div>
   )
 }
@@ -71,7 +73,12 @@ function TieredCards({ tiers }: { tiers: Tier[] }) {
               <div key={feature} className="rounded-lg border border-white/10 bg-black/30 px-4 py-3 text-sm text-zinc-300">{feature}</div>
             ))}
           </div>
-          <Button href={tier.href ?? "#pricing"} variant={tier.highlight ? "primary" : "secondary"} className="mt-7 w-full">
+          <Button
+            href={tier.href ?? "#pricing"}
+            variant={tier.highlight ? "primary" : "secondary"}
+            className="mt-7 w-full"
+            ariaLabel={`Choose ${tier.name}`}
+          >
             Choose {tier.name}
           </Button>
         </article>
@@ -129,7 +136,9 @@ function ProUpsell({ kit }: { kit?: KitSlug }) {
           {kit ? proUpsell.checkoutLine : proUpsell.promise} Annual option: {proUpsell.annual}.
         </p>
       </div>
-      <Button href="https://volynx.world/pricing/">Compare Pro</Button>
+      <Button href="https://volynx.world/pricing/" ariaLabel="Compare Volynx Pro">
+        Compare Pro
+      </Button>
     </div>
   )
 }

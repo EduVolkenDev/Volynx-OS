@@ -1,11 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
   images: {
     unoptimized: true
   },
   experimental: {
-    typedRoutes: false
+    typedRoutes: false,
+    outputFileTracingIncludes: {
+      "/api/downloads/propertyflow": ["./storage/propertyflow/*.zip"],
+      "/api/downloads/propertyflow/entitlement": ["./storage/propertyflow/*.zip"]
+    }
   }
 }
 

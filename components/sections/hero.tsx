@@ -116,12 +116,12 @@ export function Hero({
               <div className="mb-6 flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-zinc-500">Launch stack</p>
-                  <p className="mt-2 text-2xl font-semibold tracking-[-0.05em]">Three monetizable kit lines</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-[-0.05em]">Four monetizable kit lines</p>
                 </div>
                 <div className="rounded-full border border-white/10 px-3 py-1 text-xs text-zinc-400">Next.js + Tailwind</div>
               </div>
-              <div className="grid gap-4 md:grid-cols-3">
-                {["Portfolio Pro Kit", "Agency Launch Kit", "SaaS Landing System"].map((item) => (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {["Portfolio Pro Kit", "Agency Launch Kit", "SaaS Landing System", "PropertyFlow"].map((item) => (
                   <div key={item} className="rounded-[18px] border border-white/10 bg-white/[0.02] p-4 text-sm text-zinc-400">
                     {item}
                   </div>
@@ -130,7 +130,7 @@ export function Hero({
             </div>
             <div className="grid gap-4">
               <Metric value="v3" label="Launch-ready" />
-              <Metric value="3" label="Core kits" />
+              <Metric value="4" label="Core kits" />
               <Metric value="A+" label="Premium feel" />
             </div>
           </div>

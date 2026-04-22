@@ -29,6 +29,12 @@ Market it as:
 - The 7-day preview-match guarantee keeps risk low because previews define the contract.
 - BRL should be fixed annually from USD x 5.8, not spot converted in the front-end.
 
+## Launch blockers
+- Stripe Checkout must be in LIVE mode before public traffic. The checkout session URL should start with `cs_live_`, and deployed keys should use `pk_live_` and `sk_live_`.
+- USD should be available as the default buyer currency before public launch. Add local currencies only after live Stripe prices exist for them.
+- Run one low-value real purchase before launch and verify the receipt, webhook, delivery email and ZIP contents for the purchased tier.
+- Legal routes required for paid digital products: `/terms`, `/privacy`, `/refund`, `/license`, `/cookies`, `/support`, `/about` and `/contact`.
+
 ## Target users
 - web developers
 - indie hackers

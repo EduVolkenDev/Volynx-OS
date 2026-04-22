@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { productKits } from "@/content/site"
 import { volynxCardIcons } from "@/content/volynx-card-icons"
@@ -16,15 +17,16 @@ export function ProductKits() {
         <div className="grid gap-5 lg:grid-cols-4">
           {productKits.map((kit, index) => {
             const icon = volynxCardIcons.kits[index % volynxCardIcons.kits.length]
+            const external = kit.href.startsWith("http")
 
             return (
-              <article key={kit.name} className="surface flex min-h-[420px] flex-col overflow-hidden p-6">
+              <article key={kit.name} className="surface relative flex min-h-[420px] flex-col overflow-hidden p-6">
                 <div className="mb-6 flex h-28 items-center justify-center rounded-lg border border-white/10 bg-black/30">
                   <Image src={icon} alt="" width={160} height={160} className="h-24 w-24 object-contain" />
                 </div>
-                <p className="text-xs uppercase tracking-[0.22em] text-zinc-500">{kit.label}</p>
-                <h3 className="mt-5 text-2xl font-semibold tracking-[-0.04em] text-white">{kit.name}</h3>
-                <p className="mt-4 text-sm leading-7 text-zinc-400">{kit.description}</p>
+                <p className="relative z-10 text-xs uppercase tracking-[0.22em] text-zinc-500">{kit.label}</p>
+                <h3 className="relative z-10 mt-5 text-2xl font-semibold tracking-[-0.04em] text-white">{kit.name}</h3>
+                <p className="relative z-10 mt-4 text-sm leading-7 text-zinc-400">{kit.description}</p>
                 <div className="mt-6 grid gap-3">
                   {kit.points.map((point) => (
                     <div key={point} className="rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-sm text-zinc-300">
@@ -32,14 +34,15 @@ export function ProductKits() {
                     </div>
                   ))}
                 </div>
-                <a
+                <Link
                   href={kit.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  aria-label={`Open ${kit.name}`}
                   className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-medium text-white"
                 >
                   Open kit <ArrowUpRight className="h-4 w-4" />
-                </a>
+                </Link>
               </article>
             )
           })}

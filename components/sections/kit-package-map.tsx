@@ -54,7 +54,7 @@ export function KitPackageMap({ kit }: KitPackageMapProps) {
                     ))}
                   </div>
                 </div>
-                <Button href={offer.href} variant={tier.highlight ? "primary" : "secondary"}>
+                <Button href={offer.href} variant={tier.highlight ? "primary" : "secondary"} ariaLabel={`${tier.ctaLabel} for ${offer.productName}`}>
                   {tier.ctaLabel}
                 </Button>
               </article>

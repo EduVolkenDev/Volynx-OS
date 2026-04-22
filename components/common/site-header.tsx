@@ -4,7 +4,7 @@ import { ThemeSwitcher } from "@/components/common/theme-switcher"
 
 const nav = [
   { href: "/#kits", label: "Kits" },
-  { href: "/icons-store", label: "Icons" },
+  { href: "/products/propertyflow", label: "PropertyFlow" },
   { href: "/demo/saas", label: "SaaS" },
   { href: "/demo/agency", label: "Agency" },
   { href: "/#pricing", label: "Pricing" },
