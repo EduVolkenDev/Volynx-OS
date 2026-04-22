@@ -14,7 +14,7 @@ type FinalCTAProps = {
 export function FinalCTA({
   eyebrow = "Get started",
   title = "Stop building random pages. Start shipping VolynxOS.",
-  subtitle = "The fastest way to look expensive is restraint, clarity and execution. VolynxOS gives you the structure to do that repeatedly.",
+  subtitle = "The fastest way to feel premium is restraint, clarity and execution. VolynxOS gives you the structure to do that repeatedly.",
   primaryCta = "Open product store",
   primaryHref = storeUrl,
   secondaryCta = "Read docs",

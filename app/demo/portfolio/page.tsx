@@ -36,7 +36,7 @@ const portfolioCards = [
   },
   {
     title: "Premium first impression",
-    description: "Large type, controlled contrast and lean sections help the work feel more expensive.",
+    description: "Large type, controlled contrast and lean sections help the work feel more credible.",
   },
 ]
 
@@ -67,7 +67,7 @@ export default function PortfolioDemoPage() {
       <main>
         <Hero
           variant="minimal"
-          title="Launch fast, look expensive and give your personal brand an operating system."
+          title="Launch fast, feel premium and give your personal brand an operating system."
           subtitle="A portfolio kit for builders who need more than a gallery: positioning, proof, career context and a premium first impression."
           primaryCta="Explore sections"
           primaryHref="#sections"

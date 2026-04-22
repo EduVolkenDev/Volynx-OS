@@ -14,7 +14,7 @@ export const productKits = [
     name: "Portfolio Pro Kit",
     label: "Flagship kit",
     href: "https://volynx.world/products/portfolio-pro-kit/",
-    description: "Launch fast, look expensive and give your personal brand a real operating system.",
+    description: "Launch fast, feel premium and give your personal brand a real operating system.",
     points: ["Starts at $49", "You are the work", "5 to 12+ sections"]
   },
   {

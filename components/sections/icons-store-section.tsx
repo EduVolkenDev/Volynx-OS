@@ -1,12 +1,170 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useMemo, useState } from "react"
+import { type CSSProperties, useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/common/button"
-import { iconPacks, iconPackStats } from "@/content/icon-packs"
+import { iconPacks, iconPackStats, type IconPack } from "@/content/icon-packs"
 import { type StoreIcon, iconStoreCategories, iconStoreIcons } from "@/content/icons-store"
 import { storeUrl } from "@/content/site"
 import { cn } from "@/lib/utils"
+
+type PackPalette = {
+  accent: string
+  glow: string
+  surfaceStart: string
+  surfaceEnd: string
+}
+
+type PackPresentation = PackPalette & {
+  signature: string
+  story: string
+  featured?: boolean
+}
+
+const PACK_PALETTES: Record<string, PackPalette> = {
+  chrome: { accent: "187,220,255", glow: "116,143,255", surfaceStart: "7,12,22", surfaceEnd: "25,31,47" },
+  polygon: { accent: "255,184,108", glow: "91,179,255", surfaceStart: "21,12,18", surfaceEnd: "28,30,56" },
+  master: { accent: "126,242,255", glow: "173,127,255", surfaceStart: "4,9,18", surfaceEnd: "19,12,35" },
+  neon: { accent: "93,255,210", glow: "64,166,255", surfaceStart: "5,18,19", surfaceEnd: "9,20,43" },
+  purple: { accent: "198,133,255", glow: "110,186,255", surfaceStart: "18,9,31", surfaceEnd: "14,19,41" },
+  cobalt: { accent: "103,190,255", glow: "94,117,255", surfaceStart: "7,14,31", surfaceEnd: "13,24,46" },
+  hyper: { accent: "255,116,191", glow: "90,217,255", surfaceStart: "17,8,25", surfaceEnd: "12,19,41" },
+  glow: { accent: "255,229,120", glow: "112,226,255", surfaceStart: "21,17,10", surfaceEnd: "13,26,35" },
+  vintage: { accent: "255,177,121", glow: "255,118,159", surfaceStart: "28,13,12", surfaceEnd: "37,19,28" },
+  glass: { accent: "142,232,255", glow: "154,183,255", surfaceStart: "6,16,28", surfaceEnd: "15,24,39" },
+  ember: { accent: "255,177,92", glow: "255,106,106", surfaceStart: "28,13,9", surfaceEnd: "34,22,18" },
+  green: { accent: "121,255,181", glow: "76,210,255", surfaceStart: "7,18,14", surfaceEnd: "10,28,25" },
+  rose: { accent: "255,138,196", glow: "171,125,255", surfaceStart: "29,11,28", surfaceEnd: "22,15,37" },
+  red: { accent: "255,125,125", glow: "255,170,107", surfaceStart: "30,8,12", surfaceEnd: "40,18,20" },
+  iridescent: { accent: "125,247,255", glow: "255,123,221", surfaceStart: "7,12,29", surfaceEnd: "27,13,34" },
+}
+
+const PACK_PRESENTATIONS: Record<string, Omit<PackPresentation, keyof PackPalette> & { palette: keyof typeof PACK_PALETTES }> = {
+  "hyper-icons-premium": {
+    palette: "hyper",
+    signature: "Hyper Interface",
+    story: "Oversized product UI icons with the loudest premium presence in the shelf.",
+    featured: true,
+  },
+  "poligon-premium": {
+    palette: "polygon",
+    signature: "Flagship Geometry",
+    story: "A larger angular bundle with the sharper polygon language pushed to the front.",
+    featured: true,
+  },
+  "purple-icons-premium": {
+    palette: "purple",
+    signature: "Ultra Violet",
+    story: "High-polish purple treatment with a sharper futuristic glow.",
+    featured: true,
+  },
+  "neon-icons-free": {
+    palette: "neon",
+    signature: "Neon Gateway",
+    story: "A generous free neon line that still carries the Volynx future-facing silhouette.",
+    featured: true,
+  },
+  "volynx-master-webp": {
+    palette: "master",
+    signature: "Open Archive",
+    story: "The broad WebP archive for exploring the full range of Volynx icon language.",
+    featured: true,
+  },
+  "glow-premium": {
+    palette: "glow",
+    signature: "Glow Signal",
+    story: "Soft luminous halos and cleaner futuristic light falloff in one premium pack.",
+  },
+  "icons-glass-premium": {
+    palette: "glass",
+    signature: "Crystal Layer",
+    story: "Glossy depth, transparency and quiet reflections for premium glass UI work.",
+  },
+  "icons-glass-premium-2": {
+    palette: "glass",
+    signature: "Crystal Variant",
+    story: "A second glass direction with the same polished material, arranged as its own line.",
+  },
+  "iridescent-premium": {
+    palette: "iridescent",
+    signature: "Iridescent Shift",
+    story: "The chromatic premium line with shifting light and cleaner reflective depth.",
+  },
+  "metal-chrome-premium": {
+    palette: "chrome",
+    signature: "Chrome Vector",
+    story: "A tighter chrome line for compact premium accents and sharper detail.",
+  },
+  "metal-premium": {
+    palette: "chrome",
+    signature: "Forged Metal",
+    story: "A denser metal series with bold highlights and confident industrial shine.",
+  },
+  "vintage-premium": {
+    palette: "vintage",
+    signature: "Retro Signal",
+    story: "Warm stylized tones for a premium shelf that feels archival, not generic.",
+  },
+  "abstract-free": {
+    palette: "rose",
+    signature: "Abstract Drop",
+    story: "Free abstract shapes for testing the Volynx mood without flattening the brand.",
+  },
+  "day-by-day-free": {
+    palette: "cobalt",
+    signature: "Day By Day",
+    story: "A lighter daily free pack that still feels authored and intentional.",
+  },
+  "icons-blue-sliced3": {
+    palette: "cobalt",
+    signature: "Blue Vector Slice",
+    story: "Technical blue slicing with more motion and sharper cut lines.",
+  },
+  "neon-icons-free3": {
+    palette: "neon",
+    signature: "Neon Variant III",
+    story: "A second free neon shelf with alternate shapes for faster product testing.",
+  },
+  "soft-blue": {
+    palette: "cobalt",
+    signature: "Soft Blue",
+    story: "A calm premium blue pack with softer light and cleaner volume.",
+  },
+  "soft-dark-blue": {
+    palette: "cobalt",
+    signature: "Night Blue",
+    story: "Deeper premium blues for darker dashboards and quieter interfaces.",
+  },
+  "soft-green": {
+    palette: "green",
+    signature: "Soft Green",
+    story: "Fresh premium greens with a softer glow and cleaner organic weight.",
+  },
+  "soft-orange": {
+    palette: "ember",
+    signature: "Soft Orange",
+    story: "Warm premium orange shapes that keep energy without losing polish.",
+  },
+  "soft-red": {
+    palette: "red",
+    signature: "Soft Red",
+    story: "Controlled red intensity for premium packs that still read as elegant.",
+  },
+}
+
+function resolvePackPresentation(pack: IconPack): PackPresentation {
+  const mapped = PACK_PRESENTATIONS[pack.slug]
+
+  if (mapped) {
+    return { ...PACK_PALETTES[mapped.palette], ...mapped }
+  }
+
+  return {
+    ...PACK_PALETTES[pack.plan === "premium" ? "master" : "cobalt"],
+    signature: pack.plan === "premium" ? "Volynx Premium" : "Volynx Free",
+    story: "A curated Volynx icon pack prepared for the storefront shelf.",
+  }
+}
 
 export function IconsStoreSection() {
   const [activeCategory, setActiveCategory] = useState<(typeof iconStoreCategories)[number]>("All")
@@ -94,40 +252,62 @@ export function IconsStoreSection() {
         <div className="icons-section-heading">
           <p className="icons-store-brand">Ready Packs</p>
           <h2>Free drops and premium vaults ready to publish.</h2>
-              <p>
+          <p>
             Each pack uses the WebP folders you separated for launch, with real previews, item counts, individual pricing and direct paths for free or premium conversion.
           </p>
         </div>
         <div className="icons-pack-grid">
-          {iconPacks.map((pack) => (
-            <article key={pack.slug} className={cn("icons-pack-card", pack.plan === "premium" && "is-premium")}>
-              <div className="icons-pack-meta">
-                <span className={cn("icons-plan-badge", pack.plan)}>{pack.plan}</span>
-                <span>{pack.count} WebP</span>
-              </div>
-              <div className="icons-pack-preview" aria-hidden="true">
-                {pack.preview.map((src, index) => (
-                  <div key={src} className="icons-pack-tile">
-                    <Image src={src} alt="" width={96} height={96} />
-                  </div>
-                ))}
-              </div>
-              <p className="icons-pack-category">{pack.category}</p>
-              <h3 className="icons-pack-title">{pack.name}</h3>
-              <div className="icons-pack-price-row">
-                <strong>{pack.price}</strong>
-                <span>{pack.priceDetail}</span>
-              </div>
-              <a
-                href={pack.plan === "premium" ? storeUrl : pack.href}
-                target={pack.plan === "premium" ? "_blank" : undefined}
-                rel={pack.plan === "premium" ? "noopener noreferrer" : undefined}
-                className="icons-pack-cta"
+          {iconPacks.map((pack) => {
+            const presentation = resolvePackPresentation(pack)
+            const packStyle = {
+              "--pack-accent": presentation.accent,
+              "--pack-glow": presentation.glow,
+              "--pack-surface-start": presentation.surfaceStart,
+              "--pack-surface-end": presentation.surfaceEnd,
+            } as CSSProperties
+
+            return (
+              <article
+                key={pack.slug}
+                className={cn(
+                  "icons-pack-card",
+                  pack.plan === "premium" && "is-premium",
+                  presentation.featured && "is-featured",
+                )}
+                style={packStyle}
               >
-                {pack.plan === "premium" ? `Buy pack - ${pack.price}` : "Download free ZIP"}
-              </a>
-            </article>
-          ))}
+                <div className="icons-pack-meta">
+                  <span className={cn("icons-plan-badge", pack.plan)}>{pack.plan}</span>
+                  <span className="icons-pack-signature">{presentation.signature}</span>
+                </div>
+                <div className="icons-pack-preview" aria-hidden="true">
+                  {pack.preview.map((src) => (
+                    <div key={src} className="icons-pack-tile">
+                      <Image src={src} alt="" width={96} height={96} />
+                    </div>
+                  ))}
+                </div>
+                <div className="icons-pack-submeta">
+                  <p className="icons-pack-category">{pack.category}</p>
+                  <span className="icons-pack-count">{pack.count} WebP</span>
+                </div>
+                <h3 className="icons-pack-title">{pack.name}</h3>
+                <p className="icons-pack-story">{presentation.story}</p>
+                <div className="icons-pack-price-row">
+                  <strong>{pack.price}</strong>
+                  <span>{pack.priceDetail}</span>
+                </div>
+                <a
+                  href={pack.plan === "premium" ? storeUrl : pack.href}
+                  target={pack.plan === "premium" ? "_blank" : undefined}
+                  rel={pack.plan === "premium" ? "noopener noreferrer" : undefined}
+                  className="icons-pack-cta"
+                >
+                  {pack.plan === "premium" ? `Buy pack - ${pack.price}` : "Download free ZIP"}
+                </a>
+              </article>
+            )
+          })}
         </div>
       </section>
 

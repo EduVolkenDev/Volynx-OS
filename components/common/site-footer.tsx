@@ -8,22 +8,40 @@ const footerLinks = [
   { href: "https://volynx.world/products/", label: "All products", external: true },
 ]
 
+const legalLinks = [
+  { href: "/terms", label: "Terms" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/refund", label: "Refunds" },
+  { href: "/license", label: "License" },
+  { href: "/support", label: "Support" },
+  { href: "/contact", label: "Contact" },
+]
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/5 py-10">
-      <div className="container-shell flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <div className="container-shell grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start">
         <div>
           <p className="text-sm font-medium text-white">VolynxOS</p>
           <p className="mt-2 text-sm text-zinc-500">
             Premium operating system for commercial kits and digital products.
           </p>
         </div>
-        <div className="flex flex-wrap gap-5">
-          {footerLinks.map((item) => (
-            <Link key={item.label} href={item.href} className="text-sm text-zinc-400 transition hover:text-white">
-              {item.label}
-            </Link>
-          ))}
+        <div className="grid gap-4">
+          <div className="flex flex-wrap gap-5 lg:justify-end">
+            {footerLinks.map((item) => (
+              <Link key={item.label} href={item.href} className="text-sm text-zinc-400 transition hover:text-white">
+                {item.label}
+              </Link>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-4 lg:justify-end">
+            {legalLinks.map((item) => (
+              <Link key={item.label} href={item.href} className="text-xs text-zinc-500 transition hover:text-white">
+                {item.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
