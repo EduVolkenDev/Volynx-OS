@@ -417,7 +417,7 @@ A partir daí, segue **[docs/ADMIN.md](ADMIN.md)** pra aprender a usar o painel.
 **Fix:** Testa em **https://www.whatsmydns.net** — digita seu domínio e vê se está resolvendo globalmente. Se estiver verde no mundo todo mas ainda não carrega pra você, é cache local — tenta em outro navegador, celular com 4G, ou aguarda.
 
 ### Algo diferente está acontecendo
-**Email com screenshot:** `eduardo@volynx.world` com:
+**Email com screenshot:** `support@volynx.world` com:
 - Seu **order ID** (tá no email de compra)
 - O **passo exato** onde travou
 - **Screenshot** do erro

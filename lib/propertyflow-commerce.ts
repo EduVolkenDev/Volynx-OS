@@ -23,6 +23,10 @@ export type VerifiedPropertyFlowPurchase = {
   version: string
 }
 
+function getSessionCatalogAmount(session: Stripe.Checkout.Session) {
+  return session.amount_subtotal ?? session.amount_total
+}
+
 export const propertyFlowStorageDir = path.join(process.cwd(), "storage", "propertyflow")
 
 export function isPropertyFlowTierId(value: unknown): value is PropertyFlowTierId {
@@ -106,7 +110,10 @@ export async function verifyPropertyFlowSession(sessionId: string): Promise<Veri
   const currency = getSessionCurrency(session)
   const expected = getPropertyFlowPrice(tierId, currency)
 
-  if (session.amount_total !== expected.amount || session.currency !== propertyFlowPriceMatrix[currency].stripeCurrency) {
+  if (
+    getSessionCatalogAmount(session) !== expected.amount ||
+    session.currency !== propertyFlowPriceMatrix[currency].stripeCurrency
+  ) {
     throw new Error("Stripe session amount does not match the PropertyFlow tier price")
   }
 
@@ -118,7 +125,7 @@ export async function verifyPropertyFlowSession(sessionId: string): Promise<Veri
     tierId,
     tierName: tier.name,
     currency,
-    amountTotal: session.amount_total,
+    amountTotal: session.amount_total ?? 0,
     customerEmail: session.customer_details?.email ?? session.customer_email ?? null,
     filename: zip.filename,
     bytes: zip.bytes,

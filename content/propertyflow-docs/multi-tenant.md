@@ -80,7 +80,7 @@ Vou focar no Modo A neste guia. Pro Modo B, as diferenças estão numa seção n
 
 ## Parte 2 — Ativar multi-tenant mode
 
-Parte técnica. Se não é confortável, pode pedir ajuda do suporte — **eduardo@volynx.world**.
+Parte técnica. Se não é confortável, pode pedir ajuda do suporte — **support@volynx.world**.
 
 ### 2.1 Habilitar no código
 
@@ -404,7 +404,7 @@ Não precisa configurar DNS wildcard. Todos os clientes ficam sob o domínio pri
 **CRÍTICO** — isso não deveria acontecer. Se acontece:
 1. **Para o site imediatamente** (Vercel → Settings → Pause deployment)
 2. **Backup o banco** (pra investigar depois)
-3. **Email urgente pra eduardo@volynx.world** com detalhes do que viu
+3. **Email urgente pra support@volynx.world** com detalhes do que viu
 4. NÃO tenta consertar sozinho — pode piorar
 
 ### Performance caiu depois de adicionar muitos tenants
@@ -459,4 +459,4 @@ O grupo Maranhão tem 3 marcas: Maranhão Imóveis (residencial), Maranhão Comm
 - **Configurar integrações de CRM** por tenant: [INTEGRATIONS.md](INTEGRATIONS.md)
 - **Remover atribuição Volynx** pra apresentar como teu produto: [WHITE_LABEL.md](WHITE_LABEL.md)
 
-Multi-tenant é poderoso mas tem suas idiossincrasias. Se ficar em dúvida, o suporte prioritário do White-Label (eduardo@volynx.world) responde em 24h úteis.
+Multi-tenant é poderoso mas tem suas idiossincrasias. Se ficar em dúvida, o suporte prioritário do White-Label (support@volynx.world) responde em 24h úteis.

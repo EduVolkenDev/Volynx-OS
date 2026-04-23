@@ -483,7 +483,7 @@ Se na dúvida: **HubSpot Free tier** faz 99% do trabalho pra imobiliária, é gr
 ## Precisou de ajuda?
 
 - Canal Discord do White-Label (link no email de delivery)
-- **eduardo@volynx.world** com o CRM e o erro. Priority queue: 24h úteis.
+- **support@volynx.world** com o CRM e o erro. Priority queue: 24h úteis.
 
 **O que incluir no email:**
 - CRM usado + plano

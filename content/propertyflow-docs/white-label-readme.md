@@ -120,7 +120,7 @@ Full terms in **[docs/LICENSE.md](docs/LICENSE.md)** — specifically section 4 
 - **Community Discord** — shared with other White-Label customers. Share patterns, ask questions, see what others are shipping. Pinned resources, searchable history.
 - **Quarterly recap video** — every 3 months, a recorded walkthrough of new features, roadmap and top community patterns. Watch on your schedule.
 
-Access links are in your delivery email. If you didn't get them, email **eduardo@volynx.world** with your order ID.
+Access links are in your delivery email. If you didn't get them, email **support@volynx.world** with your order ID.
 
 ---
 

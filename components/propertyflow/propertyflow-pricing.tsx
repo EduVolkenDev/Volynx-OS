@@ -56,10 +56,21 @@ export function PropertyFlowPricing() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ tier, currency })
       })
-      const data = await response.json() as { url?: string; error?: string }
+      const data = await response.json() as { url?: string; sessionId?: string; error?: string }
 
       if (!response.ok || !data.url) {
         throw new Error(data.error ?? "Checkout could not be started.")
+      }
+
+      if (data.sessionId) {
+        try {
+          window.localStorage.setItem(
+            "propertyflow-pending-checkout",
+            JSON.stringify({ sessionId: data.sessionId, tier, createdAt: new Date().toISOString() })
+          )
+        } catch {
+          // Checkout still works if the browser blocks local storage.
+        }
       }
 
       window.location.assign(data.url)

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { ArrowRight, Download, FileText, LockKeyhole, Mail, ShieldCheck } from "lucide-react"
+import { DeliveryTrustStrip } from "@/components/common/delivery-trust-strip"
 import {
   getPropertyFlowTier,
   propertyFlowDeliveryFeatures,
@@ -11,7 +12,9 @@ import {
   propertyFlowVersion,
   type PropertyFlowTierId
 } from "@/content/propertyflow"
+import { supportEmail } from "@/content/legal-pages"
 import { cn } from "@/lib/utils"
+import { getPropertyFlowPublicUrl } from "@/lib/volynx-public"
 
 type DownloadEvent = {
   timestamp: string
@@ -31,6 +34,14 @@ type Entitlement = {
 }
 
 const storageKey = "propertyflow-download-history"
+const pendingCheckoutKey = "propertyflow-pending-checkout"
+const propertyFlowPublicHref = getPropertyFlowPublicUrl()
+
+type PendingCheckout = {
+  sessionId?: string
+  tier?: string
+  createdAt?: string
+}
 
 function formatBytes(bytes: number | undefined) {
   if (!bytes) {
@@ -88,12 +99,33 @@ export function PropertyFlowDeliveryClient() {
 
   useEffect(() => {
     const search = new URLSearchParams(window.location.search)
-    const nextTier = getPropertyFlowTier(search.get("tier")).id
     const nextPreview = search.get("preview") === "1"
-    const nextSessionId = search.get("session_id")
+    let nextSessionId = search.get("session_id")
+    let pendingTier: string | undefined
+
+    if (!nextSessionId && !nextPreview) {
+      try {
+        const rawPending = window.localStorage.getItem(pendingCheckoutKey)
+        const pending = rawPending ? JSON.parse(rawPending) as PendingCheckout : null
+
+        if (pending?.sessionId?.startsWith("cs_")) {
+          nextSessionId = pending.sessionId
+          pendingTier = pending.tier
+        }
+      } catch {
+        // Pending checkout recovery is best-effort only.
+      }
+    }
+
+    const nextTier = getPropertyFlowTier(search.get("tier") ?? pendingTier).id
+    const accessSearch = new URLSearchParams(search)
+
+    if (!accessSearch.get("session_id") && nextSessionId) {
+      accessSearch.set("session_id", nextSessionId)
+    }
 
     setTierId(nextTier)
-    setAccess(getAccessState(search))
+    setAccess(getAccessState(accessSearch))
     setPreview(nextPreview)
     setSessionId(nextSessionId)
 
@@ -220,7 +252,9 @@ export function PropertyFlowDeliveryClient() {
       <nav className="mb-10 flex flex-wrap items-center gap-3 text-sm text-zinc-500">
         <a href="/" className="transition hover:text-white">Home</a>
         <span>/</span>
-        <a href="/products/propertyflow" className="transition hover:text-white">PropertyFlow</a>
+        <a href="/dashboard/purchases" className="transition hover:text-white">Purchases</a>
+        <span>/</span>
+        <a href={propertyFlowPublicHref} className="transition hover:text-white">PropertyFlow</a>
         <span>/</span>
         <span className="text-zinc-300">{tier.name} delivery</span>
       </nav>
@@ -238,6 +272,8 @@ export function PropertyFlowDeliveryClient() {
           protected ZIP delivery. The server checks the Stripe session before opening the pack.
         </p>
       </section>
+
+      <DeliveryTrustStrip productName="PropertyFlow" className="py-8" />
 
       <section className="grid gap-5 py-10 md:grid-cols-4">
         {[
@@ -264,7 +300,7 @@ export function PropertyFlowDeliveryClient() {
           type="button"
           onClick={handleDownload}
           disabled={!access.allowed}
-          className={cn("button-primary", !access.allowed && "cursor-not-allowed opacity-45")}
+          className={cn("button-primary w-full md:w-auto", !access.allowed && "cursor-not-allowed opacity-45")}
         >
           Download ZIP <Download className="ml-2 h-4 w-4" />
         </button>
@@ -364,7 +400,7 @@ export function PropertyFlowDeliveryClient() {
           <p className="mt-3 text-sm leading-7 text-zinc-400">
             Include the Stripe session ID and tier so support can route it fast. White-Label buyers use the priority email queue.
           </p>
-          <a href="mailto:eduardo@volynx.world?subject=PropertyFlow%20support" className="button-secondary mt-6">
+          <a href={`mailto:${supportEmail}?subject=PropertyFlow%20support`} className="button-secondary mt-6 w-full md:w-auto">
             Email support <Mail className="ml-2 h-4 w-4" />
           </a>
         </div>

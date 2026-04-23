@@ -24,11 +24,13 @@ export async function POST(request: Request) {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object
-      console.info("PropertyFlow checkout completed", {
+      console.info("Volynx checkout completed", {
         id: session.id,
         product: session.metadata?.product,
         tier: session.metadata?.tier,
+        pack: session.metadata?.pack,
         amount: session.amount_total,
+        subtotal: session.amount_subtotal,
         currency: session.currency,
         livemode: session.livemode
       })

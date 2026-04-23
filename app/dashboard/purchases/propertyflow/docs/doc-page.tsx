@@ -12,6 +12,7 @@ import {
   type PropertyFlowTierId
 } from "@/content/propertyflow"
 import { isPropertyFlowTierId, previewDownloadsEnabled, verifyPropertyFlowSession } from "@/lib/propertyflow-commerce"
+import { getPropertyFlowPublicUrl } from "@/lib/volynx-public"
 
 type PropertyFlowDocViewProps = {
   slug: string
@@ -65,7 +66,7 @@ function buildDeliveryHref(tierId: PropertyFlowTierId, searchParams: Record<stri
 }
 
 function redirectToProduct(): never {
-  redirect("/products/propertyflow?docs=locked")
+  redirect(getPropertyFlowPublicUrl({ docs: "locked" }))
 }
 
 async function resolveDocAccess(slug: string, searchParams: Record<string, string | string[] | undefined> = {}): Promise<PropertyFlowDocAccess> {
@@ -131,7 +132,7 @@ export async function PropertyFlowDocView({ slug, searchParams }: PropertyFlowDo
         <section className="border-b border-white/5 py-12 md:py-16">
           <div className="container-shell">
             <nav className="mb-8 flex flex-wrap items-center gap-3 text-sm text-zinc-500">
-              <a href="/products/propertyflow" className="transition hover:text-white">PropertyFlow</a>
+              <a href={getPropertyFlowPublicUrl()} className="transition hover:text-white">PropertyFlow</a>
               <span>/</span>
               <a href={access.deliveryHref} className="transition hover:text-white">Delivery</a>
               <span>/</span>

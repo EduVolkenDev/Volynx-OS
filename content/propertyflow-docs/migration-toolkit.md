@@ -411,4 +411,4 @@ npm run db:restore backups/[timestamp]
 - **Customizar a marca** pros tenants: [MULTI_TENANT.md](MULTI_TENANT.md) Parte 4
 - **Remover atribuição Volynx:** [WHITE_LABEL.md](WHITE_LABEL.md)
 
-Trava em alguma migração específica: **eduardo@volynx.world** com o log de erro e o sistema de origem. Resposta em 24h úteis (priority White-Label).
+Trava em alguma migração específica: **support@volynx.world** com o log de erro e o sistema de origem. Resposta em 24h úteis (priority White-Label).

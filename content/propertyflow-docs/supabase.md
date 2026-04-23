@@ -309,7 +309,7 @@ Coisas em que provavelmente vai precisar do nosso suporte:
 - Performance degradou muito (site lento)
 - Quer customizações avançadas (tabelas novas, campos novos)
 
-Email **eduardo@volynx.world** com:
+Email **support@volynx.world** com:
 - Seu order ID
 - Screenshot do erro ou descrição detalhada
 - O que você tentou antes de pedir ajuda

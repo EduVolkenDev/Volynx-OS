@@ -74,7 +74,7 @@ Starter is a showcase, not a management system. These require **Professional** (
 - Gallery Hero, Split View, Masonry templates (3 more)
 - Multi-tenant mode, white-label rights, custom branding (Enterprise only)
 
-Email **eduardo@volynx.world** to upgrade at any time — we credit your Starter purchase against the next tier.
+Email **support@volynx.world** to upgrade at any time — we credit your Starter purchase against the next tier.
 
 ---
 
@@ -129,7 +129,7 @@ Included with Starter:
 - Access to setup walkthrough videos (link in your delivery email)
 - Re-download your kit from your VOLYNX dashboard anytime
 
-Email **eduardo@volynx.world** with your order ID for anything blocking you.
+Email **support@volynx.world** with your order ID for anything blocking you.
 
 ---
 

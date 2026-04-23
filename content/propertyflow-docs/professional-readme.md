@@ -145,7 +145,7 @@ Included with Professional:
 - Setup walkthrough Loom library
 - Free re-download of the current and next 2 minor versions
 
-Email **eduardo@volynx.world** with your order ID.
+Email **support@volynx.world** with your order ID.
 
 ---
 

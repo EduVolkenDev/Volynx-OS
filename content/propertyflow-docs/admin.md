@@ -328,7 +328,7 @@ O que fazer pra manter o site saudável:
 
 ## Precisou de ajuda?
 
-Email **eduardo@volynx.world** com:
+Email **support@volynx.world** com:
 - Seu **order ID**
 - O que estava tentando fazer
 - Screenshot do erro (se houver)

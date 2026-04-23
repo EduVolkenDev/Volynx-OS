@@ -200,7 +200,7 @@ Setup fee: R$ 997 one-time pra migração + onboarding.
 
 ## Precisou de ajuda pra implementar?
 
-**Email:** eduardo@volynx.world
+**Email:** support@volynx.world
 **Priority queue pra White-Label buyers:** 24h úteis.
 
 Boa venda. Agora é correr.

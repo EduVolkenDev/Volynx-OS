@@ -12,7 +12,7 @@
 
 You bought PropertyFlow. You can use it to run your real-estate business (or deliver it to clients as a service, at the Professional or White-Label tier) on infrastructure you control. You cannot resell the source code itself as a template or redistribute it as a kit.
 
-Full terms below. Anything unclear, email **eduardo@volynx.world** and we'll clarify before you commit.
+Full terms below. Anything unclear, email **support@volynx.world** and we'll clarify before you commit.
 
 ---
 
@@ -134,7 +134,7 @@ Our aggregate liability under this license is capped at the amount you paid for 
 
 **14-day preview-match guarantee.** If your delivered kit does not match what was shown in the previews on volynx.world at the time of your purchase, we refund in full within 14 days of delivery.
 
-**Outside of that**, refunds are handled case-by-case. Write us at eduardo@volynx.world and explain the situation. We're a small team and we want buyers who are satisfied, not stuck.
+**Outside of that**, refunds are handled case-by-case. Write us at support@volynx.world and explain the situation. We're a small team and we want buyers who are satisfied, not stuck.
 
 ---
 
@@ -149,7 +149,7 @@ Otherwise, this license is perpetual for the version you purchased.
 ## 12. Contact
 
 Questions about any of the above:
-**Email:** eduardo@volynx.world
+**Email:** support@volynx.world
 **Mailing:** see your receipt
 
 *Last updated: 2026-04-21*

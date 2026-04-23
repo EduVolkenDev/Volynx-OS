@@ -377,4 +377,4 @@ Antes de colocar seu site no ar (ou redeployar depois das customizações), conf
 
 Se customizou tudo e funcionou: ✓ **seu site é seu agora.** Hora de adicionar as propriedades reais.
 
-Trava em alguma coisa: email **eduardo@volynx.world** com screenshot e o que você tentou. 24h úteis pra resposta.
+Trava em alguma coisa: email **support@volynx.world** com screenshot e o que você tentou. 24h úteis pra resposta.

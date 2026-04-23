@@ -7,6 +7,7 @@ import {
 } from "@/lib/propertyflow-commerce"
 import { getBaseUrl, getStripe } from "@/lib/stripe"
 import { getPropertyFlowTier, propertyFlowPriceMatrix, propertyFlowVersion } from "@/content/propertyflow"
+import { getPropertyFlowPublicUrl } from "@/lib/volynx-public"
 
 export const runtime = "nodejs"
 
@@ -42,9 +43,13 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       success_url: `${baseUrl}/dashboard/purchases/propertyflow?session_id={CHECKOUT_SESSION_ID}&tier=${tier.id}`,
-      cancel_url: `${baseUrl}/products/propertyflow?checkout=cancelled&tier=${tier.id}`,
+      cancel_url: getPropertyFlowPublicUrl({ checkout: "cancelled", tier: tier.id }),
+      client_reference_id: `propertyflow:${tier.id}`,
       customer_creation: "if_required",
       allow_promotion_codes: true,
+      invoice_creation: {
+        enabled: true
+      },
       line_items: [
         {
           quantity: 1,
@@ -86,7 +91,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Stripe did not return a checkout URL." }, { status: 502 })
     }
 
-    return NextResponse.json({ url: session.url })
+    return NextResponse.json({ url: session.url, sessionId: session.id })
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unable to create checkout session."
 

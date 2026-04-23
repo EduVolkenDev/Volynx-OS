@@ -453,6 +453,6 @@ Feito isso, **tu tem um produto próprio rodando sobre a VOLYNX — e o cliente 
 ## Precisou de ajuda?
 
 - Canal Discord do White-Label (link no email de delivery)
-- **eduardo@volynx.world** com o order ID. Priority queue: 24h úteis.
+- **support@volynx.world** com o order ID. Priority queue: 24h úteis.
 
 Bom lançamento. 🚀 (OK, sem emoji. Bom lançamento.)
