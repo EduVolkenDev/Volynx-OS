@@ -1,5 +1,40 @@
 export const storeUrl = "https://volynx.world/products/"
 
+export const platformProducts = [
+  {
+    name: "VOLYNX Daily",
+    label: "Execution OS",
+    href: "/daily",
+    status: "Use now",
+    description: "Capture anything and route it into tasks, summaries, writing and decisions.",
+    actions: ["Command Inbox", "VOLYNX AI", "Local fallback"]
+  },
+  {
+    name: "Icons Store",
+    label: "Asset shelf",
+    href: "/icons-store",
+    status: "Browse",
+    description: "Premium and free icon packs with checkout-ready delivery.",
+    actions: ["Free drops", "Premium packs", "Instant ZIPs"]
+  },
+  {
+    name: "PropertyFlow",
+    label: "Product kit",
+    href: "/products/propertyflow",
+    status: "Buy",
+    description: "Premium real-estate SaaS kit with tiered delivery and white-label rights.",
+    actions: ["Starter", "Professional", "White-Label"]
+  },
+  {
+    name: "Purchases",
+    label: "Delivery hub",
+    href: "/dashboard/purchases",
+    status: "Download",
+    description: "Return to verified downloads, docs and post-purchase support.",
+    actions: ["Icons delivery", "PropertyFlow delivery", "Docs"]
+  }
+] as const
+
 export const metrics = [
   { label: "Core kits", value: "4" },
   { label: "Sections", value: "39+" },

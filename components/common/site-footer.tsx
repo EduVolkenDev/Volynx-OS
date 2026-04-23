@@ -1,11 +1,15 @@
 import Link from "next/link"
 
 const footerLinks = [
+  { href: "https://volynx.world/products/", label: "Products", external: true },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/purchases", label: "Purchases" },
+  { href: "/daily", label: "Daily" },
   { href: "/products/propertyflow", label: "PropertyFlow" },
+  { href: "/icons-store", label: "Icons Store" },
   { href: "/demo/saas", label: "SaaS demo" },
   { href: "/demo/agency", label: "Agency demo" },
-  { href: "/demo/portfolio", label: "Portfolio demo" },
-  { href: "https://volynx.world/products/", label: "All products", external: true },
+  { href: "/demo/portfolio", label: "Portfolio demo" }
 ]
 
 const legalLinks = [
@@ -26,7 +30,7 @@ export function SiteFooter() {
         <div>
           <p className="text-sm font-medium text-white">VolynxOS</p>
           <p className="mt-2 text-sm text-zinc-500">
-            Premium operating system for commercial kits and digital products.
+            Launch OS for execution tools, premium assets, product kits and delivery.
           </p>
         </div>
         <div className="grid gap-4">
