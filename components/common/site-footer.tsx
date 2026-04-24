@@ -1,11 +1,12 @@
 import Link from "next/link"
+import { propertyFlowUrl } from "@/content/site"
 
 const footerLinks = [
   { href: "https://volynx.world/products/", label: "Products", external: true },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/purchases", label: "Purchases" },
   { href: "/daily", label: "Daily" },
-  { href: "/products/propertyflow", label: "PropertyFlow" },
+  { href: propertyFlowUrl, label: "PropertyFlow", external: true },
   { href: "/icons-store", label: "Icons Store" },
   { href: "/demo/saas", label: "SaaS demo" },
   { href: "/demo/agency", label: "Agency demo" },

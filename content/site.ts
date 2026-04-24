@@ -1,3 +1,6 @@
+import { getPropertyFlowPublicUrl } from "@/lib/volynx-public"
+
+export const propertyFlowUrl = getPropertyFlowPublicUrl()
 export const storeUrl = "https://volynx.world/products/"
 
 export const platformProducts = [
@@ -20,7 +23,7 @@ export const platformProducts = [
   {
     name: "PropertyFlow",
     label: "Product kit",
-    href: "/products/propertyflow",
+    href: propertyFlowUrl,
     status: "Buy",
     description: "Premium real-estate SaaS kit with tiered delivery and white-label rights.",
     actions: ["Starter", "Professional", "White-Label"]
@@ -69,7 +72,7 @@ export const productKits = [
   {
     name: "PropertyFlow",
     label: "Real estate SaaS",
-    href: "/products/propertyflow",
+    href: propertyFlowUrl,
     description: "Bilingual real-estate SaaS kit with tiered delivery, docs and white-label upgrade logic.",
     points: ["Starts at $239", "15 templates", "White-label tier"]
   }

@@ -1,14 +1,14 @@
 import Link from "next/link"
 import { Button } from "@/components/common/button"
 import { ThemeSwitcher } from "@/components/common/theme-switcher"
-import { storeUrl } from "@/content/site"
+import { propertyFlowUrl, storeUrl } from "@/content/site"
 
 const nav = [
   { href: storeUrl, label: "Products", external: true },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/daily", label: "Daily" },
   { href: "/icons-store", label: "Icons" },
-  { href: "/products/propertyflow", label: "PropertyFlow" },
+  { href: propertyFlowUrl, label: "PropertyFlow", external: true },
   { href: "/support", label: "Support" },
 ]
 
