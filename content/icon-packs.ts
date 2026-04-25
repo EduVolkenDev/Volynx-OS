@@ -19,7 +19,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Hyper UI",
     count: 43,
-    price: "$39",
+    price: "£39",
     priceDetail: "43 high-resolution icons",
     preview: [
       "/assets/icons-store/Hyper-Icons-Premium/33.png",
@@ -38,7 +38,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Polygon",
     count: 111,
-    price: "$39",
+    price: "£39",
     priceDetail: "111 flagship icons",
     preview: [
       "/assets/icons-store/Poligon-Premium/daily3D1.webp",
@@ -57,7 +57,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Purple",
     count: 84,
-    price: "$29",
+    price: "£29",
     priceDetail: "84 polished icons",
     preview: [
       "/assets/icons-store/purple-icons-premium/purple-icons_11.png",
@@ -114,7 +114,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Glow",
     count: 42,
-    price: "$24",
+    price: "£24",
     priceDetail: "42 luminous icons",
     preview: [
       "/assets/icons-store/glow-premium/glow-premium_17.webp",
@@ -133,7 +133,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Glass",
     count: 41,
-    price: "$24",
+    price: "£24",
     priceDetail: "41 glass icons",
     preview: [
       "/assets/icons-store/Icons-Glass-Premium/glass-premium1.webp",
@@ -152,7 +152,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Glass",
     count: 41,
-    price: "$24",
+    price: "£24",
     priceDetail: "41 alternate glass icons",
     preview: [
       "/assets/icons-store/Icons-Glass-Premium-2/glass-premium1.webp",
@@ -171,7 +171,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Iridescent",
     count: 33,
-    price: "$19",
+    price: "£19",
     priceDetail: "33 chromatic icons",
     preview: [
       "/assets/icons-store/Iridescent-Premium/daily-iridescent-premium1.webp",
@@ -190,7 +190,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Chrome",
     count: 36,
-    price: "$19",
+    price: "£19",
     priceDetail: "36 chrome icons",
     preview: [
       "/assets/icons-store/metal-chrome-premium/metal-chrome-premium1.webp",
@@ -209,7 +209,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Metal",
     count: 44,
-    price: "$24",
+    price: "£24",
     priceDetail: "44 high-shine icons",
     preview: [
       "/assets/icons-store/Metal-Premium/icon-metal-premium6.png",
@@ -228,7 +228,7 @@ export const iconPacks: IconPack[] = [
     plan: "premium",
     category: "Vintage",
     count: 44,
-    price: "$24",
+    price: "£24",
     priceDetail: "44 stylized icons",
     preview: [
       "/assets/icons-store/vintage-premium/vintage-premium9.webp",

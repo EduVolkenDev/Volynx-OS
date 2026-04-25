@@ -171,6 +171,14 @@ function resolvePackPresentation(pack: IconPack): PackPresentation {
   }
 }
 
+function formatPackPrice(price: string) {
+  if (price.toLowerCase() === "free") {
+    return "£0"
+  }
+
+  return price.startsWith("£") ? price : price.replace("$", "£")
+}
+
 export function IconsStoreSection() {
   const [activeCategory, setActiveCategory] = useState<(typeof iconStoreCategories)[number]>("All")
   const [activePackFilter, setActivePackFilter] = useState<string>(PACK_FILTER_ALL)
@@ -318,8 +326,8 @@ export function IconsStoreSection() {
                 </div>
               </div>
               <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-                <Button href="#ready-packs">Browse ready packs</Button>
-                <Button href={storeUrl} variant="secondary">Open product store</Button>
+                <Button href="#icon-vault">Open Icon Vault</Button>
+                <Button href="#ready-packs" variant="secondary">Browse priced packs</Button>
               </div>
             </div>
 
@@ -356,6 +364,7 @@ export function IconsStoreSection() {
                         "--pack-glow": presentation.glow,
                       } as CSSProperties}
                     >
+                      <span className="vx-card-chip compact">VX</span>
                       <div className="icons-showcase-pack-icons" aria-hidden="true">
                         {pack.preview.slice(0, 3).map((src) => (
                           <Image key={src} src={src} alt="" width={72} height={72} />
@@ -363,10 +372,55 @@ export function IconsStoreSection() {
                       </div>
                       <p>{presentation.signature}</p>
                       <strong>{pack.name}</strong>
+                      <div className="icons-showcase-pack-price">
+                        <span>{formatPackPrice(pack.price)}</span>
+                        <small>{pack.count} WebP</small>
+                      </div>
                     </div>
                   )
                 })}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="icon-vault" className="container-shell py-10">
+        <div className="icons-export-showcase">
+          <div>
+            <p className="icons-store-brand text-left">Icon Vault</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white md:text-5xl">
+              Put the vault first and let the icon language sell the shelf.
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-[#7c8a9a]">
+              The vault now opens the page with the VX mood up front: source previews, collectible icon energy and a stronger reason to keep scrolling into priced packs.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button href="#ready-packs">Browse priced packs</Button>
+              <Button href={storeUrl} variant="secondary">Open product store</Button>
+            </div>
+          </div>
+
+          <div className="source-preview-shell" aria-label="Icon Vault preview">
+            <div className="source-preview-topbar">
+              <span />
+              <span />
+              <span />
+              <p>icon-vault/source-edition</p>
+            </div>
+            <div className="source-preview-grid">
+              {iconStoreIcons.slice(0, 8).map((icon) => (
+                <button
+                  key={icon.label}
+                  type="button"
+                  className={cn("source-preview-card", icon.tone !== "cyan" && `tone-${icon.tone}`)}
+                  onClick={() => setSelectedIcon(icon)}
+                  aria-label={`Open preview for ${icon.label}`}
+                >
+                  <span className="vx-card-chip compact">VX</span>
+                  <div dangerouslySetInnerHTML={{ __html: icon.svg }} />
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -418,6 +472,7 @@ export function IconsStoreSection() {
                 )}
                 style={packStyle}
               >
+                <span className="vx-card-chip">VX</span>
                 <div className="icons-pack-meta">
                   <span className={cn("icons-plan-badge", pack.plan)}>{pack.plan}</span>
                   <span className="icons-pack-signature">{presentation.signature}</span>
@@ -436,7 +491,7 @@ export function IconsStoreSection() {
                 <h3 className="icons-pack-title">{pack.name}</h3>
                 <p className="icons-pack-story">{presentation.story}</p>
                 <div className="icons-pack-price-row">
-                  <strong>{pack.price}</strong>
+                  <strong>{formatPackPrice(pack.price)}</strong>
                   <span>{pack.priceDetail}</span>
                 </div>
                 {pack.plan === "premium" ? (
@@ -446,7 +501,7 @@ export function IconsStoreSection() {
                     disabled={checkoutPack !== null}
                     className="icons-pack-cta"
                   >
-                    {checkoutPack === pack.slug ? "Opening Stripe..." : `Buy pack - ${pack.price}`}
+                    {checkoutPack === pack.slug ? "Opening Stripe..." : `Buy pack - ${formatPackPrice(pack.price)}`}
                   </button>
                 ) : (
                   <a href={pack.href} className="icons-pack-cta">
@@ -459,46 +514,6 @@ export function IconsStoreSection() {
               </article>
             )
           })}
-        </div>
-      </section>
-
-      <section className="container-shell py-10">
-        <div className="icons-export-showcase">
-          <div>
-            <p className="icons-store-brand text-left">Volynx Source Edition</p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white md:text-5xl">
-              The SVG model set stays as the Volynx source layer.
-            </h2>
-            <p className="mt-5 max-w-xl text-sm leading-7 text-[#7c8a9a]">
-              Dark neon cards, textured SVG icons and a premium product surface for SaaS pages, dashboards, stores and kit launches.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button href={storeUrl}>Get the vault</Button>
-              <Button href="#icon-grid" variant="secondary">Continue to icons</Button>
-            </div>
-          </div>
-
-          <div className="source-preview-shell" aria-label="Volynx source preview">
-            <div className="source-preview-topbar">
-              <span />
-              <span />
-              <span />
-              <p>volynx-icons-store/source-edition</p>
-            </div>
-            <div className="source-preview-grid">
-              {iconStoreIcons.slice(0, 8).map((icon) => (
-                <button
-                  key={icon.label}
-                  type="button"
-                  className={cn("source-preview-card", icon.tone !== "cyan" && `tone-${icon.tone}`)}
-                  onClick={() => setSelectedIcon(icon)}
-                  aria-label={`Open preview for ${icon.label}`}
-                >
-                  <div dangerouslySetInnerHTML={{ __html: icon.svg }} />
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
@@ -519,6 +534,7 @@ export function IconsStoreSection() {
               onClick={() => setSelectedIcon(icon)}
               aria-label={`Preview ${icon.label}`}
             >
+              <span className="vx-card-chip compact">VX</span>
               {icon.badge ? <span className={cn("neon-icon-badge", icon.badgeTone && `badge-${icon.badgeTone}`)}>{icon.badge}</span> : null}
               <div className="featured-source-svg" dangerouslySetInnerHTML={{ __html: icon.svg }} />
               <div className="featured-source-copy">
@@ -553,6 +569,7 @@ export function IconsStoreSection() {
             className={cn("neon-icon-card", icon.tone !== "cyan" && `tone-${icon.tone}`)}
             aria-label={`Open preview for ${icon.label}`}
           >
+            <span className="vx-card-chip compact">VX</span>
             {icon.badge ? <span className={cn("neon-icon-badge", icon.badgeTone && `badge-${icon.badgeTone}`)}>{icon.badge}</span> : null}
             <div className="neon-icon-svg" dangerouslySetInnerHTML={{ __html: icon.svg }} />
             <p className="neon-icon-label">{icon.label}</p>
