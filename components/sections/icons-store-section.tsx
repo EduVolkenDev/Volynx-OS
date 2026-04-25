@@ -296,16 +296,16 @@ export function IconsStoreSection() {
 
   return (
     <main className="icons-store-page">
-      <section className="icons-store-hero">
+      <section id="icon-vault" className="icons-store-hero">
         <div className="container-shell">
           <div className="icons-store-hero-shell">
             <div className="text-center lg:text-left">
               <BrandLockup size="sm" caption="VX signature" className="mx-auto mb-5 lg:mx-0" />
-              <p className="icons-store-brand">VolynxOS Assets</p>
+              <p className="icons-store-brand">Icon Vault</p>
               <h1 className="icons-store-title">Icons Store</h1>
               <p className="icons-store-subtitle">Premium · Textured · Futuristic</p>
               <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[#7c8a9a] lg:mx-0">
-                {iconPackStats.packs} catalogued WebP packs plus the VolynxOS SVG source set, organized for free drops, priced premium packs and fast product publishing.
+                {iconPackStats.packs} catalogued WebP packs, priced premium vaults and the VX source SVG collection arranged so the commercial packs lead the page and the metallic source gallery lives lower in the browse flow.
               </p>
               <div className="icons-store-stats" aria-label="Icons Store stats">
                 <div className="icons-store-stat">
@@ -326,8 +326,8 @@ export function IconsStoreSection() {
                 </div>
               </div>
               <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-                <Button href="#icon-vault">Open Icon Vault</Button>
-                <Button href="#ready-packs" variant="secondary">Browse priced packs</Button>
+                <Button href="#ready-packs">Browse priced packs</Button>
+                <Button href="#icon-grid" variant="secondary">Explore icon grid</Button>
               </div>
             </div>
 
@@ -380,47 +380,6 @@ export function IconsStoreSection() {
                   )
                 })}
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="icon-vault" className="container-shell py-10">
-        <div className="icons-export-showcase">
-          <div>
-            <p className="icons-store-brand text-left">Icon Vault</p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white md:text-5xl">
-              Put the vault first and let the icon language sell the shelf.
-            </h2>
-            <p className="mt-5 max-w-xl text-sm leading-7 text-[#7c8a9a]">
-              The vault now opens the page with the VX mood up front: source previews, collectible icon energy and a stronger reason to keep scrolling into priced packs.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button href="#ready-packs">Browse priced packs</Button>
-              <Button href={storeUrl} variant="secondary">Open product store</Button>
-            </div>
-          </div>
-
-          <div className="source-preview-shell" aria-label="Icon Vault preview">
-            <div className="source-preview-topbar">
-              <span />
-              <span />
-              <span />
-              <p>icon-vault/source-edition</p>
-            </div>
-            <div className="source-preview-grid">
-              {iconStoreIcons.slice(0, 8).map((icon) => (
-                <button
-                  key={icon.label}
-                  type="button"
-                  className={cn("source-preview-card", icon.tone !== "cyan" && `tone-${icon.tone}`)}
-                  onClick={() => setSelectedIcon(icon)}
-                  aria-label={`Open preview for ${icon.label}`}
-                >
-                  <span className="vx-card-chip compact">VX</span>
-                  <div dangerouslySetInnerHTML={{ __html: icon.svg }} />
-                </button>
-              ))}
             </div>
           </div>
         </div>
@@ -517,35 +476,6 @@ export function IconsStoreSection() {
         </div>
       </section>
 
-      <section className="container-shell py-10">
-        <div className="icons-section-heading">
-          <p className="icons-store-brand">Featured Source Grid</p>
-          <h2>The HTML showcase grid now lives in the page as a real section.</h2>
-          <p>
-            These twelve cards pull from the source SVG set directly, keep the neon palette visible, and open a larger preview instead of feeling decorative only.
-          </p>
-        </div>
-        <div className="featured-source-grid" aria-label="Featured source icons">
-          {featuredIcons.map((icon) => (
-            <button
-              key={icon.label}
-              type="button"
-              className={cn("featured-source-card", icon.tone !== "cyan" && `tone-${icon.tone}`)}
-              onClick={() => setSelectedIcon(icon)}
-              aria-label={`Preview ${icon.label}`}
-            >
-              <span className="vx-card-chip compact">VX</span>
-              {icon.badge ? <span className={cn("neon-icon-badge", icon.badgeTone && `badge-${icon.badgeTone}`)}>{icon.badge}</span> : null}
-              <div className="featured-source-svg" dangerouslySetInnerHTML={{ __html: icon.svg }} />
-              <div className="featured-source-copy">
-                <p>{icon.category}</p>
-                <strong>{icon.label}</strong>
-              </div>
-            </button>
-          ))}
-        </div>
-      </section>
-
       <section className="icons-store-filters" aria-label="Icon categories">
         {iconStoreCategories.map((category) => (
           <button
@@ -575,6 +505,66 @@ export function IconsStoreSection() {
             <p className="neon-icon-label">{icon.label}</p>
           </button>
         ))}
+      </section>
+
+      <section className="container-shell py-10">
+        <div className="icons-export-showcase">
+          <div>
+            <p className="icons-store-brand text-left">SVG Vault</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white md:text-5xl">
+              The metal SVG icons now live lower in the page.
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-[#7c8a9a]">
+              The shopping flow stays focused on priced packs first. The source SVG shelf is still here for previews, references and collectible browsing, but no longer competes with the top of the store.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button href="#ready-packs">Back to priced packs</Button>
+              <Button href={storeUrl} variant="secondary">Open product store</Button>
+            </div>
+          </div>
+
+          <div className="source-preview-shell" aria-label="SVG vault preview">
+            <div className="source-preview-topbar">
+              <span />
+              <span />
+              <span />
+              <p>svg-vault/source-preview</p>
+            </div>
+            <div className="source-preview-grid">
+              {iconStoreIcons.slice(0, 8).map((icon) => (
+                <button
+                  key={icon.label}
+                  type="button"
+                  className={cn("source-preview-card", icon.tone !== "cyan" && `tone-${icon.tone}`)}
+                  onClick={() => setSelectedIcon(icon)}
+                  aria-label={`Open preview for ${icon.label}`}
+                >
+                  <span className="vx-card-chip compact">VX</span>
+                  <div dangerouslySetInnerHTML={{ __html: icon.svg }} />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 featured-source-grid" aria-label="Featured source icons">
+          {featuredIcons.map((icon) => (
+            <button
+              key={icon.label}
+              type="button"
+              className={cn("featured-source-card", icon.tone !== "cyan" && `tone-${icon.tone}`)}
+              onClick={() => setSelectedIcon(icon)}
+              aria-label={`Preview ${icon.label}`}
+            >
+              <span className="vx-card-chip compact">VX</span>
+              {icon.badge ? <span className={cn("neon-icon-badge", icon.badgeTone && `badge-${icon.badgeTone}`)}>{icon.badge}</span> : null}
+              <div className="featured-source-svg" dangerouslySetInnerHTML={{ __html: icon.svg }} />
+              <div className="featured-source-copy">
+                <p>{icon.category}</p>
+                <strong>{icon.label}</strong>
+              </div>
+            </button>
+          ))}
+        </div>
       </section>
 
       <section className="container-shell pb-20">
