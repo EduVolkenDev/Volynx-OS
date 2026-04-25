@@ -1,20 +1,33 @@
 import Image from "next/image"
-import { workflow } from "@/content/site"
+import { workflow as defaultWorkflow } from "@/content/site"
 import { volynxCardIcons } from "@/content/volynx-card-icons"
 import { SectionHeading } from "@/components/common/section-heading"
 
-export function WorkflowSteps() {
+type WorkflowItem = {
+  step: string
+  title: string
+  copy: string
+}
+
+type WorkflowStepsProps = {
+  badge?: string
+  title?: string
+  copy?: string
+  items?: WorkflowItem[]
+}
+
+export function WorkflowSteps({
+  badge = "Workflow",
+  title = "A repeatable launch process, not a gallery of disconnected pages.",
+  copy = "Use VolynxOS the same way serious studios operate: pick the product line, attach the right blocks, then ship with documentation and speed.",
+  items = defaultWorkflow
+}: WorkflowStepsProps) {
   return (
     <section className="section-space">
       <div className="container-shell">
-        <SectionHeading
-          badge="Workflow"
-          title="A repeatable launch process, not a gallery of disconnected pages."
-          copy="Use VolynxOS the same way serious studios operate: pick the product line, attach the right blocks, then ship with documentation and speed."
-          align="center"
-        />
+        <SectionHeading badge={badge} title={title} copy={copy} align="center" />
         <div className="grid gap-5 md:grid-cols-3">
-          {workflow.map((item, index) => {
+          {items.map((item, index) => {
             const icon = volynxCardIcons.workflow[index % volynxCardIcons.workflow.length]
 
             return (

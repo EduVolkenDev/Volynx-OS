@@ -3,13 +3,14 @@ import { Button } from "@/components/common/button"
 import { storeUrl } from "@/content/site"
 import { volynxCardIcons } from "@/content/volynx-card-icons"
 
-const items = [
-  { label: "Premium kit ecosystem" },
-  { label: "Commercial-ready structure" },
-  { label: "Launchable today" }
-]
+const defaultItems = ["Premium kit ecosystem", "Commercial-ready structure", "Launchable today"]
 
-export function LaunchOffer() {
+type LaunchOfferProps = {
+  items?: string[]
+  ctaLabel?: string
+}
+
+export function LaunchOffer({ items = defaultItems, ctaLabel = "Open product store" }: LaunchOfferProps) {
   return (
     <section className="py-8">
       <div className="container-shell">
@@ -19,16 +20,16 @@ export function LaunchOffer() {
               const icon = volynxCardIcons.launch[index % volynxCardIcons.launch.length]
 
               return (
-                <div key={item.label} className="flex items-center gap-3">
+                <div key={item} className="flex items-center gap-3">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30">
                     <Image src={icon} alt="" width={72} height={72} className="h-9 w-9 object-contain" />
                   </div>
-                  <p className="text-sm font-medium text-white">{item.label}</p>
+                  <p className="text-sm font-medium text-white">{item}</p>
                 </div>
               )
             })}
           </div>
-          <Button href={storeUrl}>Open product store</Button>
+          <Button href={storeUrl}>{ctaLabel}</Button>
         </div>
       </div>
     </section>

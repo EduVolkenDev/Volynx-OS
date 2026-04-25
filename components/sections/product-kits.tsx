@@ -1,21 +1,39 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
-import { productKits } from "@/content/site"
+import { productKits as defaultProductKits } from "@/content/site"
 import { volynxCardIcons } from "@/content/volynx-card-icons"
 import { SectionHeading } from "@/components/common/section-heading"
 
-export function ProductKits() {
+type ProductKitItem = {
+  name: string
+  label: string
+  href: string
+  description: string
+  points: string[]
+}
+
+type ProductKitsProps = {
+  badge?: string
+  title?: string
+  copy?: string
+  items?: ProductKitItem[]
+  openLabel?: string
+}
+
+export function ProductKits({
+  badge = "Kits",
+  title = "Four product lines ready to sell from the same operating system.",
+  copy = "VolynxOS turns portfolio, agency, SaaS and property products into a coherent commercial platform with clear use cases and direct buying paths.",
+  items = defaultProductKits,
+  openLabel = "Open kit"
+}: ProductKitsProps) {
   return (
     <section id="kits" className="section-space">
       <div className="container-shell">
-        <SectionHeading
-          badge="Kits"
-          title="Four product lines ready to sell from the same operating system."
-          copy="VolynxOS turns portfolio, agency, SaaS and property products into a coherent commercial platform with clear use cases and direct buying paths."
-        />
+        <SectionHeading badge={badge} title={title} copy={copy} />
         <div className="grid gap-5 lg:grid-cols-4">
-          {productKits.map((kit, index) => {
+          {items.map((kit, index) => {
             const icon = volynxCardIcons.kits[index % volynxCardIcons.kits.length]
             const external = kit.href.startsWith("http")
 
@@ -41,7 +59,7 @@ export function ProductKits() {
                   aria-label={`Open ${kit.name}`}
                   className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-medium text-white"
                 >
-                  Open kit <ArrowUpRight className="h-4 w-4" />
+                  {openLabel} <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </article>
             )
