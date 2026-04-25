@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs"
 import path from "node:path"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
 import { MarkdownDocument } from "@/components/common/markdown-document"
@@ -138,6 +139,7 @@ export async function PropertyFlowDocView({ slug, searchParams }: PropertyFlowDo
               <span>/</span>
               <span className="text-zinc-300">{doc.title}</span>
             </nav>
+            <BrandLockup size="sm" caption="VX signature" className="mb-5" />
             <span className="eyebrow">{doc.tier}</span>
             <h1 className="mt-4 max-w-4xl text-5xl font-semibold tracking-[-0.06em] text-white md:text-7xl">
               {doc.title}

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { Button } from "@/components/common/button"
 import { ThemeSwitcher } from "@/components/common/theme-switcher"
 import { propertyFlowUrl, storeUrl } from "@/content/site"
@@ -23,9 +24,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur-xl">
       <div className="container-shell flex h-18 items-center justify-between py-4">
-        <Link href="/" className="text-sm font-semibold tracking-[0.28em] text-white">
-          VolynxOS
-        </Link>
+        <BrandLockup href="/" size="sm" caption="VX signature" priority />
 
         <nav className="hidden items-center gap-7 md:flex">
           {nav.map((item) => (

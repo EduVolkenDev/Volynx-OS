@@ -1,3 +1,4 @@
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
 import { legalUpdated, type LegalPageContent } from "@/content/legal-pages"
@@ -13,6 +14,7 @@ export function LegalPage({ page }: LegalPageProps) {
       <main>
         <section className="section-space border-b border-white/5">
           <div className="container-shell max-w-4xl">
+            <BrandLockup size="sm" caption="VX signature" className="mb-5" />
             <span className="eyebrow">Legal</span>
             <h1 className="section-title">{page.title}</h1>
             <p className="section-copy mt-5">{page.description}</p>

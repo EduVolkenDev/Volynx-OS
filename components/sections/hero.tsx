@@ -1,3 +1,4 @@
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { Button } from "@/components/common/button"
 import { cn } from "@/lib/utils"
 
@@ -37,6 +38,7 @@ export function Hero({
         <div className="absolute inset-0 -z-10 bg-hero-glow opacity-90" />
         <div className="container-shell grid items-end gap-16 md:grid-cols-[1.15fr_.85fr]">
           <div>
+            <BrandLockup size="md" caption="VX signature" className="mb-6" />
             <span className="eyebrow">Premium infrastructure for landing pages</span>
             <h1 className="text-hero-sm font-semibold tracking-[-0.06em] text-white md:text-hero-md lg:text-hero-lg">
               {title}
@@ -82,6 +84,7 @@ export function Hero({
     return (
       <section className="section-space">
         <div className="container-shell max-w-5xl">
+          <BrandLockup size="md" caption="VX signature" className="mb-6" />
           <span className="eyebrow">Minimal / technical / premium</span>
           <h1 className="mt-3 max-w-4xl text-hero-sm font-semibold tracking-[-0.06em] text-white md:text-hero-md">
             {title}
@@ -101,6 +104,7 @@ export function Hero({
       <section className="section-space relative overflow-hidden">
         <div className="absolute inset-x-0 top-0 -z-10 h-[520px] bg-hero-glow opacity-70" />
         <div className="container-shell text-center">
+          <BrandLockup size="md" caption="VX signature" className="mx-auto mb-6" />
           <span className="eyebrow">VolynxOS, not one-offs</span>
           <h1 className="mx-auto max-w-5xl text-hero-sm font-semibold tracking-[-0.06em] text-white md:text-hero-md lg:text-hero-lg">
             {title}
@@ -143,6 +147,7 @@ export function Hero({
     <section className="section-space relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-hero-glow opacity-70" />
       <div className="container-shell text-center">
+        <BrandLockup size="md" caption="VX signature" className="mx-auto mb-6" />
         <span className="eyebrow">Global product positioning</span>
         <h1 className="mx-auto max-w-5xl text-hero-sm font-semibold tracking-[-0.06em] text-white md:text-hero-md lg:text-hero-lg">
           {title}

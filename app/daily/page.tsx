@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Archive, CalendarDays, FileText, GitCompareArrows, ListTodo, PenLine, Sparkles, Zap } from "lucide-react"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
 import { CommandInbox } from "@/components/daily/command-inbox"
@@ -33,6 +34,7 @@ export default function DailyPage() {
         <section className="container-shell py-8 md:py-10">
           <div className="mb-6 grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
             <div>
+              <BrandLockup size="sm" caption="VX signature" className="mb-5" />
               <span className="eyebrow">VOLYNX Daily MVP</span>
               <h1 className="max-w-3xl text-4xl font-semibold tracking-[-0.05em] text-white md:text-6xl">
                 The place where thoughts become actions.

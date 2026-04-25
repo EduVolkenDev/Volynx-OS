@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { type CSSProperties, useEffect, useMemo, useState } from "react"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { Button } from "@/components/common/button"
 import { iconPacks, iconPackStats, type IconPack } from "@/content/icon-packs"
 import { type StoreIcon, iconStoreCategories, iconStoreIcons } from "@/content/icons-store"
@@ -291,6 +292,7 @@ export function IconsStoreSection() {
         <div className="container-shell">
           <div className="icons-store-hero-shell">
             <div className="text-center lg:text-left">
+              <BrandLockup size="sm" caption="VX signature" className="mx-auto mb-5 lg:mx-0" />
               <p className="icons-store-brand">VolynxOS Assets</p>
               <h1 className="icons-store-title">Icons Store</h1>
               <p className="icons-store-subtitle">Premium · Textured · Futuristic</p>
@@ -329,18 +331,16 @@ export function IconsStoreSection() {
                 <p>premium-pack-browser</p>
               </div>
               <div className="icons-showcase-feature">
-                <Image
-                  src="/icons-store/icons-logo.webp"
-                  alt="VolynxOS Icons Store logo"
-                  width={260}
-                  height={260}
-                  priority
-                  className="icons-showcase-logo"
+                <BrandLockup
+                  size="lg"
+                  caption="The VX reference"
+                  showWordmark={false}
+                  className="mx-auto sm:mx-0"
                 />
                 <div>
-                  <p>Launch shelf</p>
-                  <strong>Ready packs, source cards and checkout in one premium flow.</strong>
-                  <span>{iconPackStats.premium} premium vaults plus {iconPackStats.free} free drops, grouped by visual language instead of dumped into one flat wall.</span>
+                  <p>VX signature</p>
+                  <strong>The icon that anchors every pack, vault and launch surface.</strong>
+                  <span>{iconPackStats.premium} premium vaults plus {iconPackStats.free} free drops, now tied to one unmistakable mark instead of a fragmented shelf identity.</span>
                 </div>
               </div>
               <div className="icons-showcase-strip">

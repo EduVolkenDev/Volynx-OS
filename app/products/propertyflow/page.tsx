@@ -1,6 +1,7 @@
 import Image from "next/image"
 import type { Metadata } from "next"
 import { ArrowRight, Building2, CheckCircle2, Database, Globe2, Layers3, ShieldCheck } from "lucide-react"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
 import { PropertyFlowPricing } from "@/components/propertyflow/propertyflow-pricing"
@@ -76,6 +77,7 @@ export default function PropertyFlowPage() {
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_24%_0%,rgba(45,212,191,.14),transparent_32rem),radial-gradient(circle_at_78%_12%,rgba(251,191,36,.1),transparent_28rem)]" />
           <div className="container-shell grid min-h-[calc(100vh-76px)] gap-10 py-16 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:py-20">
             <div>
+              <BrandLockup size="sm" caption="VX signature" className="mb-5" />
               <span className="eyebrow">PropertyFlow v{propertyFlowVersion}</span>
               <h1 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-white md:text-7xl">
                 A premium real-estate SaaS kit buyers can see before they buy.

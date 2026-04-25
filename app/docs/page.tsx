@@ -1,3 +1,4 @@
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteHeader } from "@/components/common/site-header"
 import { SiteFooter } from "@/components/common/site-footer"
 import { HeroShowcase } from "@/components/sections/hero-showcase"
@@ -54,6 +55,7 @@ export default function DocsPage() {
         <section className="section-space border-b border-white/5">
           <div className="container-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
+              <BrandLockup size="sm" caption="VX signature" className="mb-5" />
               <span className="eyebrow">Documentation</span>
               <h1 className="section-title">Build with VolynxOS without reverse-engineering the page.</h1>
               <p className="section-copy mt-5">

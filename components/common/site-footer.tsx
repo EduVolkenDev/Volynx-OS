@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { propertyFlowUrl } from "@/content/site"
 
 const footerLinks = [
@@ -29,7 +30,7 @@ export function SiteFooter() {
     <footer className="border-t border-white/5 py-10">
       <div className="container-shell grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start">
         <div>
-          <p className="text-sm font-medium text-white">VolynxOS</p>
+          <BrandLockup href="/" size="md" caption="Iconic platform signature" />
           <p className="mt-2 text-sm text-zinc-500">
             Launch OS for execution tools, premium assets, product kits and delivery.
           </p>

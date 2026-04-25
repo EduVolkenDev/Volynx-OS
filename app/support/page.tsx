@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { ArrowRight, Download, FileText, LifeBuoy, Mail, ReceiptText, ShieldCheck } from "lucide-react"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
 import { legalPages, supportEmail } from "@/content/legal-pages"
@@ -41,6 +42,7 @@ export default function SupportPage() {
         <section className="border-b border-white/5 py-12 md:py-16">
           <div className="container-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
             <div>
+              <BrandLockup size="sm" caption="VX signature" className="mb-5" />
               <span className="eyebrow">Support</span>
               <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.05em] text-white md:text-7xl">
                 Fast recovery for downloads, access and launch issues.

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { ArrowRight, FileArchive, Home, Image, ShieldCheck } from "lucide-react"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
 
@@ -35,6 +36,7 @@ export default function PurchasesPage() {
         <section className="container-shell py-10 md:py-14">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
             <div>
+              <BrandLockup size="sm" caption="VX signature" className="mb-5" />
               <span className="eyebrow">Purchase Hub</span>
               <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.05em] text-white md:text-7xl">
                 Downloads, docs and support in one return path.

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { ArrowRight, Box, Download, Sparkles } from "lucide-react"
+import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
 import { platformProducts, storeUrl } from "@/content/site"
@@ -24,6 +25,7 @@ export default function DashboardPage() {
         <section className="container-shell py-10 md:py-14">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
             <div>
+              <BrandLockup size="sm" caption="VX signature" className="mb-5" />
               <span className="eyebrow">Platform Hub</span>
               <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.05em] text-white md:text-7xl">
                 One place to use, buy and return to VOLYNX.
@@ -100,4 +102,3 @@ export default function DashboardPage() {
     </>
   )
 }
-
