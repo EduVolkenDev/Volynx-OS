@@ -25,7 +25,7 @@ Market it as:
 ## Offer logic
 - Free trust products feed the paid shelf.
 - One-time kit purchases create immediate revenue.
-- Volynx Pro captures buyers who want every kit, every tier, Image Suite Pro and Daily unlimited.
+- Volynx Pro captures buyers who want every kit, every tier, Image Suite Pro and the premium expansion layer.
 - The 7-day preview-match guarantee keeps risk low because previews define the contract.
 - BRL should be fixed annually from USD x 5.8, not spot converted in the front-end.
 

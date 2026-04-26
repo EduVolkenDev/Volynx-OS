@@ -19,14 +19,12 @@ const headerCopy = {
     nav: [
       { href: storeUrl, label: "Products", external: true },
       { href: "/dashboard", label: "Dashboard" },
-      { href: "/daily", label: "Daily" },
       { href: "/icons-store", label: "Icons" },
       { href: propertyFlowUrl, label: "PropertyFlow", external: true },
       { href: "/support", label: "Support" },
     ],
     mobileNav: [
       { href: storeUrl, label: "Products", external: true },
-      { href: "/daily", label: "Daily" },
       { href: "/dashboard/purchases", label: "Purchases" },
       { href: "/support", label: "Support" },
     ]
@@ -38,14 +36,12 @@ const headerCopy = {
     nav: [
       { href: storeUrl, label: "Produtos", external: true },
       { href: "/dashboard", label: "Dashboard" },
-      { href: "/daily", label: "Daily" },
       { href: "/icons-store", label: "Icons" },
       { href: propertyFlowUrl, label: "PropertyFlow", external: true },
       { href: "/support", label: "Suporte" },
     ],
     mobileNav: [
       { href: storeUrl, label: "Produtos", external: true },
-      { href: "/daily", label: "Daily" },
       { href: "/dashboard/purchases", label: "Compras" },
       { href: "/support", label: "Suporte" },
     ]

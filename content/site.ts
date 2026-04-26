@@ -5,14 +5,6 @@ export const storeUrl = "https://volynx.world/products/"
 
 export const platformProducts = [
   {
-    name: "VOLYNX Daily",
-    label: "Execution OS",
-    href: "/daily",
-    status: "Use now",
-    description: "Capture anything and route it into tasks, summaries, writing and decisions.",
-    actions: ["Command Inbox", "VOLYNX AI", "Local fallback"]
-  },
-  {
     name: "Icons Store",
     label: "Asset shelf",
     href: "/icons-store",
@@ -150,7 +142,7 @@ export const pricingTiers = [
     name: "Volynx Pro",
     price: "$19/mo",
     description: "For buyers who should get every kit, every tier and the full tool layer.",
-    features: ["All 3 kits", "All tiers", "Image Suite Pro", "Daily unlimited"],
+    features: ["All 3 kits", "All tiers", "Image Suite Pro", "Premium expansions"],
     highlight: true,
     href: "https://volynx.world/pricing/"
   },

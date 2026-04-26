@@ -32,25 +32,6 @@ export const iconPacks: IconPack[] = [
     href: "https://volynx.world/products/"
   },
   {
-    slug: "poligon-premium",
-    folder: "Poligon-Premium",
-    name: "Polygon Premium",
-    plan: "premium",
-    category: "Polygon",
-    count: 111,
-    price: "£39",
-    priceDetail: "111 flagship icons",
-    preview: [
-      "/assets/icons-store/Poligon-Premium/daily3D1.webp",
-      "/assets/icons-store/Poligon-Premium/daily3D2.webp",
-      "/assets/icons-store/Poligon-Premium/daily3D3.webp",
-      "/assets/icons-store/Poligon-Premium/daily3D4.webp",
-      "/assets/icons-store/Poligon-Premium/daily3D5.webp",
-      "/assets/icons-store/Poligon-Premium/daily3D6.webp"
-    ],
-    href: "https://volynx.world/products/"
-  },
-  {
     slug: "purple-icons-premium",
     folder: "purple-icons-premium",
     name: "Purple Icons Premium",
@@ -165,25 +146,6 @@ export const iconPacks: IconPack[] = [
     href: "https://volynx.world/products/"
   },
   {
-    slug: "iridescent-premium",
-    folder: "Iridescent-Premium",
-    name: "Iridescent Premium",
-    plan: "premium",
-    category: "Iridescent",
-    count: 33,
-    price: "£19",
-    priceDetail: "33 chromatic icons",
-    preview: [
-      "/assets/icons-store/Iridescent-Premium/daily-iridescent-premium1.webp",
-      "/assets/icons-store/Iridescent-Premium/daily-iridescent-premium2.webp",
-      "/assets/icons-store/Iridescent-Premium/daily-iridescent-premium4.webp",
-      "/assets/icons-store/Iridescent-Premium/daily-iridescent-premium5.webp",
-      "/assets/icons-store/Iridescent-Premium/daily-iridescent-premium6.webp",
-      "/assets/icons-store/Iridescent-Premium/daily-iridescent-premium7.webp"
-    ],
-    href: "https://volynx.world/products/"
-  },
-  {
     slug: "metal-chrome-premium",
     folder: "metal-chrome-premium",
     name: "Metal Chrome Premium",
@@ -258,25 +220,6 @@ export const iconPacks: IconPack[] = [
       "/assets/icons-store/Abstract-Free/icon-neon-premium6.webp"
     ],
     href: "/icons-store/downloads/abstract-free.zip"
-  },
-  {
-    slug: "day-by-day-free",
-    folder: "Day-By-Day-free",
-    name: "Day By Day Free",
-    plan: "free",
-    category: "Daily OS",
-    count: 36,
-    price: "Free",
-    priceDetail: "36 daily icons",
-    preview: [
-      "/assets/icons-store/Day-By-Day-free/daily-common2-1.webp",
-      "/assets/icons-store/Day-By-Day-free/daily-common2-2.webp",
-      "/assets/icons-store/Day-By-Day-free/daily-common2-3.webp",
-      "/assets/icons-store/Day-By-Day-free/daily-common2-4.webp",
-      "/assets/icons-store/Day-By-Day-free/daily-common2-5.webp",
-      "/assets/icons-store/Day-By-Day-free/daily-common2-6.webp"
-    ],
-    href: "/icons-store/downloads/day-by-day-free.zip"
   },
   {
     slug: "icons-blue-sliced3",

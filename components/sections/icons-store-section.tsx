@@ -115,11 +115,6 @@ const PACK_PRESENTATIONS: Record<string, Omit<PackPresentation, keyof PackPalett
     signature: "Abstract Drop",
     story: "Free abstract shapes for testing the Volynx mood without flattening the brand.",
   },
-  "day-by-day-free": {
-    palette: "cobalt",
-    signature: "Day By Day",
-    story: "A lighter daily free pack that still feels authored and intentional.",
-  },
   "icons-blue-sliced3": {
     palette: "cobalt",
     signature: "Blue Vector Slice",

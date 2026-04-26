@@ -29,7 +29,7 @@ export const proUpsell = {
   name: "Volynx Pro",
   price: "$19/mo",
   annual: "$179/year",
-  promise: "All 3 kits, every tier, Image Suite Pro and Daily unlimited in one recurring product.",
+  promise: "All 3 kits, every tier, Image Suite Pro and premium expansions in one recurring product.",
   checkoutLine: "Or get every kit, every tier and the full Volynx tool layer with Volynx Pro."
 } as const
 

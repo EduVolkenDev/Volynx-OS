@@ -22,7 +22,7 @@ const supportRoutes = [
     title: "Check product access",
     label: "Platform hub",
     href: "/dashboard",
-    copy: "Jump back into Daily, product pages, delivery areas and launch surfaces.",
+    copy: "Jump back into product pages, delivery areas and launch surfaces.",
     icon: ReceiptText
   },
   {

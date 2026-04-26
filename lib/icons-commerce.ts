@@ -37,9 +37,6 @@ const packIconDir = path.join(publicDir, "icons-store", "packs")
 
 const extraDeliveryPacks: Omit<IconDeliveryPack, "priceCurrency" | "aliases">[] = [
   packEntry("chromed-premium", "Chromed Premium", "chromed-premium", "premium", "Metal", 77, "£29", "77-piece chrome system", "packs"),
-  packEntry("daily3Dpremium", "Daily 3D Premium", "daily3Dpremium", "premium", "Daily OS", 40, "£19", "40 3D daily icons", "packs"),
-  packEntry("daily-iridescent-premium", "Daily Iridescent Premium", "daily-iridescent-premium", "premium", "Daily OS", 33, "£15", "33 iridescent icons", "packs"),
-  packEntry("daily-poligon-premium", "Daily Polygon Premium", "daily-poligon-premium", "premium", "Daily OS", 35, "£15", "35 polygon icons", "packs", ["daily-polygon-premium"]),
   packEntry("darkglass-premium", "Dark Glass Premium", "darkglass-premium", "premium", "Glass", 19, "£9", "19 glass icons", "packs", ["dark-glass-premium"]),
   packEntry("icons-metal-premium", "Metal Premium", "icons-metal-premium", "premium", "Metal", 20, "£12", "20 metal icons", "packs"),
   packEntry("icons-neon-premium", "Neon Premium", "icons-neon-premium", "premium", "Neon", 24, "£12", "24 neon icons", "packs"),
@@ -48,7 +45,7 @@ const extraDeliveryPacks: Omit<IconDeliveryPack, "priceCurrency" | "aliases">[] 
   packEntry("super-icons-premium", "Super Icons Premium", "super-icons-premium", "premium", "Core", 14, "£9", "14 hero icons", "packs"),
   packEntry("glass-icons-premium", "Glass Icons Premium", "Icons-Glass-Premium", "premium", "Glass", 41, "£19", "41 translucent icons", "assets", ["icons-glass-premium"]),
   packEntry("metal-premium-complete", "Metal Premium Complete", "Metal-Premium", "premium", "Metal", 44, "£24", "44 high-shine icons", "assets", ["metal-premium"]),
-  packEntry("polygon-premium-complete", "Polygon Premium Complete", "Poligon-Premium", "premium", "Daily OS", 111, "£39", "111-piece flagship set", "assets", ["poligon-premium", "polygon-premium"]),
+  packEntry("polygon-premium-complete", "Polygon Premium Complete", "Poligon-Premium", "premium", "Polygon", 111, "£39", "111-piece flagship set", "assets", ["poligon-premium", "polygon-premium"]),
   packEntry("volynx-master-webp-premium", "Volynx Master WebP Vault", "volynx-master-webp", "premium", "Master Vault", 828, "£149", "828 final WebP icons", "assets", ["volynx-master-webp", "volynx-master-vault"])
 ]
 

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 const dashboardStats = [
-  { label: "Use", value: "Daily" },
+  { label: "Use", value: "Platform" },
   { label: "Browse", value: "Assets" },
   { label: "Build", value: "Kits" },
   { label: "Return", value: "Delivery" }
@@ -31,14 +31,14 @@ export default function DashboardPage() {
                 One place to use, buy and return to VOLYNX.
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-7 text-zinc-400 md:text-lg">
-                Daily handles execution, Icons powers assets, PropertyFlow ships as a product kit, and Purchases brings delivery back into one path.
+                Icons powers assets, PropertyFlow ships as a product kit, and Purchases brings delivery back into one path.
               </p>
             </div>
             <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4 shadow-glow backdrop-blur">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">Launch Flow</p>
-                  <p className="mt-2 text-lg font-semibold text-white">Products → Execution → Delivery</p>
+                  <p className="mt-2 text-lg font-semibold text-white">Products → Browse → Delivery</p>
                 </div>
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
