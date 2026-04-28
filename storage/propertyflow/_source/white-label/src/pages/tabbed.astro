@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PropertyCard from "../components/PropertyCard.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+const tabs = [
+  { id: "all", label: "All", count: properties.length },
+  { id: "luxury", label: "Luxury", count: properties.filter(p => p.category === "luxury").length },
+  { id: "premium", label: "Premium", count: properties.filter(p => p.category === "premium").length },
+  { id: "rental", label: "Rental", count: properties.filter(p => p.category === "rental").length },
+  { id: "commercial", label: "Commercial", count: properties.filter(p => p.category === "commercial").length }
+];
+---
+<BaseLayout title="Tabbed Categories · PropertyFlow" current="tabbed" locale={locale}>
+  <section class="page-head">
+    <h1>Tabbed Categories</h1>
+    <p>Reward exploration. One bold tab strip, one scroll per category.</p>
+  </section>
+  <nav class="tabbed" role="tablist">
+    {tabs.map((tab, i) => (
+      <button type="button" role="tab"
+              class:list={["tabbed__tab", { "is-active": i === 0 }]}
+              data-pf-tab={tab.id}>
+        <span class="tabbed__tab-label">{tab.label}</span>
+        <span class="tabbed__tab-count">{tab.count}</span>
+      </button>
+    ))}
+  </nav>
+  <div class="grid-tabbed" id="tabbedGrid">
+    {properties.map((prop) => (
+      <PropertyCard prop={prop} variant="classic" locale={locale} />
+    ))}
+  </div>
+
+  <script>
+    (function () {
+      const tabs = document.querySelectorAll<HTMLButtonElement>("[data-pf-tab]");
+      const cards = document.querySelectorAll<HTMLElement>("#tabbedGrid [data-pf-card]");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.classList.remove("is-active"));
+          tab.classList.add("is-active");
+          const want = tab.dataset.pfTab;
+          cards.forEach((c) => {
+            const cat = c.dataset.category || "";
+            c.style.display = (want === "all" || cat === want) ? "" : "none";
+          });
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .tabbed {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      padding: 14px; margin-bottom: 24px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+    }
+    .tabbed__tab {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: 999px;
+      background: rgba(0,0,0,.25); border: 1px solid var(--border);
+      color: var(--muted); font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: all .15s; white-space: nowrap;
+    }
+    .tabbed__tab:hover { color: var(--text); border-color: var(--border-strong); }
+    .tabbed__tab.is-active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-color: transparent; color: #0a0e1a;
+    }
+    .tabbed__tab-count {
+      padding: 2px 8px; border-radius: 999px;
+      background: rgba(0,0,0,.3); font-size: 11px;
+    }
+    .tabbed__tab.is-active .tabbed__tab-count { background: rgba(255,255,255,.42); color: #0a0e1a; }
+    .grid-tabbed {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;
+    }
+  </style>
+</BaseLayout>

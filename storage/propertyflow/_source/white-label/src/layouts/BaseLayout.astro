@@ -1,17 +1,22 @@
 ---
 import "../styles/global.css";
 import { dict, type Locale } from "../data/i18n";
+import { branding } from "../branding/tokens";
+import { brandingVarsCss, fontLink } from "../branding/apply";
 
 interface Props {
   title: string;
-  current?: "classic" | "magazine" | "compact" | "gallery" | "split" | "masonry" | "home";
+  current?: "classic" | "magazine" | "compact" | "gallery" | "split" | "masonry" | "map" | "tabbed" | "story" | "carousel" | "home";
   locale?: Locale;
 }
 
-const { title, current = "home", locale = "en" } = Astro.props;
+const { title, current = "home", locale = branding.default_locale } = Astro.props;
 const t = (key: string) => dict[locale]?.[key] ?? dict.en[key] ?? key;
 const otherLocale: Locale = locale === "en" ? "pt" : "en";
 const base = locale === "pt" ? "/pt" : "";
+const f = branding.features;
+const brandCss = brandingVarsCss();
+const fontHref = fontLink();
 ---
 <!DOCTYPE html>
 <html lang={locale === "pt" ? "pt-BR" : "en"}>
@@ -19,24 +24,30 @@ const base = locale === "pt" ? "/pt" : "";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <meta name="description" content={t("site.tagline")} />
+    <meta name="description" content={locale === "pt" ? branding.tagline_pt : branding.tagline_en} />
+    {fontHref && <link rel="stylesheet" href={fontHref} />}
+    <style is:global set:html={brandCss}></style>
   </head>
   <body>
     <header class="brand-header">
-      <a href={`${base}/`} class="brand-header__name">{t("site.name")}</a>
+      <a href={`${base}/`} class="brand-header__name">{branding.name}</a>
       <nav class="brand-header__nav" aria-label="Primary">
-        <a href={`${base}/classic/`}  class:list={{ "is-active": current === "classic" }}>{t("nav.classic")}</a>
-        <a href={`${base}/magazine/`} class:list={{ "is-active": current === "magazine" }}>{t("nav.magazine")}</a>
-        <a href={`${base}/compact/`}  class:list={{ "is-active": current === "compact" }}>{t("nav.compact")}</a>
-        <a href={`${base}/gallery/`}  class:list={{ "is-active": current === "gallery" }}>{t("nav.gallery")}</a>
-        <a href={`${base}/split/`}    class:list={{ "is-active": current === "split" }}>{t("nav.split")}</a>
-        <a href={`${base}/masonry/`}  class:list={{ "is-active": current === "masonry" }}>{t("nav.masonry")}</a>
+        {f.classic   && <a href={`${base}/classic/`}   class:list={{ "is-active": current === "classic" }}>{t("nav.classic")}</a>}
+        {f.magazine  && <a href={`${base}/magazine/`}  class:list={{ "is-active": current === "magazine" }}>{t("nav.magazine")}</a>}
+        {f.compact   && <a href={`${base}/compact/`}   class:list={{ "is-active": current === "compact" }}>{t("nav.compact")}</a>}
+        {f.gallery   && <a href={`${base}/gallery/`}   class:list={{ "is-active": current === "gallery" }}>{t("nav.gallery")}</a>}
+        {f.split     && <a href={`${base}/split/`}     class:list={{ "is-active": current === "split" }}>{t("nav.split")}</a>}
+        {f.masonry   && <a href={`${base}/masonry/`}   class:list={{ "is-active": current === "masonry" }}>{t("nav.masonry")}</a>}
+        {f.map       && <a href={`${base}/map/`}       class:list={{ "is-active": current === "map" }}>{t("nav.map")}</a>}
+        {f.tabbed    && <a href={`${base}/tabbed/`}    class:list={{ "is-active": current === "tabbed" }}>{t("nav.tabbed")}</a>}
+        {f.story     && <a href={`${base}/story/`}     class:list={{ "is-active": current === "story" }}>{t("nav.story")}</a>}
+        {f.carousel  && <a href={`${base}/carousel/`}  class:list={{ "is-active": current === "carousel" }}>{t("nav.carousel")}</a>}
       </nav>
       <a href={otherLocale === "pt" ? "/pt/" : "/"} class="brand-header__lang">{t("lang.toggle")}</a>
     </header>
     <main class="shell">
       <slot />
     </main>
-    <footer class="brand-footer">{t("footer.built_with")}</footer>
+    <footer class="brand-footer">{branding.contact.email}</footer>
   </body>
 </html>

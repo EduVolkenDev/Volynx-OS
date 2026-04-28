@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+---
+<BaseLayout title="Carousel Hero · PropertyFlow" current="carousel" locale={locale}>
+  <section class="page-head">
+    <h1>Carousel Hero</h1>
+    <p>Rotating signature listings. Perfect for the homepage of an agency that wants to lead with prestige.</p>
+  </section>
+  <div class="carousel" id="pfCarousel">
+    {properties.slice(0, 6).map((prop, i) => (
+      <article class:list={["carousel__slide", { "is-active": i === 0 }]} data-slide-index={i}
+               style={`background-image: url('${prop.image}')`}>
+        <div class="carousel__copy">
+          <span class="carousel__chip">{prop.status === "for-sale" ? "For sale" : "For rent"}</span>
+          <h2>{prop.title_en}</h2>
+          <p>{prop.city_en} · {prop.country_en} · {prop.area_m2} m²</p>
+          <strong>€{new Intl.NumberFormat("en-US").format(prop.price_eur)}{prop.status === "for-rent" ? " / month" : ""}</strong>
+        </div>
+      </article>
+    ))}
+    <button type="button" class="carousel__nav carousel__nav--prev" aria-label="Previous">‹</button>
+    <button type="button" class="carousel__nav carousel__nav--next" aria-label="Next">›</button>
+    <div class="carousel__dots" id="pfCarouselDots">
+      {properties.slice(0, 6).map((_, i) => (
+        <button type="button" class:list={["carousel__dot", { "is-active": i === 0 }]} data-dot={i} aria-label={`Slide ${i+1}`}></button>
+      ))}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.getElementById("pfCarousel");
+      if (!root) return;
+      const slides = root.querySelectorAll<HTMLElement>(".carousel__slide");
+      const dots = root.querySelectorAll<HTMLButtonElement>("[data-dot]");
+      let idx = 0;
+      function go(n: number) {
+        idx = (n + slides.length) % slides.length;
+        slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
+        dots.forEach((d, i) => d.classList.toggle("is-active", i === idx));
+      }
+      root.querySelector(".carousel__nav--prev")?.addEventListener("click", () => go(idx - 1));
+      root.querySelector(".carousel__nav--next")?.addEventListener("click", () => go(idx + 1));
+      dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
+      const auto = setInterval(() => go(idx + 1), 6000);
+      root.addEventListener("mouseenter", () => clearInterval(auto));
+    })();
+  </script>
+
+  <style>
+    .carousel {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      max-height: 70vh;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .carousel__slide {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      opacity: 0; transition: opacity .8s ease;
+      display: flex; align-items: flex-end;
+    }
+    .carousel__slide.is-active { opacity: 1; }
+    .carousel__slide::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(10,14,26,.92) 100%);
+    }
+    .carousel__copy {
+      position: relative; z-index: 1; padding: 32px clamp(24px, 5vw, 56px); color: #fff;
+    }
+    .carousel__chip {
+      display: inline-block; margin-bottom: 10px;
+      padding: 4px 14px; border-radius: 999px;
+      background: var(--accent); color: #0a0e1a;
+      font-size: 12px; font-weight: 800; letter-spacing: .08em;
+    }
+    .carousel__copy h2 { margin: 0 0 6px; font-size: clamp(1.5rem, 3.6vw, 2.2rem); }
+    .carousel__copy p { margin: 0 0 10px; opacity: .82; }
+    .carousel__copy strong { font-size: 1.4rem; color: var(--accent); }
+    .carousel__nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border-radius: 50%; border: 1px solid rgba(255,255,255,.32);
+      background: rgba(10,14,26,.62); color: #fff;
+      font-size: 24px; line-height: 1; cursor: pointer;
+      backdrop-filter: blur(8px);
+      display: grid; place-items: center;
+    }
+    .carousel__nav:hover { background: rgba(255,255,255,.14); }
+    .carousel__nav--prev { left: 18px; }
+    .carousel__nav--next { right: 18px; }
+    .carousel__dots {
+      position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px;
+    }
+    .carousel__dot {
+      width: 8px; height: 8px; border: 0; padding: 0;
+      border-radius: 50%; background: rgba(255,255,255,.32); cursor: pointer; transition: all .2s;
+    }
+    .carousel__dot.is-active { background: var(--accent); width: 22px; border-radius: 999px; }
+  </style>
+</BaseLayout>

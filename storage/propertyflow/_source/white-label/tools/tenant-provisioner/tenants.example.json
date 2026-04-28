@@ -1,0 +1,14 @@
+[
+  {
+    "slug": "acme-realty",
+    "branding": "./branding/acme-realty.ts",
+    "data": "./data/acme-realty.json",
+    "domain": "listings.acmerealty.com"
+  },
+  {
+    "slug": "luxe-lisbon",
+    "branding": "./branding/luxe-lisbon.ts",
+    "data": "./data/luxe-lisbon.json",
+    "domain": "luxe.lisbon.example"
+  }
+]

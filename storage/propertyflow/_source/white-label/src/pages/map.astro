@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FilterBar from "../components/FilterBar.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+// Demo coordinates (city-centred approximations) — wire to real lat/lng in production
+const COORDS: Record<string, { x: number; y: number }> = {
+  Lisbon: { x: 24, y: 56 }, Porto: { x: 22, y: 30 }, Lagos: { x: 18, y: 84 },
+  Cascais: { x: 18, y: 56 }, Funchal: { x: 8, y: 90 }, Évora: { x: 32, y: 64 },
+  Sintra: { x: 20, y: 54 }
+};
+const pins = properties.map((p, i) => ({ ...p, _coord: COORDS[p.city_en] || { x: 30 + (i*8)%50, y: 30 + (i*7)%50 } }));
+---
+<BaseLayout title="Map View · PropertyFlow" current="map" locale={locale}>
+  <section class="page-head">
+    <h1>Map View</h1>
+    <p>Discovery by geography. Click a pin, see the listing card.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="map-view">
+    <div class="map-canvas" id="mapCanvas">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="map-bg" aria-hidden="true">
+        <defs>
+          <linearGradient id="mapBg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0a0e1a" /><stop offset="1" stop-color="#1f2540" />
+          </linearGradient>
+        </defs>
+        <rect width="100" height="100" fill="url(#mapBg)" />
+        <path d="M16 14 Q24 10 30 18 T36 36 T28 56 T20 76 T28 92 Z" fill="rgba(89,195,255,0.06)" stroke="rgba(89,195,255,0.32)" stroke-width="0.4" />
+      </svg>
+      {pins.map((p) => (
+        <button type="button" class="map-pin" data-pf-card
+                data-category={p.category}
+                data-search={[p.title_en, p.city_en, p.type_en].join(" ").toLowerCase()}
+                data-prop-id={p.id}
+                style={`left: ${p._coord.x}%; top: ${p._coord.y}%`}>
+          <span class="map-pin__dot"></span>
+          <span class="map-pin__city">{p.city_en}</span>
+        </button>
+      ))}
+    </div>
+    <aside class="map-detail" id="mapDetail">
+      <p class="split-detail__hint">← Click a pin to inspect.</p>
+    </aside>
+  </div>
+
+  <script type="application/json" id="propertiesJson" set:html={JSON.stringify(properties)}></script>
+
+  <script>
+    (function () {
+      const data = JSON.parse(document.getElementById("propertiesJson")?.textContent || "[]");
+      const detail = document.getElementById("mapDetail");
+      const pins = document.querySelectorAll<HTMLElement>(".map-pin");
+      function render(p: any) {
+        if (!detail) return;
+        const fmt = (n: number) => new Intl.NumberFormat("en-US").format(n);
+        detail.innerHTML = `
+          <div class="map-detail__hero" style="background-image:url('${p.image}')"></div>
+          <h2>${p.title_en}</h2>
+          <p class="map-detail__loc">${p.city_en} · ${p.country_en}</p>
+          <p class="map-detail__summary">${p.summary_en || ""}</p>
+          <strong class="map-detail__price">€${fmt(p.price_eur)}${p.status === "for-rent" ? " / month" : ""}</strong>
+        `;
+      }
+      pins.forEach((pin) => {
+        pin.addEventListener("click", () => {
+          pins.forEach((p) => p.classList.remove("is-active"));
+          pin.classList.add("is-active");
+          const id = (pin as HTMLElement).dataset.propId;
+          const p = data.find((x: any) => x.id === id);
+          if (p) render(p);
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .map-view { display: grid; grid-template-columns: 1fr; gap: 14px; min-height: 70vh; }
+    @media (min-width: 920px) { .map-view { grid-template-columns: 1.6fr 1fr; } }
+    .map-canvas {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; background: rgba(0,0,0,.35);
+    }
+    @media (min-width: 920px) { .map-canvas { aspect-ratio: auto; height: 100%; } }
+    .map-bg { width: 100%; height: 100%; position: absolute; inset: 0; }
+    .map-pin {
+      position: absolute; transform: translate(-50%, -50%);
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px 6px 8px; border-radius: 999px;
+      background: rgba(10,14,26,.85); border: 1px solid var(--accent);
+      color: var(--text); font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: all .2s;
+    }
+    .map-pin:hover { background: rgba(89,195,255,.18); }
+    .map-pin.is-active { background: var(--accent); color: #0a0e1a; box-shadow: 0 0 0 4px rgba(89,195,255,.32); }
+    .map-pin__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+    .map-pin.is-active .map-pin__dot { background: #0a0e1a; box-shadow: none; }
+    .map-detail {
+      padding: 22px; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .map-detail__hero { aspect-ratio: 16 / 9; border-radius: var(--radius); background-size: cover; background-position: center; margin-bottom: 18px; }
+    .map-detail__loc { margin: 0 0 10px; color: var(--muted); }
+    .map-detail__summary { color: var(--muted); margin: 0 0 14px; }
+    .map-detail__price { display: block; font-size: 1.6rem; color: var(--accent); }
+    .split-detail__hint { color: var(--soft); }
+  </style>
+</BaseLayout>

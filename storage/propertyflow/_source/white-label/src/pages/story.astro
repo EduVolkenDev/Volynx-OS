@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+// Use top 5 highest-priced as story narrative
+const stories = [...properties].sort((a, b) => b.price_eur - a.price_eur).slice(0, 5);
+---
+<BaseLayout title="Story Mode · PropertyFlow" current="story" locale={locale}>
+  <section class="page-head">
+    <h1>Story Mode</h1>
+    <p>Full-bleed scroll. One property per "scene" — built for boutique inventory and lifestyle buyers.</p>
+  </section>
+  <div class="story">
+    {stories.map((prop, i) => (
+      <section class="story__scene" id={`scene-${i+1}`}>
+        <div class="story__bg" style={`background-image: url('${prop.image}')`}></div>
+        <div class="story__overlay">
+          <span class="story__index">{String(i+1).padStart(2, "0")} / {String(stories.length).padStart(2, "0")}</span>
+          <h2>{prop.title_en}</h2>
+          <p class="story__loc">{prop.city_en} · {prop.country_en}</p>
+          <p class="story__summary">{prop.summary_en}</p>
+          <div class="story__meta">
+            {prop.beds > 0 && <span>{prop.beds} beds</span>}
+            <span>{prop.baths} baths</span>
+            <span>{prop.area_m2} m²</span>
+          </div>
+          <strong class="story__price">€{new Intl.NumberFormat("en-US").format(prop.price_eur)}</strong>
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <style>
+    .story { display: grid; gap: 20px; }
+    .story__scene {
+      position: relative;
+      min-height: 78vh;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex; align-items: flex-end;
+      box-shadow: var(--shadow-lg);
+    }
+    .story__bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transform: scale(1.05);
+    }
+    .story__overlay {
+      position: relative; z-index: 1;
+      padding: 36px clamp(24px, 5vw, 64px);
+      width: 100%;
+      background: linear-gradient(180deg, transparent 0%, rgba(10,14,26,.6) 50%, rgba(10,14,26,.92) 100%);
+      color: #fff;
+    }
+    .story__index {
+      display: inline-block; margin-bottom: 12px;
+      padding: 4px 14px; border-radius: 999px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.32);
+      font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    }
+    .story__overlay h2 {
+      margin: 0 0 6px; font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: -.02em;
+    }
+    .story__loc { margin: 0 0 12px; opacity: .82; }
+    .story__summary { max-width: 60ch; margin: 0 0 16px; opacity: .9; line-height: 1.65; }
+    .story__meta { display: flex; gap: 16px; flex-wrap: wrap; opacity: .82; font-size: 13px; margin-bottom: 14px; }
+    .story__price { font-size: 1.6rem; color: var(--accent); letter-spacing: -.01em; }
+  </style>
+</BaseLayout>
