@@ -1,0 +1,42 @@
+---
+import "../styles/global.css";
+import { dict, type Locale } from "../data/i18n";
+
+interface Props {
+  title: string;
+  current?: "classic" | "magazine" | "compact" | "gallery" | "split" | "masonry" | "home";
+  locale?: Locale;
+}
+
+const { title, current = "home", locale = "en" } = Astro.props;
+const t = (key: string) => dict[locale]?.[key] ?? dict.en[key] ?? key;
+const otherLocale: Locale = locale === "en" ? "pt" : "en";
+const base = locale === "pt" ? "/pt" : "";
+---
+<!DOCTYPE html>
+<html lang={locale === "pt" ? "pt-BR" : "en"}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={t("site.tagline")} />
+  </head>
+  <body>
+    <header class="brand-header">
+      <a href={`${base}/`} class="brand-header__name">{t("site.name")}</a>
+      <nav class="brand-header__nav" aria-label="Primary">
+        <a href={`${base}/classic/`}  class:list={{ "is-active": current === "classic" }}>{t("nav.classic")}</a>
+        <a href={`${base}/magazine/`} class:list={{ "is-active": current === "magazine" }}>{t("nav.magazine")}</a>
+        <a href={`${base}/compact/`}  class:list={{ "is-active": current === "compact" }}>{t("nav.compact")}</a>
+        <a href={`${base}/gallery/`}  class:list={{ "is-active": current === "gallery" }}>{t("nav.gallery")}</a>
+        <a href={`${base}/split/`}    class:list={{ "is-active": current === "split" }}>{t("nav.split")}</a>
+        <a href={`${base}/masonry/`}  class:list={{ "is-active": current === "masonry" }}>{t("nav.masonry")}</a>
+      </nav>
+      <a href={otherLocale === "pt" ? "/pt/" : "/"} class="brand-header__lang">{t("lang.toggle")}</a>
+    </header>
+    <main class="shell">
+      <slot />
+    </main>
+    <footer class="brand-footer">{t("footer.built_with")}</footer>
+  </body>
+</html>

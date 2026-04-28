@@ -1,0 +1,219 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Admin · PropertyFlow" current="home" locale="en">
+  <section class="page-head">
+    <h1>Admin</h1>
+    <p>Add, edit and remove properties without touching code. Backed by Supabase.</p>
+  </section>
+
+  <div class="admin-warning">
+    <strong>Setup required.</strong> Configure your Supabase URL + anon key in <code>.env</code>
+    (copy from <code>.env.example</code>) and apply the schema in <code>supabase/schema.sql</code>.
+    See <code>docs/SUPABASE.md</code> for the full setup guide.
+  </div>
+
+  <div class="admin-toolbar">
+    <button type="button" id="adminNew" class="admin-btn admin-btn--primary">+ New property</button>
+    <span id="adminStatus" class="admin-status">Loading…</span>
+  </div>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th><th>City</th><th>Type</th><th>Price</th><th>Status</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="adminRows"></tbody>
+    </table>
+  </div>
+
+  <dialog id="adminDialog" class="admin-dialog">
+    <form id="adminForm" method="dialog">
+      <h3 id="adminFormTitle">New property</h3>
+      <div class="admin-form__grid">
+        <label>Title (EN)<input name="title_en" required /></label>
+        <label>Title (PT)<input name="title_pt" /></label>
+        <label>City (EN)<input name="city_en" required /></label>
+        <label>City (PT)<input name="city_pt" /></label>
+        <label>Country (EN)<input name="country_en" required /></label>
+        <label>Type (EN)<input name="type_en" required /></label>
+        <label>Beds<input name="beds" type="number" min="0" required /></label>
+        <label>Baths<input name="baths" type="number" min="0" required /></label>
+        <label>Area m²<input name="area_m2" type="number" min="0" required /></label>
+        <label>Price (EUR)<input name="price_eur" type="number" min="0" required /></label>
+        <label>Status
+          <select name="status" required>
+            <option value="for-sale">For sale</option>
+            <option value="for-rent">For rent</option>
+          </select>
+        </label>
+        <label>Category
+          <select name="category" required>
+            <option>luxury</option><option>premium</option><option>rental</option><option>commercial</option>
+          </select>
+        </label>
+        <label class="admin-form__full">Image URL<input name="image" placeholder="/images/property-XX.jpg" required /></label>
+        <label class="admin-form__full">Summary (EN)<textarea name="summary_en" rows="2"></textarea></label>
+      </div>
+      <div class="admin-form__actions">
+        <button type="button" id="adminCancel" class="admin-btn">Cancel</button>
+        <button type="submit" class="admin-btn admin-btn--primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module">
+    // PropertyFlow Professional admin — minimal Supabase CRUD.
+    // Loads supabase-js from a CDN; expects PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY in import.meta.env.
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+
+    const url = import.meta.env.PUBLIC_SUPABASE_URL;
+    const anon = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+    const status = document.getElementById("adminStatus");
+    const tbody = document.getElementById("adminRows");
+    const dialog = document.getElementById("adminDialog");
+    const form = document.getElementById("adminForm");
+    const newBtn = document.getElementById("adminNew");
+    const cancelBtn = document.getElementById("adminCancel");
+    const titleEl = document.getElementById("adminFormTitle");
+    let editingId = null;
+
+    if (!url || !anon) {
+      status.textContent = "⚠️ Add PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY to .env, restart dev.";
+      newBtn.disabled = true;
+    } else {
+      const supabase = createClient(url, anon);
+
+      async function load() {
+        status.textContent = "Loading…";
+        const { data, error } = await supabase
+          .from("properties")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) { status.textContent = "Error: " + error.message; return; }
+        status.textContent = (data?.length || 0) + " properties";
+        tbody.innerHTML = (data || []).map(p => `
+          <tr data-id="${p.id}">
+            <td>${escape(p.title_en || "")}</td>
+            <td>${escape(p.city_en || "")}</td>
+            <td>${escape(p.type_en || "")}</td>
+            <td>€${new Intl.NumberFormat("en-US").format(p.price_eur || 0)}</td>
+            <td>${p.status || ""}</td>
+            <td>
+              <button type="button" class="admin-btn" data-edit>Edit</button>
+              <button type="button" class="admin-btn admin-btn--danger" data-del>Delete</button>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      function escape(s) { return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+
+      function fillForm(p = {}) {
+        for (const k of Object.keys(p)) {
+          const el = form.elements.namedItem(k);
+          if (el && "value" in el) el.value = p[k] ?? "";
+        }
+      }
+      function readForm() {
+        const fd = new FormData(form);
+        const obj = {};
+        for (const [k, v] of fd.entries()) {
+          obj[k] = ["beds","baths","area_m2","price_eur"].includes(k) ? Number(v) : v;
+        }
+        return obj;
+      }
+
+      newBtn.addEventListener("click", () => {
+        editingId = null;
+        titleEl.textContent = "New property";
+        form.reset();
+        dialog.showModal();
+      });
+      cancelBtn.addEventListener("click", () => dialog.close());
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const payload = readForm();
+        if (editingId) {
+          const { error } = await supabase.from("properties").update(payload).eq("id", editingId);
+          if (error) { alert(error.message); return; }
+        } else {
+          const { error } = await supabase.from("properties").insert(payload);
+          if (error) { alert(error.message); return; }
+        }
+        dialog.close();
+        load();
+      });
+
+      tbody.addEventListener("click", async (e) => {
+        const tr = e.target.closest("tr");
+        if (!tr) return;
+        const id = tr.dataset.id;
+        if (e.target.matches("[data-del]")) {
+          if (!confirm("Delete this property?")) return;
+          await supabase.from("properties").delete().eq("id", id);
+          load();
+        } else if (e.target.matches("[data-edit]")) {
+          const { data } = await supabase.from("properties").select("*").eq("id", id).single();
+          editingId = id;
+          titleEl.textContent = "Edit property";
+          fillForm(data || {});
+          dialog.showModal();
+        }
+      });
+
+      load();
+    }
+  </script>
+
+  <style>
+    .admin-warning {
+      padding: 14px 18px; margin-bottom: 18px;
+      background: rgba(214, 179, 106, .08); border: 1px solid rgba(214, 179, 106, .3);
+      border-radius: var(--radius); color: var(--gold); font-size: 13px;
+    }
+    .admin-warning code { background: rgba(0,0,0,.3); padding: 2px 6px; border-radius: 4px; color: #fff; }
+    .admin-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .admin-status { color: var(--muted); font-size: 13px; }
+    .admin-btn {
+      padding: 8px 14px; min-height: 36px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: var(--bg-card); color: var(--text);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all .15s;
+    }
+    .admin-btn:hover { background: var(--bg-card-hover); }
+    .admin-btn--primary { background: var(--accent); color: #0a0e1a; border-color: transparent; }
+    .admin-btn--primary:hover { background: #7ed4ff; }
+    .admin-btn--danger { color: #ff8e8e; }
+    .admin-btn--danger:hover { background: rgba(255, 142, 142, .12); }
+    .admin-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-card); }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .admin-table th, .admin-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    .admin-table th { color: var(--soft); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+    .admin-table tr:last-child td { border-bottom: 0; }
+    .admin-dialog {
+      width: min(620px, 92vw); padding: 24px;
+      background: #0e1320; color: var(--text);
+      border: 1px solid var(--border-strong); border-radius: var(--radius-lg);
+    }
+    .admin-dialog::backdrop { background: rgba(0,0,0,.65); backdrop-filter: blur(6px); }
+    .admin-dialog h3 { margin: 0 0 14px; }
+    .admin-form__grid {
+      display: grid; gap: 12px; grid-template-columns: 1fr 1fr;
+    }
+    .admin-form__full { grid-column: 1 / -1; }
+    .admin-form__grid label {
+      display: grid; gap: 4px; font-size: 12px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+    }
+    .admin-form__grid input, .admin-form__grid select, .admin-form__grid textarea {
+      padding: 8px 12px; border-radius: 10px;
+      background: rgba(0,0,0,.3); border: 1px solid var(--border);
+      color: var(--text); font: inherit; text-transform: none; letter-spacing: 0;
+    }
+    .admin-form__actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+  </style>
+</BaseLayout>

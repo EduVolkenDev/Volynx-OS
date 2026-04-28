@@ -1,0 +1,77 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FilterBar from "../components/FilterBar.astro";
+import PropertyCard from "../components/PropertyCard.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+const [hero, ...rest] = properties;
+---
+<BaseLayout title="Gallery Hero · PropertyFlow" current="gallery" locale={locale}>
+  <section class="page-head">
+    <h1>Gallery Hero</h1>
+    <p>One signature property dominates; supporting shots build the dream.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <article class="gallery-hero">
+    <a href={`#prop-${hero.id}`} class="gallery-hero__feature" data-pf-card data-category={hero.category}
+       style={`background-image: url('${hero.image}')`}>
+      <div class="gallery-hero__chip">{hero.status === "for-sale" ? "For sale" : "For rent"}</div>
+      <div class="gallery-hero__copy">
+        <h2>{hero.title_en}</h2>
+        <p>{hero.city_en} · {hero.country_en} · {hero.beds} beds · {hero.baths} baths · {hero.area_m2} m²</p>
+        <strong>€{new Intl.NumberFormat("en-US").format(hero.price_eur)}{hero.status === "for-rent" ? " / month" : ""}</strong>
+      </div>
+    </a>
+    <div class="gallery-hero__grid">
+      {rest.slice(0, 3).map((prop) => (
+        <PropertyCard prop={prop} variant="classic" locale={locale} />
+      ))}
+    </div>
+  </article>
+  <h3 class="gallery-rest-head">More inventory</h3>
+  <div class="gallery-rest">
+    {rest.slice(3).map((prop) => (
+      <PropertyCard prop={prop} variant="classic" locale={locale} />
+    ))}
+  </div>
+
+  <style>
+    .gallery-hero {
+      display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 32px;
+    }
+    @media (min-width: 980px) {
+      .gallery-hero { grid-template-columns: 1.6fr 1fr; align-items: stretch; }
+    }
+    .gallery-hero__feature {
+      position: relative; border-radius: var(--radius-lg); overflow: hidden;
+      min-height: 480px; background-size: cover; background-position: center;
+      display: flex; align-items: flex-end;
+      box-shadow: var(--shadow-lg);
+    }
+    .gallery-hero__feature::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 14, 26, .85) 100%);
+    }
+    .gallery-hero__chip {
+      position: absolute; top: 18px; left: 18px;
+      padding: 6px 14px; border-radius: 999px;
+      background: rgba(89, 195, 255, .9); color: #0a0e1a;
+      font-size: 12px; font-weight: 800; letter-spacing: .08em;
+    }
+    .gallery-hero__copy { position: relative; z-index: 1; padding: 28px; color: #fff; }
+    .gallery-hero__copy h2 { margin: 0 0 4px; font-size: clamp(1.4rem, 2.6vw, 2rem); }
+    .gallery-hero__copy p { margin: 0 0 8px; opacity: .82; font-size: 14px; }
+    .gallery-hero__copy strong { font-size: 1.4rem; letter-spacing: -.01em; }
+    .gallery-hero__grid {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+    }
+    .gallery-rest-head {
+      margin: 32px 0 14px; font-size: 1.1rem; color: var(--muted);
+      font-weight: 600; letter-spacing: -.01em;
+    }
+    .gallery-rest {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px;
+    }
+  </style>
+</BaseLayout>

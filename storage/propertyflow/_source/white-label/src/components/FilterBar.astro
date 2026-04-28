@@ -1,0 +1,75 @@
+---
+import { dict, type Locale } from "../data/i18n";
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = (key: string) => dict[locale]?.[key] ?? dict.en[key] ?? key;
+
+const chips = [
+  { id: "all", label: t("filter.all") },
+  { id: "luxury", label: t("filter.luxury") },
+  { id: "premium", label: t("filter.premium") },
+  { id: "rental", label: t("filter.rental") },
+  { id: "commercial", label: t("filter.commercial") }
+];
+---
+<div class="filter-bar" data-pf-filter-bar>
+  <div class="filter-bar__search">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="7" cy="7" r="5"/>
+      <path d="M14 14l-3-3"/>
+    </svg>
+    <input type="search" placeholder={t("filter.search_ph")} data-pf-search />
+  </div>
+  <div class="filter-bar__chips" role="tablist">
+    {chips.map((c, i) => (
+      <button type="button" class:list={["filter-chip", { "is-active": i === 0 }]} data-pf-chip={c.id}>{c.label}</button>
+    ))}
+  </div>
+</div>
+<p class="filter-bar__count" data-pf-count>—</p>
+
+<script>
+  // Lightweight filter wiring — no framework, runs once per page.
+  (function () {
+    const bar = document.querySelector("[data-pf-filter-bar]");
+    if (!bar) return;
+    const cards = Array.from(document.querySelectorAll("[data-pf-card]"));
+    const chips = Array.from(bar.querySelectorAll<HTMLButtonElement>("[data-pf-chip]"));
+    const search = bar.querySelector<HTMLInputElement>("[data-pf-search]");
+    const countEl = document.querySelector<HTMLElement>("[data-pf-count]");
+    let activeChip = "all";
+    let query = "";
+
+    function apply() {
+      const q = query.trim().toLowerCase();
+      let shown = 0;
+      cards.forEach((card) => {
+        const cat = (card as HTMLElement).dataset.category || "";
+        const txt = (card as HTMLElement).dataset.search || "";
+        const matchChip = activeChip === "all" || cat === activeChip;
+        const matchSearch = !q || txt.includes(q);
+        const visible = matchChip && matchSearch;
+        (card as HTMLElement).style.display = visible ? "" : "none";
+        if (visible) shown++;
+      });
+      const noResultsEl = document.querySelector<HTMLElement>("[data-pf-empty]");
+      if (noResultsEl) noResultsEl.style.display = shown === 0 ? "" : "none";
+      if (countEl) countEl.textContent = shown + " " + (countEl.dataset.label || "results");
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chips.forEach((c) => c.classList.remove("is-active"));
+        chip.classList.add("is-active");
+        activeChip = chip.dataset.pfChip || "all";
+        apply();
+      });
+    });
+    search?.addEventListener("input", () => {
+      query = search.value || "";
+      apply();
+    });
+    apply();
+  })();
+</script>

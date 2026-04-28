@@ -1,0 +1,15 @@
+{
+  "name": "propertyflow-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "PropertyFlow Starter — premium real-estate catalogue with 3 layouts, live filters, EN/PT, static data.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  }
+}

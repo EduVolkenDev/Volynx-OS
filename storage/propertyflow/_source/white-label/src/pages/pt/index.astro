@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FilterBar from "../../components/FilterBar.astro";
+import PropertyCard from "../../components/PropertyCard.astro";
+import properties from "../../data/properties.json";
+
+const locale = "pt";
+---
+<BaseLayout title="PropertyFlow — Imobiliário Premium" current="classic" locale={locale}>
+  <section class="page-head">
+    <h1>Imobiliário premium, com apresentação à altura.</h1>
+    <p>Três layouts. Filtros ao vivo. Bilíngue EN / PT. Edite <code>src/data/properties.json</code> para personalizar.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="grid-classic">
+    {properties.map((prop) => (
+      <PropertyCard prop={prop} variant="classic" locale={locale} />
+    ))}
+  </div>
+  <div class="no-results" data-pf-empty style="display:none;">Nenhum imóvel encontrado para esses filtros.</div>
+
+  <style>
+    .grid-classic {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+  </style>
+</BaseLayout>

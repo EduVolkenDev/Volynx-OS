@@ -1,0 +1,130 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FilterBar from "../components/FilterBar.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+---
+<BaseLayout title="Split View · PropertyFlow" current="split" locale={locale}>
+  <section class="page-head">
+    <h1>Split View</h1>
+    <p>List on the left, detail on the right. Buyers compare without losing context.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="split-view">
+    <aside class="split-view__list" id="splitList">
+      {properties.map((prop, i) => (
+        <button type="button"
+                class:list={["split-row", { "is-active": i === 0 }]}
+                data-pf-card
+                data-category={prop.category}
+                data-search={[prop.title_en, prop.city_en, prop.type_en, ...(prop.tags_en || [])].join(" ").toLowerCase()}
+                data-prop-id={prop.id}>
+          <span class="split-row__thumb" style={`background-image: url('${prop.image}')`}></span>
+          <span class="split-row__copy">
+            <strong>{prop.title_en}</strong>
+            <span>{prop.city_en} · {prop.beds > 0 ? `${prop.beds} beds · ` : ""}{prop.area_m2} m²</span>
+            <span class="split-row__price">€{new Intl.NumberFormat("en-US").format(prop.price_eur)}{prop.status === "for-rent" ? " / mo" : ""}</span>
+          </span>
+        </button>
+      ))}
+    </aside>
+    <article class="split-view__detail" id="splitDetail">
+      <div id="splitDetailContent">
+        <p class="split-detail__hint">← Pick a property to preview here.</p>
+      </div>
+    </article>
+  </div>
+
+  <script type="application/json" id="propertiesJson" set:html={JSON.stringify(properties)}></script>
+
+  <script>
+    (function () {
+      const data = JSON.parse(document.getElementById("propertiesJson")?.textContent || "[]");
+      const detail = document.getElementById("splitDetailContent");
+      const rows = document.querySelectorAll<HTMLElement>("[data-prop-id]");
+      function render(p: any) {
+        if (!detail) return;
+        const fmt = (n: number) => new Intl.NumberFormat("en-US").format(n);
+        detail.innerHTML = `
+          <div class="split-detail__hero" style="background-image:url('${p.image}')"></div>
+          <h2>${p.title_en}</h2>
+          <p class="split-detail__loc">${p.city_en} · ${p.country_en}</p>
+          <p class="split-detail__summary">${p.summary_en || ""}</p>
+          <div class="split-detail__meta">
+            ${p.beds > 0 ? `<span>${p.beds} beds</span>` : ""}
+            <span>${p.baths} baths</span>
+            <span>${p.area_m2} m²</span>
+            <span>${(p.tags_en || []).slice(0, 2).join(" · ")}</span>
+          </div>
+          <strong class="split-detail__price">€${fmt(p.price_eur)}${p.status === "for-rent" ? " / month" : ""}</strong>
+        `;
+      }
+      rows.forEach((row) => {
+        row.addEventListener("click", () => {
+          rows.forEach((r) => r.classList.remove("is-active"));
+          row.classList.add("is-active");
+          const id = row.dataset.propId;
+          const p = data.find((x: any) => x.id === id);
+          if (p) render(p);
+        });
+      });
+      if (data[0]) render(data[0]);
+    })();
+  </script>
+
+  <style>
+    .split-view {
+      display: grid; grid-template-columns: 1fr; gap: 16px;
+      min-height: 70vh;
+    }
+    @media (min-width: 920px) {
+      .split-view { grid-template-columns: 1fr 1.3fr; }
+    }
+    .split-view__list {
+      display: grid; gap: 8px; max-height: 80vh; overflow-y: auto; padding-right: 8px;
+    }
+    .split-row {
+      display: grid; grid-template-columns: 96px 1fr; gap: 14px;
+      padding: 10px; border-radius: var(--radius);
+      background: var(--bg-card); border: 1px solid var(--border);
+      cursor: pointer; text-align: left; color: inherit;
+      transition: all .2s;
+    }
+    .split-row:hover { border-color: var(--border-strong); }
+    .split-row.is-active { border-color: var(--accent); background: rgba(89, 195, 255, .07); }
+    .split-row__thumb {
+      width: 96px; height: 72px; border-radius: 10px;
+      background-size: cover; background-position: center;
+      background-color: var(--bg-card-hover);
+    }
+    .split-row__copy { display: grid; gap: 4px; font-size: 13px; min-width: 0; }
+    .split-row__copy strong { font-size: 14px; letter-spacing: -.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .split-row__copy span { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .split-row__price { color: var(--accent) !important; font-weight: 700; }
+
+    .split-view__detail {
+      padding: 22px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .split-detail__hint { color: var(--soft); }
+    .split-detail__hero {
+      aspect-ratio: 16 / 9; border-radius: var(--radius);
+      background-size: cover; background-position: center;
+      background-color: var(--bg-card-hover);
+      margin-bottom: 18px;
+    }
+    .split-detail__loc { margin: 0 0 12px; color: var(--muted); }
+    .split-detail__summary { color: var(--muted); margin: 0 0 14px; }
+    .split-detail__meta {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      padding: 12px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      color: var(--muted); font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .split-detail__price {
+      display: block; font-size: 1.6rem; letter-spacing: -.01em; color: var(--accent);
+    }
+  </style>
+</BaseLayout>

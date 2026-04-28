@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FilterBar from "../components/FilterBar.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+const heights = [340, 420, 280, 380, 320, 460, 300, 360, 400, 280];
+---
+<BaseLayout title="Masonry · PropertyFlow" current="masonry" locale={locale}>
+  <section class="page-head">
+    <h1>Masonry</h1>
+    <p>Discovery-first. Different aspect ratios reward exploration — ideal for mixed inventory.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="masonry">
+    {properties.map((prop, i) => (
+      <a href={`#prop-${prop.id}`} class="masonry__tile" data-pf-card
+         data-category={prop.category}
+         data-search={[prop.title_en, prop.city_en, prop.type_en, ...(prop.tags_en || [])].join(" ").toLowerCase()}
+         style={`background-image: url('${prop.image}'); height: ${heights[i % heights.length]}px;`}>
+        <div class="masonry__overlay">
+          <div class="masonry__chip">{prop.status === "for-sale" ? "For sale" : "For rent"}</div>
+          <div class="masonry__copy">
+            <strong>{prop.title_en}</strong>
+            <span>{prop.city_en}</span>
+            <span class="masonry__price">€{new Intl.NumberFormat("en-US").format(prop.price_eur)}{prop.status === "for-rent" ? " / mo" : ""}</span>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <style>
+    .masonry {
+      column-count: 1;
+      column-gap: 14px;
+    }
+    @media (min-width: 600px) { .masonry { column-count: 2; } }
+    @media (min-width: 980px) { .masonry { column-count: 3; } }
+    @media (min-width: 1280px) { .masonry { column-count: 4; } }
+    .masonry__tile {
+      position: relative;
+      display: block;
+      width: 100%;
+      margin: 0 0 14px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background-size: cover; background-position: center;
+      background-color: var(--bg-card-hover);
+      break-inside: avoid;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .masonry__tile:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .masonry__overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(10,14,26,.4) 0%, transparent 30%, rgba(10,14,26,.85) 100%);
+      color: #fff;
+    }
+    .masonry__chip {
+      align-self: flex-start;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(89, 195, 255, .9); color: #0a0e1a;
+      font-size: 11px; font-weight: 800; letter-spacing: .06em;
+    }
+    .masonry__copy { display: grid; gap: 2px; }
+    .masonry__copy strong { font-size: .98rem; letter-spacing: -.01em; }
+    .masonry__copy span { font-size: 12px; opacity: .82; }
+    .masonry__price { color: var(--accent); font-weight: 700; opacity: 1; }
+  </style>
+</BaseLayout>

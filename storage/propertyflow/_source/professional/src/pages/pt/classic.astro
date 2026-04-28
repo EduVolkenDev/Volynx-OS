@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FilterBar from "../../components/FilterBar.astro";
+import PropertyCard from "../../components/PropertyCard.astro";
+import properties from "../../data/properties.json";
+
+const locale = "pt";
+---
+<BaseLayout title="Grade Clássica · PropertyFlow" current="classic" locale={locale}>
+  <section class="page-head">
+    <h1>Grade Clássica</h1>
+    <p>Inventário em escala — residencial padrão, apartamentos médios, estoque urbano.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="grid-classic">
+    {properties.map((prop) => (
+      <PropertyCard prop={prop} variant="classic" locale={locale} />
+    ))}
+  </div>
+  <div class="no-results" data-pf-empty style="display:none;">Nenhum imóvel encontrado para esses filtros.</div>
+
+  <style>
+    .grid-classic {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+  </style>
+</BaseLayout>

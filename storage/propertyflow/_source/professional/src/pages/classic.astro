@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FilterBar from "../components/FilterBar.astro";
+import PropertyCard from "../components/PropertyCard.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+---
+<BaseLayout title="Classic Grid · PropertyFlow" current="classic" locale={locale}>
+  <section class="page-head">
+    <h1>Classic Grid</h1>
+    <p>Inventory at scale — standard residential, mid-market apartments, urban inventory.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="grid-classic">
+    {properties.map((prop) => (
+      <PropertyCard prop={prop} variant="classic" locale={locale} />
+    ))}
+  </div>
+  <div class="no-results" data-pf-empty style="display:none;">No properties match these filters.</div>
+
+  <style>
+    .grid-classic {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+  </style>
+</BaseLayout>

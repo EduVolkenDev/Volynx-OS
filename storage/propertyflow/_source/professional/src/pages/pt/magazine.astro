@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FilterBar from "../../components/FilterBar.astro";
+import PropertyCard from "../../components/PropertyCard.astro";
+import properties from "../../data/properties.json";
+
+const locale = "pt";
+const [feature, ...rest] = properties;
+---
+<BaseLayout title="Revista · PropertyFlow" current="magazine" locale={locale}>
+  <section class="page-head">
+    <h1>Revista</h1>
+    <p>Hierarquia editorial. Um imóvel-destaque ancora a página; os demais orbitam em torno dele.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="grid-mag">
+    <div class="grid-mag__feature">
+      <PropertyCard prop={feature} variant="magazine" locale={locale} feature={true} />
+    </div>
+    <div class="grid-mag__rest">
+      {rest.map((prop) => (
+        <PropertyCard prop={prop} variant="classic" locale={locale} />
+      ))}
+    </div>
+  </div>
+  <div class="no-results" data-pf-empty style="display:none;">Nenhum imóvel encontrado para esses filtros.</div>
+
+  <style>
+    .grid-mag { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 920px) {
+      .grid-mag { grid-template-columns: 1.1fr 1fr; align-items: flex-start; }
+    }
+    .grid-mag__rest {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+  </style>
+</BaseLayout>

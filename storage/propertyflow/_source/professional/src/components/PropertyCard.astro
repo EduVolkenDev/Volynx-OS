@@ -1,0 +1,145 @@
+---
+// Variants: 'classic' | 'magazine' | 'compact'
+import { dict, type Locale } from "../data/i18n";
+
+interface Props {
+  prop: any;
+  variant?: "classic" | "magazine" | "compact";
+  locale?: Locale;
+  feature?: boolean;
+}
+const { prop, variant = "classic", locale = "en", feature = false } = Astro.props;
+const t = (key: string) => dict[locale]?.[key] ?? dict.en[key] ?? key;
+
+const title = locale === "pt" ? prop.title_pt : prop.title_en;
+const city = locale === "pt" ? prop.city_pt : prop.city_en;
+const country = locale === "pt" ? prop.country_pt : prop.country_en;
+const summary = locale === "pt" ? prop.summary_pt : prop.summary_en;
+const tags: string[] = (locale === "pt" ? prop.tags_pt : prop.tags_en) || [];
+
+const isRent = prop.status === "for-rent";
+const symbol = prop.currency === "EUR" ? "€" : prop.currency === "GBP" ? "£" : prop.currency === "BRL" ? "R$" : "$";
+const priceFmt = new Intl.NumberFormat(locale === "pt" ? "pt-PT" : "en-US").format(prop.price_eur);
+
+// Search index for filter (lowercased, locale-agnostic combo)
+const searchBlob = [
+  prop.title_en, prop.title_pt, prop.city_en, prop.city_pt,
+  prop.type_en, prop.type_pt, ...(prop.tags_en || []), ...(prop.tags_pt || [])
+].join(" ").toLowerCase();
+---
+<a
+  href={`#prop-${prop.id}`}
+  class:list={["pf-card", `pf-card--${variant}`, { "pf-card--feature": feature }]}
+  data-pf-card
+  data-category={prop.category}
+  data-search={searchBlob}
+  id={`prop-${prop.id}`}
+>
+  <div
+    class="pf-card__media"
+    style={`background-image: url('${prop.image}')`}
+    aria-hidden="true"
+  ></div>
+  <div class="pf-card__body">
+    <div class="pf-card__row">
+      <span class:list={["pf-card__status", { "is-rent": isRent }]}>
+        {isRent ? t("card.for_rent") : t("card.for_sale")}
+      </span>
+      <span class="pf-card__type">{locale === "pt" ? prop.type_pt : prop.type_en}</span>
+    </div>
+    <h3 class="pf-card__title">{title}</h3>
+    <p class="pf-card__loc">{city} · {country}</p>
+    {variant !== "compact" && summary && <p class="pf-card__summary">{summary}</p>}
+    <div class="pf-card__meta">
+      {prop.beds > 0 && <span>{prop.beds} {t("card.beds")}</span>}
+      <span>{prop.baths} {t("card.baths")}</span>
+      <span>{prop.area_m2} m²</span>
+    </div>
+    {variant === "magazine" && tags.length > 0 && (
+      <div class="pf-card__tags">
+        {tags.slice(0, 3).map((tag) => <span class="pf-tag">{tag}</span>)}
+      </div>
+    )}
+    <div class="pf-card__price">
+      <strong>{symbol}{priceFmt}</strong>
+      {isRent && <span class="pf-card__suffix">{t("card.month")}</span>}
+    </div>
+  </div>
+</a>
+
+<style>
+  .pf-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .pf-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-lg);
+  }
+  .pf-card__media {
+    aspect-ratio: 16 / 10;
+    background:
+      linear-gradient(135deg, rgba(89, 195, 255, .22), rgba(139, 92, 246, .18)),
+      var(--bg-card);
+    background-size: cover;
+    background-position: center;
+  }
+  .pf-card__body { padding: 18px 20px 20px; display: grid; gap: 8px; }
+  .pf-card__row {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .pf-card__status {
+    padding: 3px 10px; border-radius: 999px;
+    background: rgba(89, 195, 255, .14); border: 1px solid rgba(89, 195, 255, .32);
+    color: #9bd5ff; font-weight: 700;
+  }
+  .pf-card__status.is-rent {
+    background: rgba(214, 179, 106, .12); border-color: rgba(214, 179, 106, .32); color: var(--gold);
+  }
+  .pf-card__type { color: var(--soft); font-weight: 600; }
+  .pf-card__title {
+    margin: 4px 0 0; font-size: clamp(1.05rem, 1.4vw, 1.2rem); letter-spacing: -.01em;
+  }
+  .pf-card__loc { margin: 0; color: var(--muted); font-size: 13px; }
+  .pf-card__summary {
+    margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .pf-card__meta {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 13px;
+  }
+  .pf-card__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .pf-tag {
+    padding: 3px 9px; border-radius: 999px;
+    background: rgba(0, 0, 0, .25); border: 1px solid var(--border);
+    color: var(--muted); font-size: 11px; letter-spacing: .04em;
+  }
+  .pf-card__price { display: flex; align-items: baseline; gap: 6px; margin-top: 6px; }
+  .pf-card__price strong { font-size: 1.25rem; letter-spacing: -.01em; }
+  .pf-card__suffix { color: var(--soft); font-size: 12px; }
+
+  /* ── Magazine feature variant — taller, tighter content ── */
+  .pf-card--magazine.pf-card--feature .pf-card__media { aspect-ratio: 4 / 5; }
+  .pf-card--magazine.pf-card--feature .pf-card__title { font-size: 1.4rem; }
+
+  /* ── Compact variant — horizontal row layout ── */
+  .pf-card--compact { display: grid; grid-template-columns: 160px 1fr; }
+  .pf-card--compact .pf-card__media { aspect-ratio: auto; height: 100%; min-height: 120px; }
+  .pf-card--compact .pf-card__body { padding: 14px 18px; }
+  .pf-card--compact .pf-card__summary { display: none; }
+  .pf-card--compact .pf-card__title { font-size: 1rem; }
+  @media (max-width: 540px) {
+    .pf-card--compact { grid-template-columns: 1fr; }
+    .pf-card--compact .pf-card__media { aspect-ratio: 16 / 9; }
+  }
+</style>

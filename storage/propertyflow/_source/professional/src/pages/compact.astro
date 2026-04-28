@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FilterBar from "../components/FilterBar.astro";
+import PropertyCard from "../components/PropertyCard.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+---
+<BaseLayout title="Compact List · PropertyFlow" current="compact" locale={locale}>
+  <section class="page-head">
+    <h1>Compact List</h1>
+    <p>Filter-driven shopping. Maximum information per scroll, ideal for rentals and commercial inventory.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="grid-compact">
+    {properties.map((prop) => (
+      <PropertyCard prop={prop} variant="compact" locale={locale} />
+    ))}
+  </div>
+  <div class="no-results" data-pf-empty style="display:none;">No properties match these filters.</div>
+
+  <style>
+    .grid-compact { display: grid; gap: 12px; }
+  </style>
+</BaseLayout>

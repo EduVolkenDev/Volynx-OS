@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FilterBar from "../components/FilterBar.astro";
+import PropertyCard from "../components/PropertyCard.astro";
+import properties from "../data/properties.json";
+
+const locale = "en";
+---
+<BaseLayout title="PropertyFlow — Premium real estate" current="classic" locale={locale}>
+  <section class="page-head">
+    <h1>Premium real estate, beautifully presented.</h1>
+    <p>Three layouts. Live filters. Bilingual EN / PT. Edit <code>src/data/properties.json</code> to make it yours.</p>
+  </section>
+  <FilterBar locale={locale} />
+  <div class="grid-classic">
+    {properties.map((prop) => (
+      <PropertyCard prop={prop} variant="classic" locale={locale} />
+    ))}
+  </div>
+  <div class="no-results" data-pf-empty style="display:none;">No properties match these filters.</div>
+
+  <style>
+    .grid-classic {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+  </style>
+</BaseLayout>
