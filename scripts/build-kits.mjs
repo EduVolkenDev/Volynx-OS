@@ -19,8 +19,9 @@
  *   /app/about, /contact, /case-study/[slug]  — Studio tier only
  *   /components/common    — full set (12 files)
  *   /components/sections  — full set (16 files) so buyer can use any
- *   /lib/utils.ts + motion.ts — small helpers
- *   /content/kit-offers.ts — shipped so buyer can extend tiers themselves
+ *   /lib/utils.ts + motion.ts + volynx-public.ts + site-locale.ts — small helpers
+ *   /content/*.ts        — shipped so every copied component has its content
+ *                          dependencies and buyers can edit core copy
  *   /public               — only assets actually referenced by sections
  *   /package.json         — minimal deps (next, react, tailwind, lucide,
  *                          clsx, tailwind-merge), no Stripe/Supabase
@@ -194,8 +195,8 @@ npm run dev      # http://localhost:3000
   so you can drop your own copy and data without touching the JSX.
 - **\`components/common/\`** — header, footer, banner, theme switcher,
   badge, button, section-heading, plus a few utility blocks.
-- **\`content/kit-offers.ts\`** — the tier catalogue Volynx itself uses.
-  Strip what you don't need; or extend it for your own products.
+- **\`content/\`** — editable copy, links, metrics, FAQs, pricing defaults,
+  legal copy, icon-store references and tier catalogue used by the sections.
 - **\`app/globals.css\`** — design tokens (gold / blue / violet palette,
   glass blurs, container queries). Tweak the \`:root\` block to re-skin
   the entire kit.
@@ -362,9 +363,9 @@ export default function AboutPage() {
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-6 py-20 space-y-8">
         <SectionHeading
-          eyebrow="About"
+          badge="About"
           title="The story behind this work."
-          description="Replace this copy with your own story. Who you are, what you've built, why this matters to you, and how clients should think about working with you."
+          copy="Replace this copy with your own story. Who you are, what you've built, why this matters to you, and how clients should think about working with you."
         />
         <p className="text-muted-foreground leading-relaxed">
           This page ships as part of the Studio tier. Use it as a long-form
@@ -391,9 +392,9 @@ export default function ContactPage() {
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-6 py-20 space-y-8">
         <SectionHeading
-          eyebrow="Contact"
+          badge="Contact"
           title="Let's talk about your project."
-          description="Replace this with your own intake. The simplest version is a clear email + WhatsApp + 'how to start' — that converts better than long forms."
+          copy="Replace this with your own intake. The simplest version is a clear email + WhatsApp + 'how to start' — that converts better than long forms."
         />
         <ul className="space-y-3 text-base">
           <li><strong>Email:</strong> you@example.com</li>
@@ -423,9 +424,9 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-6 py-20 space-y-10">
         <SectionHeading
-          eyebrow={\`Case study · \${params.slug}\`}
+          badge={\`Case study · \${params.slug}\`}
           title="Project name goes here."
-          description="One sentence on the result. Skip features, lead with outcome."
+          copy="One sentence on the result. Skip features, lead with outcome."
         />
         <section className="grid gap-8 md:grid-cols-3">
           <div>
@@ -496,9 +497,11 @@ async function buildOne(kit, tier) {
   await copyDir(path.join(ROOT, "components", "common"), path.join(buildDir, "components", "common"));
 
   // 2. lib helpers used by sections (utils for clsx/twMerge, motion if used)
-  log("copy: lib/utils.ts + lib/motion.ts");
+  log("copy: lib/utils.ts + lib/motion.ts + lib/volynx-public.ts + lib/site-locale.ts");
   await copyFile(path.join(ROOT, "lib", "utils.ts"), path.join(buildDir, "lib", "utils.ts"));
   await copyFile(path.join(ROOT, "lib", "motion.ts"), path.join(buildDir, "lib", "motion.ts"));
+  await copyFile(path.join(ROOT, "lib", "volynx-public.ts"), path.join(buildDir, "lib", "volynx-public.ts"));
+  await copyFile(path.join(ROOT, "lib", "site-locale.ts"), path.join(buildDir, "lib", "site-locale.ts"));
 
   // 3. Demo page → app/page.tsx, app/globals.css, generated layout
   log("copy: app/demo/{kit}/page.tsx → app/page.tsx");
@@ -524,10 +527,13 @@ async function buildOne(kit, tier) {
     }
   }
 
-  // 5. Content + public — pass the catalog so buyers can extend tiers, plus
-  //    the small subset of public assets the demo page references.
-  log("copy: content/kit-offers.ts (catalog reference)");
-  await copyFile(path.join(ROOT, "content", "kit-offers.ts"), path.join(buildDir, "content", "kit-offers.ts"));
+  // 5. Content + public — pass the root content modules used by the
+  //    shipped sections so the ZIP is self-contained, without bundling the
+  //    long internal documentation folder.
+  log("copy: content/*.ts");
+  await copyDir(path.join(ROOT, "content"), path.join(buildDir, "content"), {
+    exclude: ["propertyflow-docs"],
+  });
 
   // 6. Config files (tailwind, postcss, tsconfig, next.config)
   log("copy: tailwind.config.ts + postcss.config.js + tsconfig.json + next.config.mjs");
