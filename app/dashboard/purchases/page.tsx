@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ArrowRight, FileArchive, Home, Image, ShieldCheck } from "lucide-react"
+import { ArrowRight, FileArchive, Home, Image, LayoutTemplate, ShieldCheck } from "lucide-react"
 import { BrandLockup } from "@/components/common/brand-lockup"
 import { SiteFooter } from "@/components/common/site-footer"
 import { SiteHeader } from "@/components/common/site-header"
@@ -25,6 +25,14 @@ const purchaseAreas = [
     icon: Home,
     copy: "Return to tiered downloads, setup docs and gated delivery for Starter, Professional and White-Label.",
     checks: ["Tier downloads", "Docs", "License support"]
+  },
+  {
+    title: "Kit Customizer",
+    label: "Visual setup",
+    href: "/dashboard/kits/customizer",
+    icon: LayoutTemplate,
+    copy: "Customize Portfolio, Agency and SaaS kit content visually, preview changes and export ready configuration files.",
+    checks: ["Live preview", "No-code fields", "Config export"]
   }
 ]
 
@@ -54,7 +62,7 @@ export default function PurchasesPage() {
             </div>
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
             {purchaseAreas.map((area) => {
               const Icon = area.icon
 

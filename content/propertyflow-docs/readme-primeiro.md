@@ -45,19 +45,19 @@ Total: **13 documentos prontos** pra implementação e entrega.
 
 Cada tier gera um ZIP separado com conteúdo diferente:
 
-**propertyflow-starter-v1.0.0.zip:**
+**propertyflow-starter-v1.1.0.zip:**
 - STARTER/README.md → raiz do zip (como README.md)
 - LICENSE.md
 - docs/SETUP.md, CUSTOMIZATION.md (só os 2 relevantes pra Starter)
 - código-fonte React+Vite (sem Supabase, sem admin, 3 templates)
 
-**propertyflow-professional-v1.0.0.zip:**
+**propertyflow-professional-v1.1.0.zip:**
 - PROFESSIONAL/README.md → raiz como README.md
 - LICENSE.md
 - docs/SETUP.md, CUSTOMIZATION.md, ADMIN.md, SUPABASE.md
 - código-fonte completo (com Supabase, admin, enquiries, 6 templates)
 
-**propertyflow-white-label-v1.0.0.zip:**
+**propertyflow-white-label-v1.1.0.zip:**
 - WHITE-LABEL/README.md → raiz como README.md
 - LICENSE.md
 - docs/ completo (todos os 8 arquivos)

@@ -24,8 +24,9 @@ type HomePageProps = {
   }
 }
 
-export default function HomePage({ searchParams }: HomePageProps) {
-  const locale = resolveSiteLocale(searchParams?.lang, headers().get("accept-language"))
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const requestHeaders = await headers()
+  const locale = resolveSiteLocale(searchParams?.lang, requestHeaders.get("accept-language"))
   const content = getHomeContent(locale)
 
   return (

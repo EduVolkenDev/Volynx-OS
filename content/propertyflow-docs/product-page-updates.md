@@ -226,7 +226,7 @@ Antes do launch, conferir na página:
 
 Baseado no tier, o ZIP deve conter:
 
-**Starter (`propertyflow-starter-v1.0.0.zip`):**
+**Starter (`propertyflow-starter-v1.1.0.zip`):**
 ```
 README.md                   (STARTER/README.md do bundle entregue)
 LICENSE.md
@@ -239,7 +239,7 @@ package.json
 .env.example
 ```
 
-**Professional (`propertyflow-professional-v1.0.0.zip`):**
+**Professional (`propertyflow-professional-v1.1.0.zip`):**
 ```
 README.md                   (PROFESSIONAL/README.md)
 LICENSE.md
@@ -256,7 +256,7 @@ package.json
 .env.example
 ```
 
-**White-Label (`propertyflow-white-label-v1.0.0.zip`):**
+**White-Label (`propertyflow-white-label-v1.1.0.zip`):**
 ```
 README.md                   (WHITE-LABEL/README.md)
 LICENSE.md

@@ -40,9 +40,9 @@ This repo now uses Next.js server routes for Stripe Checkout and protected ZIP d
 
 ## Tier ZIPs
 
-- `propertyflow-starter-v1.0.0.zip`: Starter README, license, setup/customization docs and local source placeholder.
-- `propertyflow-professional-v1.0.0.zip`: Professional README, license, setup/customization/admin/Supabase docs and local source placeholder.
-- `propertyflow-white-label-v1.0.0.zip`: White-Label README, license, tier config, all docs, tools/templates placeholders and local source placeholder.
+- `propertyflow-starter-v1.1.0.zip`: Starter README, license, setup/customization docs and local source package.
+- `propertyflow-professional-v1.1.0.zip`: Professional README, license, setup/customization/admin/Supabase docs and local source package.
+- `propertyflow-white-label-v1.1.0.zip`: White-Label README, license, tier config, all docs, tools/templates and local source package.
 
 The `propertyflow-complete-FINAL.zip` source package is stored in `storage/propertyflow` for audit and rebuilds.
 

@@ -41,7 +41,7 @@ Beleza. Bora lá.
 
 ## Passo 1 — Baixar e descompactar o PropertyFlow (5 minutos)
 
-Você já tem o arquivo **propertyflow-[seu-tier]-v1.0.0.zip** no seu computador (veio no email de entrega).
+Você já tem o arquivo **propertyflow-[seu-tier]-v1.1.0.zip** no seu computador (veio no email de entrega).
 
 **No Windows:**
 1. Ache o arquivo no Explorador de Arquivos (geralmente em "Downloads")

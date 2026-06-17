@@ -1,7 +1,7 @@
 export type PropertyFlowTierId = "starter" | "professional" | "white-label"
 export type PropertyFlowCurrencyCode = "USD" | "GBP" | "EUR" | "BRL"
 
-export const propertyFlowVersion = "1.0.0"
+export const propertyFlowVersion = "1.1.0"
 
 export const propertyFlowPriceMatrix = {
   USD: {
@@ -79,7 +79,7 @@ export const propertyFlowTiers = [
     description: "For solo agents or small teams that need a polished bilingual property showcase with static data.",
     ctaLabel: "Get Starter",
     deliveryHref: "/dashboard/purchases/propertyflow?tier=starter&preview=1",
-    downloadFile: "propertyflow-starter-v1.0.0.zip",
+    downloadFile: "propertyflow-starter-v1.1.0.zip",
     supportWindow: "30 days · 48h SLA",
     subtitle: "Starter tier · 3 templates · static catalogue",
     highlight: false,
@@ -101,7 +101,7 @@ export const propertyFlowTiers = [
     description: "For agencies and brokerages that need Supabase, admin controls, enquiries and a stronger delivery license.",
     ctaLabel: "Get Professional",
     deliveryHref: "/dashboard/purchases/propertyflow?tier=professional&preview=1",
-    downloadFile: "propertyflow-professional-v1.0.0.zip",
+    downloadFile: "propertyflow-professional-v1.1.0.zip",
     supportWindow: "90 days · 24h SLA",
     subtitle: "Professional tier · 6 templates · Supabase + admin",
     highlight: true,
@@ -125,7 +125,7 @@ export const propertyFlowTiers = [
     description: "For agencies reselling PropertyFlow as their own real-estate SaaS across many clients.",
     ctaLabel: "Get White-Label",
     deliveryHref: "/dashboard/purchases/propertyflow?tier=white-label&preview=1",
-    downloadFile: "propertyflow-white-label-v1.0.0.zip",
+    downloadFile: "propertyflow-white-label-v1.1.0.zip",
     supportWindow: "12 months · 24h priority SLA",
     subtitle: "White-Label tier · 15 templates · multi-tenant",
     highlight: false,

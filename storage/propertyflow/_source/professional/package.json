@@ -1,15 +1,18 @@
 {
   "name": "propertyflow-professional",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
-  "description": "PropertyFlow Professional — 6 layouts, Supabase backend, admin CRUD, gallery + filters, EN/PT.
+  "description": "PropertyFlow Professional - 6 layouts, Supabase backend, admin CRUD, gallery + filters, EN/PT.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "astro": "^6.4.4"
+  },
+  "engines": {
+    "node": ">=22.13.0"
   }
 }
