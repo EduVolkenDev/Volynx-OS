@@ -1,103 +1,103 @@
 /**
- * PROVISIONAL UI TYPES — Muse domain (product experience).
+ * Console UI types.
  *
- * These types describe what the console UI needs to render. They are NOT the
- * canonical data contracts: those will live in /contracts and are defined by
- * Codex (system architecture). When /contracts exists, this file should be
- * refactored to import from it instead of duplicating critical types (§11).
- *
- * Rule: the UI never invents operational data. Any value without a source and
- * a checked-at timestamp renders as Unknown / Not configured (§3, §12).
+ * Critical domain types live in the shared contract — never duplicate them here.
+ * Source of truth: /contracts/cloud-console-v1.ts (decision 007).
+ * This module only re-exports the contract and adds UI-only compositions.
  */
 
-export type SemanticStatus =
-  | "operational"
-  | "degraded"
-  | "incident"
-  | "maintenance"
-  | "unknown"
-  | "not_configured";
+import type {
+  ApiResponse,
+  AuditEvent,
+  BackupCapability,
+  CarePlan,
+  CloudConsoleRole,
+  CloudStatus,
+  ConsoleContext,
+  Deployment,
+  DomainStatus,
+  FailureCode,
+  Incident,
+  ModuleState,
+  Observation,
+  OperationError,
+  ProductHealth,
+  ProductIdentity,
+  ResourceHealth,
+  SecurityPosture,
+  SupportRequest,
+} from "@/contracts/cloud-console-v1";
+import { CLOUD_CONSOLE_CONTRACT_VERSION } from "@/contracts/cloud-console-v1";
+import { CLOUD_CONSOLE_ROLES, CLOUD_STATUS_VALUES } from "@/contracts/cloud-console";
+import type { CloudConsoleRole as DraftRole, CloudStatus as DraftStatus } from "@/contracts/cloud-console";
 
-/** Provenance for every operational datum (§17). Null = no source connected. */
-export interface DataFreshness {
-  lastCheckedAt: string | null; // ISO-8601 timestamp
-  source: string | null; // e.g. "cloudflare-api", "supabase", "uptime-check"
-}
+export type {
+  ApiResponse,
+  AuditEvent,
+  BackupCapability,
+  CarePlan,
+  CloudConsoleRole,
+  CloudStatus,
+  ConsoleContext,
+  Deployment,
+  DomainStatus,
+  FailureCode,
+  Incident,
+  ModuleState,
+  Observation,
+  OperationError,
+  ProductHealth,
+  ProductIdentity,
+  ResourceHealth,
+  SecurityPosture,
+  SupportRequest,
+  DraftRole,
+  DraftStatus,
+};
+export { CLOUD_CONSOLE_CONTRACT_VERSION, CLOUD_CONSOLE_ROLES, CLOUD_STATUS_VALUES };
 
-export interface OperationError {
-  reason: string;
-  at: string; // ISO-8601 timestamp
-  referenceId: string;
-}
-
-/** A renderable module: status + provenance + optional payload or error. */
-export interface ModuleState<T> {
-  status: SemanticStatus;
-  freshness: DataFreshness;
-  data: T | null;
-  error?: OperationError | null;
-}
-
-export interface ProductIdentity {
-  vlxId: string; // immutable, e.g. VLX-JP-001
+/** Navigation section. `name` (not `label`) per the contract's label → name decision. */
+export type NavSection = {
+  slug: string;
   name: string;
-  productionUrl: string | null;
-}
+  description: string;
+};
 
-export interface DomainInfo {
-  domain: string;
-  dnsOk: boolean | null;
-  ssl: { status: SemanticStatus; issuer: string | null; expiresAt: string | null };
-  cdn: string | null;
-}
+/**
+ * UI routing context (URL slugs). Slugs and vlxId may appear in deep-links,
+ * but they never authorize access: when endpoints land, the server resolves
+ * the product by database UUID inside the authorized tenant (ConsoleContext).
+ */
+export type TenantContext = {
+  client: string;
+  product: string;
+  env: string;
+};
 
-export interface DeploymentInfo {
-  id: string;
-  status: SemanticStatus;
-  commitSha: string | null;
-  branch: string | null;
-  author: string | null;
-  createdAt: string | null;
-  durationMs: number | null;
-  triggeredBy: string | null;
-}
+/** UI-only compositions over contract DTOs (no duplication of contract shapes). */
+export type ProductListData = Observation & { products: ProductIdentity[] };
+export type DeploymentListData = Observation & { deployments: Deployment[] };
+export type ResourceListData = Observation & { resources: ResourceHealth[] };
+export type BackupListData = Observation & { capabilities: BackupCapability[] };
+export type IncidentListData = Observation & { incidents: Incident[] };
+export type CarePlanData = Observation & { plan: CarePlan | null };
+export type SupportData = Observation & { requests: SupportRequest[] };
+/** SecurityPosture carries per-claim evidence; the wrapper is the module's own observation. */
+export type SecurityPostureData = Observation & { posture: SecurityPosture | null };
 
-export interface HealthComponent {
-  name: string; // e.g. "Application", "Database", "Storage"
-  status: SemanticStatus;
-  freshness: DataFreshness;
-}
-
-export interface BackupInfo {
-  resource: string;
-  provider: string | null;
-  enabled: boolean | null;
-  lastSuccessfulAt: string | null;
-  retentionDays: number | null;
-  restoreCapability: boolean | null;
-  verificationStatus: SemanticStatus;
-}
-
-export interface SecurityClaim {
-  key: string; // https | waf | ddos | rate_limit
-  label: string;
-  state: SemanticStatus;
-  evidence: string | null; // why this state exists (§29)
-  lastEvaluatedAt: string | null;
-}
-
-export interface CarePlanInfo {
-  name: string | null;
-  tier: string | null;
-  includes: string[];
-  supportChannel: string | null;
-  slaHours: number | null;
-}
-
-export interface IncidentSummary {
-  id: string;
-  title: string;
-  severity: "critical" | "high" | "medium" | "low";
-  status: "detected" | "investigating" | "mitigating" | "resolved" | "postmortem";
-  startedAt: string;
-}
+/** Overview snapshot. vlxId stays null until a real identity source exists — never fabricated. */
+export type OverviewSnapshot = {
+  identity: {
+    name: string;
+    vlxId: string | null;
+    contextLabel: string;
+  };
+  health: ModuleState<ProductHealth>;
+  modules: Array<{
+    key: string;
+    name: string;
+    href: string;
+    module: ModuleState<Observation>;
+  }>;
+  attention: string[];
+};

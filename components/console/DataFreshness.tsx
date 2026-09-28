@@ -1,4 +1,4 @@
-import type { DataFreshness } from "@/lib/console/types";
+import type { Observation } from "@/lib/console/types";
 import { cn } from "@/lib/utils";
 
 /** "2 minutes ago" style relative time; falls back to absolute for old dates. */
@@ -14,12 +14,15 @@ function relative(iso: string): string {
   return new Date(iso).toLocaleString();
 }
 
+export type FreshnessInput = Pick<Observation, "source" | "lastCheckedAt" | "stale">;
+
 /**
  * Provenance chip for every operational datum (§17).
+ * Renders directly from the contract's Observation fields.
  * No timestamp = no claim of liveness: renders "No data source".
  */
-export function DataFreshness({ freshness, className }: { freshness: DataFreshness; className?: string }) {
-  const { lastCheckedAt, source } = freshness;
+export function DataFreshness({ observation, className }: { observation: FreshnessInput; className?: string }) {
+  const { lastCheckedAt, source, stale } = observation;
   if (!lastCheckedAt) {
     return (
       <span className={cn("text-[11px] uppercase tracking-[0.14em] text-zinc-600", className)}>
@@ -31,6 +34,7 @@ export function DataFreshness({ freshness, className }: { freshness: DataFreshne
     <span className={cn("text-[11px] uppercase tracking-[0.14em] text-zinc-500", className)} title={new Date(lastCheckedAt).toLocaleString()}>
       Last checked {relative(lastCheckedAt)}
       {source ? ` · ${source}` : ""}
+      {stale ? " · stale" : ""}
     </span>
   );
 }

@@ -1,179 +1,131 @@
 /**
  * Console data access — Muse domain (UI-side only).
  *
- * This module resolves the console context (client / product / environment)
- * from the URL and exposes "pending" snapshots: every operational module
- * reports Unknown / Not configured until Codex wires real data sources.
+ * Shapes follow contracts/cloud-console-v1.ts (decision 007). There are no
+ * endpoints yet, so every operational module honestly reports "not_configured":
+ * no provider is wired, nothing is being observed. This is deliberate —
+ * protocol §3 forbids inventing uptime, statuses, backups or metrics, and
+ * decision 3 forbids any positive state without a source and check time.
  *
- * This is deliberate, not a stub to be filled with fake data: §3 of the
- * protocol forbids inventing uptime, statuses, backups or metrics. When the
- * API contracts in /contracts are ready, these functions become thin
- * fetchers over them — the components already handle every state.
+ * When the API lands, these functions become thin fetchers of ApiResponse<T>.
+ * The server will resolve the product by database UUID inside the authorized
+ * tenant (ConsoleContext); URL slugs/vlxId never authorize access.
  */
 
 import type {
-  BackupInfo,
-  CarePlanInfo,
-  DataFreshness,
-  DeploymentInfo,
-  DomainInfo,
-  HealthComponent,
-  IncidentSummary,
+  BackupListData,
+  CarePlanData,
+  DeploymentListData,
+  DomainStatus,
+  IncidentListData,
   ModuleState,
-  ProductIdentity,
-  SecurityClaim,
-  SemanticStatus,
+  Observation,
+  ProductHealth,
+  ProductListData,
+  ResourceListData,
+  SecurityPostureData,
+  SupportData,
+  TenantContext,
+  OverviewSnapshot,
 } from "./types";
 
-export interface ConsoleClient {
-  slug: string;
-  name: string;
+function humanize(slug: string): string {
+  return slug
+    .split(/[-_]/g)
+    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w))
+    .join(" ");
 }
 
-export interface ConsoleProduct {
-  slug: string;
-  name: string;
-  vlxId: string;
-  url: string | null;
+export function resolveContext(client: string, product: string, env: string): TenantContext {
+  return { client, product, env };
 }
 
-export interface ConsoleContext {
-  org: string;
-  client: ConsoleClient;
-  product: ConsoleProduct;
-  env: string;
+export function contextLabel(ctx: TenantContext): string {
+  return `${humanize(ctx.client)} · ${humanize(ctx.product)} · ${humanize(ctx.env)}`;
 }
 
-/** Registry of known clients/products — identity config, not operational data. */
-const REGISTRY: Array<{
-  client: ConsoleClient;
-  products: ConsoleProduct[];
-  envs: string[];
-}> = [
-  {
-    client: { slug: "volynx", name: "Volynx" },
-    products: [
-      { slug: "volynx-os", name: "Volynx OS", vlxId: "VLX-VX-001", url: null },
-      { slug: "volynx-site", name: "Volynx Platform", vlxId: "VLX-VX-002", url: "https://volynx.world" },
-    ],
-    envs: ["production", "staging"],
-  },
-  {
-    client: { slug: "jonathan", name: "Jonathan" },
-    products: [
-      { slug: "property-flow", name: "Property Flow", vlxId: "VLX-JP-001", url: null },
-    ],
-    envs: ["production", "staging"],
-  },
-  {
-    client: { slug: "pratti", name: "Pratti Beauté" },
-    products: [
-      { slug: "pratti-beaute", name: "Pratti Beauté", vlxId: "VLX-PB-001", url: null },
-    ],
-    envs: ["production"],
-  },
-  {
-    client: { slug: "pdu", name: "Palavras do Universo" },
-    products: [
-      { slug: "pdu-app", name: "Palavras do Universo", vlxId: "VLX-PU-001", url: null },
-    ],
-    envs: ["production"],
-  },
-];
-
-export function listClients(): ConsoleClient[] {
-  return REGISTRY.map((r) => r.client);
-}
-
-export function listProducts(clientSlug: string): ConsoleProduct[] {
-  return REGISTRY.find((r) => r.client.slug === clientSlug)?.products ?? [];
-}
-
-export function listEnvs(clientSlug: string): string[] {
-  return REGISTRY.find((r) => r.client.slug === clientSlug)?.envs ?? ["production"];
-}
-
-export function resolveContext(
-  clientSlug: string,
-  productSlug: string,
-  env: string
-): ConsoleContext | null {
-  const entry = REGISTRY.find((r) => r.client.slug === clientSlug);
-  const product = entry?.products.find((p) => p.slug === productSlug);
-  if (!entry || !product || !entry.envs.includes(env)) return null;
-  return { org: "Volynx Cloud", client: entry.client, product, env };
-}
-
-export function contextPath(ctx: ConsoleContext, section = ""): string {
-  const base = `/console/${ctx.client.slug}/${ctx.product.slug}/${ctx.env}`;
+export function contextPath(ctx: TenantContext, section = ""): string {
+  const base = `/console/${ctx.client}/${ctx.product}/${ctx.env}`;
   return section ? `${base}/${section}` : base;
 }
 
-/** Freshness for "no data source connected yet". */
-export function pendingFreshness(): DataFreshness {
-  return { lastCheckedAt: null, source: null };
+/** Every module is unconfigured until a real adapter is wired. One honest state, typed per module. */
+function notConfigured<T>(): ModuleState<T> {
+  return { state: "not_configured", data: null };
 }
 
-function pendingState<T>(): ModuleState<T> {
-  return { status: "not_configured", freshness: pendingFreshness(), data: null, error: null };
-}
+/** Demo navigation contexts — illustrative only, not tenant data. No IDs are fabricated. */
+export const DEMO_CONTEXTS: TenantContext[] = [
+  { client: "volynx", product: "volynx-os", env: "production" },
+  { client: "volynx", product: "volynx-os", env: "staging" },
+];
 
-function unknownState<T>(): ModuleState<T> {
-  return { status: "unknown", freshness: pendingFreshness(), data: null, error: null };
-}
-
-export interface OverviewSnapshot {
-  identity: ProductIdentity;
-  overall: SemanticStatus;
-  domain: ModuleState<DomainInfo>;
-  lastDeployment: ModuleState<DeploymentInfo>;
-  health: HealthComponent[];
-  backups: ModuleState<BackupInfo>[];
-  security: ModuleState<SecurityClaim>[];
-  care: ModuleState<CarePlanInfo>;
-  incidents: { active: IncidentSummary[]; source: DataFreshness };
-}
-
-/**
- * Honest snapshot: identity comes from the registry (config), everything
- * operational is pending until data sources are connected. Unknown is the
- * default — absence of error is not health (§12).
- */
-export function getOverview(ctx: ConsoleContext): OverviewSnapshot {
-  const product = ctx.product;
+export function getOverview(ctx: TenantContext): OverviewSnapshot {
+  const modules: OverviewSnapshot["modules"] = [
+    { key: "health", name: "Health", href: contextPath(ctx, "monitoring"), module: notConfigured<Observation>() },
+    { key: "domain", name: "Domain & SSL", href: contextPath(ctx, "infrastructure"), module: notConfigured<Observation>() },
+    { key: "deployments", name: "Deployments", href: contextPath(ctx, "deployments"), module: notConfigured<Observation>() },
+    { key: "backups", name: "Backups", href: contextPath(ctx, "backups"), module: notConfigured<Observation>() },
+    { key: "security", name: "Security", href: contextPath(ctx, "security"), module: notConfigured<Observation>() },
+    { key: "care", name: "Care", href: contextPath(ctx, "care"), module: notConfigured<Observation>() },
+  ];
+  const pending = modules.filter((m) => m.module.state === "not_configured").length;
   return {
-    identity: { vlxId: product.vlxId, name: product.name, productionUrl: product.url },
-    overall: "unknown",
-    domain: product.url
-      ? { status: "unknown", freshness: pendingFreshness(), data: null, error: null }
-      : pendingState<DomainInfo>(),
-    lastDeployment: pendingState<DeploymentInfo>(),
-    health: [
-      { name: "Application", status: "unknown", freshness: pendingFreshness() },
-      { name: "Database", status: "unknown", freshness: pendingFreshness() },
-      { name: "Storage", status: "unknown", freshness: pendingFreshness() },
-    ],
-    backups: [pendingState<BackupInfo>(), pendingState<BackupInfo>()],
-    security: [
-      { ...pendingState<SecurityClaim>(), data: null },
-    ],
-    care: pendingState<CarePlanInfo>(),
-    incidents: { active: [], source: pendingFreshness() },
+    identity: {
+      // No identity source exists yet: vlxId stays null. Never fabricate VLX-* IDs.
+      name: humanize(ctx.product),
+      vlxId: null,
+      contextLabel: contextLabel(ctx),
+    },
+    health: notConfigured<ProductHealth>(),
+    modules,
+    attention:
+      pending > 0
+        ? [
+            `${pending} of ${modules.length} modules are not configured — no data is being collected yet. Connect providers to activate them.`,
+          ]
+        : [],
   };
 }
 
-export function getDeployments(): ModuleState<DeploymentInfo>[] {
-  return [];
+/* ------------------------- Per-section module states ------------------------ */
+
+export function getProductList(): ModuleState<ProductListData> {
+  return notConfigured();
 }
 
-export function getSecurityClaims(): SecurityClaim[] {
-  return [
-    { key: "https", label: "HTTPS", state: "not_configured", evidence: null, lastEvaluatedAt: null },
-    { key: "waf", label: "WAF", state: "not_configured", evidence: null, lastEvaluatedAt: null },
-    { key: "ddos", label: "DDoS mitigation", state: "not_configured", evidence: null, lastEvaluatedAt: null },
-    { key: "rate_limit", label: "Rate limiting", state: "not_configured", evidence: null, lastEvaluatedAt: null },
-  ];
+export function getDomainStatus(): ModuleState<DomainStatus> {
+  return notConfigured();
 }
 
-export { unknownState, pendingState };
-export type { SemanticStatus };
+export function getResources(): ModuleState<ResourceListData> {
+  return notConfigured();
+}
+
+export function getDeployments(): ModuleState<DeploymentListData> {
+  return notConfigured();
+}
+
+export function getProductHealth(): ModuleState<ProductHealth> {
+  return notConfigured();
+}
+
+export function getBackups(): ModuleState<BackupListData> {
+  return notConfigured();
+}
+
+export function getSecurityPosture(): ModuleState<SecurityPostureData> {
+  return notConfigured();
+}
+
+export function getIncidents(): ModuleState<IncidentListData> {
+  return notConfigured();
+}
+
+export function getCarePlan(): ModuleState<CarePlanData> {
+  return notConfigured();
+}
+
+export function getSupportRequests(): ModuleState<SupportData> {
+  return notConfigured();
+}

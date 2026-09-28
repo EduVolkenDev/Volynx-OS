@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { DataFreshness } from "@/components/console/DataFreshness";
+import { ModuleCard } from "@/components/console/ModuleCard";
 import { StatusPill } from "@/components/console/StatusPill";
-import {
-  AttentionBanner,
-  EmptyState,
-  ErrorState,
-  LoadingSkeleton,
-  ModuleCard,
-  PermissionState,
-} from "@/components/console/states";
-import type { SemanticStatus } from "@/lib/console/types";
+import { AttentionBanner, PermissionState } from "@/components/console/states";
+import { CLOUD_STATUS_VALUES } from "@/lib/console/types";
+import type {
+  CloudStatus,
+  DeploymentListData,
+  ModuleState,
+  Observation,
+  OperationError,
+  ProductHealth,
+} from "@/lib/console/types";
 
 const SAMPLE_AT = "2026-09-28T03:00:00.000Z";
 /** Fixed illustrative timestamps — module-level so render stays pure. */
@@ -17,14 +19,60 @@ function sampleAgo(minutes: number): string {
   return new Date(new Date(SAMPLE_AT).getTime() - minutes * 60000).toISOString();
 }
 
-const STATUSES: SemanticStatus[] = [
-  "operational",
-  "degraded",
-  "incident",
-  "maintenance",
-  "unknown",
-  "not_configured",
-];
+const sampleObservation = (status: CloudStatus, minutesAgo: number | null, source: string | null): Observation => ({
+  status,
+  source,
+  lastCheckedAt: minutesAgo === null ? null : sampleAgo(minutesAgo),
+  stale: false,
+});
+
+const sampleError = (code: OperationError["code"], retryable: boolean): OperationError => ({
+  code,
+  reason: "Sample failure: build step failed because STRIPE_SECRET_KEY was not set in the environment.",
+  at: sampleAgo(9),
+  referenceId: "dpl_8f3ka2",
+  retryable,
+});
+
+const readyHealth: ModuleState<ProductHealth> = {
+  state: "ready",
+  data: {
+    status: "degraded",
+    source: "uptime-check",
+    lastCheckedAt: sampleAgo(5),
+    stale: false,
+    productId: "00000000-0000-0000-0000-000000000000",
+    environmentId: "00000000-0000-0000-0000-000000000001",
+    components: [
+      { key: "app", name: "Application", ...sampleObservation("operational", 2, "uptime-check") },
+      { key: "db", name: "Database", ...sampleObservation("operational", 2, "supabase") },
+      { key: "storage", name: "Storage", ...sampleObservation("degraded", 5, "uptime-check") },
+    ],
+    activeIncidentIds: [],
+  },
+};
+
+const staleDeployments: ModuleState<DeploymentListData> = {
+  state: "stale",
+  data: {
+    ...sampleObservation("unknown", 47, "github"),
+    stale: true,
+    deployments: [
+      {
+        id: "dpl_8f3ka2",
+        status: "failed",
+        source: { repo: "volynx-os", commitSha: "8f3ka2c", branch: "main", author: "edu" },
+        createdAt: sampleAgo(50),
+        durationMs: 182000,
+        triggeredBy: "push",
+        lastCheckedAt: sampleAgo(47),
+        providerSource: "github",
+        error: sampleError("operation_failed", false),
+      },
+    ],
+  },
+  error: null,
+};
 
 /**
  * Component gallery — ILLUSTRATIVE ONLY. Every state below is sample data for
@@ -43,10 +91,10 @@ export default function ConsolePreviewPage() {
 
         <section>
           <h2 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Status scale (§12)
+            Status scale (§12 — contract CLOUD_STATUS_VALUES)
           </h2>
           <div className="flex flex-wrap gap-2">
-            {STATUSES.map((s) => (
+            {CLOUD_STATUS_VALUES.map((s) => (
               <StatusPill key={s} status={s} />
             ))}
           </div>
@@ -54,77 +102,44 @@ export default function ConsolePreviewPage() {
 
         <section>
           <h2 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Module cards — every state
+            Module states — the contract&apos;s ModuleState union
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
-            <ModuleCard
-              title="Domain & SSL (sample: live)"
-              status="operational"
-              freshness={{ lastCheckedAt: sampleAgo(2), source: "cloudflare-api" }}
-              action={{ label: "Details", href: "#" }}
-            >
-              <dl className="space-y-2 text-[13px]">
-                <div className="flex justify-between"><dt className="text-zinc-500">Domain</dt><dd className="font-medium text-zinc-200">example.com</dd></div>
-                <div className="flex justify-between"><dt className="text-zinc-500">DNS</dt><dd className="font-medium text-zinc-200">Resolving</dd></div>
-                <div className="flex justify-between"><dt className="text-zinc-500">SSL expires</dt><dd className="tnum font-medium text-zinc-200">in 89 days</dd></div>
-              </dl>
+            <ModuleCard title="Health (sample: ready → degraded)" module={readyHealth} action={{ label: "Details", href: "#" }}>
+              {(data) => (
+                <ul>
+                  {data.components.map((c) => (
+                    <li key={c.key} className="flex items-center justify-between gap-3 py-2 text-[13px]">
+                      <span className="text-zinc-300">{c.name}</span>
+                      <StatusPill status={c.status} />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </ModuleCard>
 
-            <ModuleCard
-              title="Health (sample: degraded)"
-              status="degraded"
-              freshness={{ lastCheckedAt: sampleAgo(5), source: "uptime-check" }}
-            >
-              <p className="text-[13px] leading-6 text-zinc-400">
-                Storage latency above threshold for 12 minutes. Application and database unaffected.
-              </p>
-            </ModuleCard>
+            <ModuleCard title="Deployments (sample: stale)" module={staleDeployments} />
 
             <ModuleCard
-              title="Backups (sample: stale)"
-              status="unknown"
-              freshness={{ lastCheckedAt: sampleAgo(47), source: "supabase" }}
-            >
-              <p className="text-[13px] leading-6 text-zinc-400">
-                Last known backup succeeded 47 minutes ago. Source unreachable since — showing last
-                known state, labeled as stale, never as live.
-              </p>
-            </ModuleCard>
+              title="Backups (sample: empty)"
+              module={{ state: "empty", source: "supabase", lastCheckedAt: sampleAgo(12) }}
+            />
+
+            <ModuleCard title="Domain & SSL (sample: not_configured)" module={{ state: "not_configured", data: null }} />
+
+            <ModuleCard title="Care plan (sample: pending)" module={{ state: "pending", data: null }} />
+
+            <ModuleCard title="Security (sample: loading)" module={{ state: "loading" }} />
 
             <ModuleCard
-              title="Deployments (sample: failed)"
-              status="incident"
-              freshness={{ lastCheckedAt: sampleAgo(9), source: "github" }}
-            >
-              <ErrorState
-                error={{
-                  reason: "Build failed: missing environment variable STRIPE_SECRET_KEY at build step.",
-                  at: sampleAgo(9),
-                  referenceId: "dpl_8f3ka2",
-                }}
-              />
-            </ModuleCard>
+              title="Incidents (sample: error, retryable)"
+              module={{ state: "error", data: null, error: sampleError("provider_unavailable", true) }}
+            />
 
             <ModuleCard
-              title="Security (sample: loading)"
-              status="unknown"
-              freshness={{ lastCheckedAt: null, source: null }}
-            >
-              <LoadingSkeleton lines={4} />
-            </ModuleCard>
-
-            <ModuleCard
-              title="Care plan (sample: empty)"
-              status="not_configured"
-              freshness={{ lastCheckedAt: null, source: null }}
-            >
-              <EmptyState
-                variant="not_configured"
-                title="No care plan attached"
-                description="Attach a plan to surface included maintenance, support channel and SLA here."
-                action={{ label: "View plans", href: "#" }}
-              />
-            </ModuleCard>
+              title="Support (sample: forbidden)"
+              module={{ state: "forbidden", data: null, error: sampleError("permission_denied", false) }}
+            />
           </div>
         </section>
 
@@ -147,19 +162,19 @@ export default function ConsolePreviewPage() {
 
         <section>
           <h2 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Freshness chips
+            Freshness chips (contract Observation fields)
           </h2>
           <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.025] p-4">
-            <DataFreshness freshness={{ lastCheckedAt: sampleAgo(2), source: "cloudflare-api" }} />
-            <DataFreshness freshness={{ lastCheckedAt: sampleAgo(180), source: "supabase" }} />
-            <DataFreshness freshness={{ lastCheckedAt: null, source: null }} />
+            <DataFreshness observation={sampleObservation("operational", 2, "cloudflare-api")} />
+            <DataFreshness observation={{ ...sampleObservation("unknown", 180, "supabase"), stale: true }} />
+            <DataFreshness observation={sampleObservation("unknown", null, null)} />
           </div>
         </section>
 
         <p className="border-t border-white/[0.07] pt-6 text-[13px] leading-6 text-zinc-600">
           End of preview. Real console routes live under{" "}
           <Link href="/console" className="underline underline-offset-4">/console</Link> and show only
-          honest Unknown / Not configured states until data sources are connected.
+          honest Not configured states until data sources are connected.
         </p>
       </div>
     </div>

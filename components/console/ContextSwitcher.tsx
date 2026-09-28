@@ -3,24 +3,26 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import type { ConsoleContext } from "@/lib/console/data";
-import { contextPath, listClients, listEnvs, listProducts } from "@/lib/console/data";
+import type { TenantContext } from "@/lib/console/types";
+import { DEMO_CONTEXTS } from "@/lib/console/data";
 import { cn } from "@/lib/utils";
 
 /**
  * Client → Product → Environment cascade. Changing context keeps the current
- * section whenever possible (IA §2).
+ * section whenever possible (IA §2). Options are demo navigation contexts —
+ * explicitly illustrative until tenant data exists.
  */
-export function ContextSwitcher({ ctx }: { ctx: ConsoleContext }) {
+export function ContextSwitcher({ ctx }: { ctx: TenantContext }) {
   const router = useRouter();
   const pathname = usePathname();
   const section = pathname.split("/").slice(5).join("/") || "";
 
-  const products = listProducts(ctx.client.slug);
-  const envs = listEnvs(ctx.client.slug);
+  const clients = [...new Set(DEMO_CONTEXTS.map((c) => c.client))];
+  const products = [...new Set(DEMO_CONTEXTS.filter((c) => c.client === ctx.client).map((c) => c.product))];
+  const envs = [...new Set(DEMO_CONTEXTS.filter((c) => c.client === ctx.client && c.product === ctx.product).map((c) => c.env))];
 
-  function go(clientSlug: string, productSlug: string, env: string) {
-    const base = `/console/${clientSlug}/${productSlug}/${env}`;
+  function go(client: string, product: string, env: string) {
+    const base = `/console/${client}/${product}/${env}`;
     router.push(section ? `${base}/${section}` : base);
   }
 
@@ -33,15 +35,14 @@ export function ContextSwitcher({ ctx }: { ctx: ConsoleContext }) {
         <span className="mb-1 block text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-600">Client</span>
         <select
           className={selectClass}
-          value={ctx.client.slug}
+          value={ctx.client}
           onChange={(e) => {
-            const prods = listProducts(e.target.value);
-            const first = prods[0];
-            if (first) go(e.target.value, first.slug, listEnvs(e.target.value)[0] ?? "production");
+            const next = DEMO_CONTEXTS.find((c) => c.client === e.target.value);
+            if (next) go(next.client, next.product, next.env);
           }}
         >
-          {listClients().map((c) => (
-            <option key={c.slug} value={c.slug}>{c.name}</option>
+          {clients.map((c) => (
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
       </label>
@@ -49,11 +50,11 @@ export function ContextSwitcher({ ctx }: { ctx: ConsoleContext }) {
         <span className="mb-1 block text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-600">Product</span>
         <select
           className={selectClass}
-          value={ctx.product.slug}
-          onChange={(e) => go(ctx.client.slug, e.target.value, ctx.env)}
+          value={ctx.product}
+          onChange={(e) => go(ctx.client, e.target.value, envs[0] ?? ctx.env)}
         >
           {products.map((p) => (
-            <option key={p.slug} value={p.slug}>{p.name} · {p.vlxId}</option>
+            <option key={p} value={p}>{p}</option>
           ))}
         </select>
       </label>
@@ -62,23 +63,18 @@ export function ContextSwitcher({ ctx }: { ctx: ConsoleContext }) {
         <select
           className={selectClass}
           value={ctx.env}
-          onChange={(e) => go(ctx.client.slug, ctx.product.slug, e.target.value)}
+          onChange={(e) => go(ctx.client, ctx.product, e.target.value)}
         >
           {envs.map((env) => (
             <option key={env} value={env}>{env}</option>
           ))}
         </select>
       </label>
-      <p className="tnum pt-1 text-[11px] uppercase tracking-[0.14em] text-zinc-600">
-        {ctx.product.vlxId}
+      <p className="pt-1 text-[11px] uppercase tracking-[0.14em] text-zinc-600">
+        Demo context — not connected
       </p>
     </div>
   );
-}
-
-/** Compact context link used on pages without a full shell (e.g. context picker). */
-export function contextLink(ctx: ConsoleContext, section = ""): string {
-  return contextPath(ctx, section);
 }
 
 export function useSectionSlug(): string {

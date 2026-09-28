@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Cloud } from "lucide-react";
-import type { ConsoleContext } from "@/lib/console/data";
-import { contextPath } from "@/lib/console/data";
+import type { TenantContext } from "@/lib/console/types";
+import { contextLabel, contextPath } from "@/lib/console/data";
 import { MOBILE_PRIMARY, SECTIONS } from "@/lib/console/nav";
 import { ContextSwitcher, NavLink } from "./ContextSwitcher";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ function RoleBadge() {
   );
 }
 
-function SidebarNav({ ctx, activeSection }: { ctx: ConsoleContext; activeSection: string }) {
+function SidebarNav({ ctx, activeSection }: { ctx: TenantContext; activeSection: string }) {
   return (
     <nav className="space-y-0.5" aria-label="Console sections">
       {SECTIONS.map((s) => {
@@ -28,7 +28,7 @@ function SidebarNav({ ctx, activeSection }: { ctx: ConsoleContext; activeSection
         return (
           <NavLink key={s.slug || "overview"} href={href} active={active}>
             <Icon className="h-4 w-4 shrink-0" aria-hidden />
-            {s.label}
+            {s.name}
           </NavLink>
         );
       })}
@@ -40,7 +40,7 @@ function SidebarNav({ ctx, activeSection }: { ctx: ConsoleContext; activeSection
  * Console shell: desktop sidebar + mobile top/bottom nav (§3 navigation model).
  * The operational environment is desktop; mobile keeps the 5 primary sections.
  */
-export function ConsoleShell({ ctx, activeSection, children }: { ctx: ConsoleContext; activeSection: string; children: ReactNode }) {
+export function ConsoleShell({ ctx, activeSection, children }: { ctx: TenantContext; activeSection: string; children: ReactNode }) {
   const mobileSections = SECTIONS.filter((s) => MOBILE_PRIMARY.includes(s.slug));
   return (
     <div className="console-root min-h-screen bg-[#070807] text-zinc-100">
@@ -66,7 +66,7 @@ export function ConsoleShell({ ctx, activeSection, children }: { ctx: ConsoleCon
           <p className="px-1 text-[11px] leading-5 text-zinc-600">
             Data sources pending.
             <br />
-            Statuses show Unknown until connected.
+            Modules show Not configured until connected.
           </p>
         </div>
       </aside>
@@ -81,7 +81,7 @@ export function ConsoleShell({ ctx, activeSection, children }: { ctx: ConsoleCon
           <RoleBadge />
         </div>
         <p className="tnum mt-1.5 truncate text-[11px] uppercase tracking-[0.14em] text-zinc-500">
-          {ctx.client.name} · {ctx.product.name} · {ctx.env} · {ctx.product.vlxId}
+          {contextLabel(ctx)}
         </p>
       </header>
 
@@ -111,7 +111,7 @@ export function ConsoleShell({ ctx, activeSection, children }: { ctx: ConsoleCon
                 )}
               >
                 <Icon className="h-5 w-5" aria-hidden />
-                {s.label}
+                {s.name}
               </Link>
             );
           })}

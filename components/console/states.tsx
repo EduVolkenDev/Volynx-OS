@@ -1,30 +1,67 @@
 import type { ReactNode } from "react";
-import { AlertOctagon, ArrowRight, Inbox, Lock, Unplug } from "lucide-react";
+import { AlertOctagon, ArrowRight, Hourglass, Inbox, Lock, Unplug } from "lucide-react";
 import { DataFreshness } from "./DataFreshness";
-import { StatusPill } from "./StatusPill";
-import type { DataFreshness as Freshness, OperationError, SemanticStatus } from "@/lib/console/types";
+import type { OperationError } from "@/lib/console/types";
 import { cn } from "@/lib/utils";
 
 /* ---------------------------------- Empty ---------------------------------- */
 
+/**
+ * The API checked and found nothing (ModuleState 'empty').
+ * Provenance is required: when it was checked and by which source.
+ */
 export function EmptyState({
-  variant = "not_configured",
+  title,
+  description,
+  observed,
+  action,
+  className,
+}: {
+  title: string;
+  description: string;
+  observed: { source: string; lastCheckedAt: string };
+  action?: { label: string; href: string };
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex flex-col items-center px-6 py-10 text-center", className)}>
+      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03]">
+        <Inbox className="h-5 w-5 text-zinc-500" aria-hidden />
+      </span>
+      <p className="mt-4 text-sm font-semibold text-zinc-200">{title}</p>
+      <p className="mt-1.5 max-w-sm text-[13px] leading-6 text-zinc-500">{description}</p>
+      <DataFreshness className="mt-3" observation={{ ...observed, stale: false }} />
+      {action ? (
+        <a
+          href={action.href}
+          className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2 text-[13px] font-medium text-zinc-200 transition hover:bg-white/[0.08]"
+        >
+          {action.label}
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+        </a>
+      ) : null}
+    </div>
+  );
+}
+
+/* ------------------------------ Not configured ----------------------------- */
+
+/** No provider wired yet. Honest about the absence — never a fake "everything is fine". */
+export function NotConfiguredState({
   title,
   description,
   action,
   className,
 }: {
-  variant?: "not_configured" | "no_data";
   title: string;
   description: string;
   action?: { label: string; href: string };
   className?: string;
 }) {
-  const Icon = variant === "not_configured" ? Unplug : Inbox;
   return (
     <div className={cn("flex flex-col items-center px-6 py-10 text-center", className)}>
-      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03]">
-        <Icon className="h-5 w-5 text-zinc-500" aria-hidden />
+      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-dashed border-white/15 bg-transparent">
+        <Unplug className="h-5 w-5 text-zinc-500" aria-hidden />
       </span>
       <p className="mt-4 text-sm font-semibold text-zinc-200">{title}</p>
       <p className="mt-1.5 max-w-sm text-[13px] leading-6 text-zinc-500">{description}</p>
@@ -37,6 +74,21 @@ export function EmptyState({
           <ArrowRight className="h-3.5 w-3.5" aria-hidden />
         </a>
       ) : null}
+    </div>
+  );
+}
+
+/* --------------------------------- Pending --------------------------------- */
+
+/** Configured, but the first observation hasn't arrived yet. */
+export function PendingState({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="flex flex-col items-center px-6 py-10 text-center">
+      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03]">
+        <Hourglass className="h-5 w-5 text-zinc-500" aria-hidden />
+      </span>
+      <p className="mt-4 text-sm font-semibold text-zinc-200">{title}</p>
+      <p className="mt-1.5 max-w-sm text-[13px] leading-6 text-zinc-500">{description}</p>
     </div>
   );
 }
@@ -59,7 +111,10 @@ export function LoadingSkeleton({ lines = 3, className }: { lines?: number; clas
 
 /* ---------------------------------- Error ---------------------------------- */
 
-/** Explicit failure, never a disappearing spinner (§13). */
+/**
+ * Explicit failure, never a disappearing spinner (§13).
+ * Renders the contract's OperationError: server-owned safe text, code, reference.
+ */
 export function ErrorState({
   error,
   onRetry,
@@ -74,12 +129,15 @@ export function ErrorState({
       <div className="flex items-start gap-3">
         <AlertOctagon className="mt-0.5 h-5 w-5 shrink-0 text-red-300" aria-hidden />
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-red-200">Operation failed</p>
+          <p className="text-sm font-semibold text-red-200">Something failed</p>
           <p className="mt-1 text-[13px] leading-6 text-red-200/70">{error.reason}</p>
           <p className="tnum mt-2 text-[11px] uppercase tracking-[0.14em] text-red-200/40">
-            {new Date(error.at).toLocaleString()} · Ref {error.referenceId}
+            {error.code} · {new Date(error.at).toLocaleString()} · Ref {error.referenceId}
           </p>
-          {onRetry ? (
+          <p className="mt-1 text-[12px] text-red-200/50">
+            {error.retryable ? "This may work if you try again." : "This needs an operator — retrying won't help."}
+          </p>
+          {onRetry && error.retryable ? (
             <button
               type="button"
               onClick={onRetry}
@@ -96,6 +154,7 @@ export function ErrorState({
 
 /* -------------------------------- Permission -------------------------------- */
 
+/** Server-enforced denial (ModuleState 'forbidden'). Access is decided by the API, not hidden by CSS. */
 export function PermissionState({ who = "your Volynx operator" }: { who?: string }) {
   return (
     <div className="flex flex-col items-center px-6 py-10 text-center">
@@ -146,41 +205,12 @@ export function AttentionBanner({
   );
 }
 
-/* -------------------------------- ModuleCard -------------------------------- */
+/* ------------------------------ Stale notice ------------------------------ */
 
-/** Standard module frame: title + status + provenance. Answers "what's happening?" (§18). */
-export function ModuleCard({
-  title,
-  status,
-  freshness,
-  action,
-  children,
-  className,
-}: {
-  title: string;
-  status: SemanticStatus;
-  freshness: Freshness;
-  action?: { label: string; href: string };
-  children: ReactNode;
-  className?: string;
-}) {
+export function StaleNotice({ children }: { children?: ReactNode }) {
   return (
-    <section className={cn("rounded-2xl border border-white/10 bg-white/[0.025]", className)}>
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.07] px-4 py-3">
-        <div className="flex items-center gap-2.5">
-          <h3 className="text-[13px] font-semibold uppercase tracking-[0.14em] text-zinc-300">{title}</h3>
-          <StatusPill status={status} />
-        </div>
-        <div className="flex items-center gap-3">
-          <DataFreshness freshness={freshness} />
-          {action ? (
-            <a href={action.href} className="text-[13px] font-medium text-zinc-300 underline-offset-4 hover:underline">
-              {action.label}
-            </a>
-          ) : null}
-        </div>
-      </header>
-      <div className="p-4">{children}</div>
-    </section>
+    <p className="rounded-lg border border-amber-400/20 bg-amber-400/[0.06] px-3 py-2 text-[12px] leading-5 text-amber-200/80">
+      {children ?? "This data is stale — the last check is older than expected. Treat it as a hint, not the truth."}
+    </p>
   );
 }

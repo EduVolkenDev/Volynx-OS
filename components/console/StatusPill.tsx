@@ -7,10 +7,10 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import type { SemanticStatus } from "@/lib/console/types";
+import type { CloudStatus } from "@/lib/console/types";
 import { cn } from "@/lib/utils";
 
-const CONFIG: Record<SemanticStatus, { label: string; icon: LucideIcon; classes: string }> = {
+const CONFIG: Record<CloudStatus, { label: string; icon: LucideIcon; classes: string }> = {
   operational: {
     label: "Operational",
     icon: CheckCircle2,
@@ -46,8 +46,9 @@ const CONFIG: Record<SemanticStatus, { label: string; icon: LucideIcon; classes:
 /**
  * Semantic status indicator (§12). Never color-only: always icon + label.
  * Unknown is visually quiet — absence of error is not health.
+ * Status values come from the shared contract (CLOUD_STATUS_VALUES).
  */
-export function StatusPill({ status, className }: { status: SemanticStatus; className?: string }) {
+export function StatusPill({ status, className }: { status: CloudStatus; className?: string }) {
   const { label, icon: Icon, classes } = CONFIG[status];
   return (
     <span
