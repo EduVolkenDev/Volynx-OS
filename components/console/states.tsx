@@ -68,7 +68,8 @@ export function NotConfiguredState({
       {action ? (
         <a
           href={action.href}
-          className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-[#e3b85c] px-4 py-2 text-[13px] font-semibold text-black transition hover:bg-[#f2d68a]"
+          style={{ borderRadius: "21px 10px 10px 3px" }}
+          className="mt-5 inline-flex items-center gap-1.5 bg-[#e3b85c] px-4 py-2 text-[13px] font-semibold text-black transition hover:bg-[#f2d68a]"
         >
           {action.label}
           <ArrowRight className="h-3.5 w-3.5" aria-hidden />

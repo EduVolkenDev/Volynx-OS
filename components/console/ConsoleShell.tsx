@@ -11,7 +11,13 @@ function RoleBadge() {
   // Mirrors the server-known role; the server decides, the UI only displays.
   // Until authz lands (Codex), this is honestly labeled as a preview role.
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+    <span
+      style={{
+        backgroundColor: "rgb(255 255 255 / 4%)",
+        boxShadow: "0 0 7px 1px inset currentColor",
+      }}
+      className="console-chip inline-flex items-center gap-1.5 border border-white/10 text-[11px] font-medium text-zinc-300"
+    >
       <span className="h-1.5 w-1.5 rounded-full bg-sky-300" aria-hidden />
       Volynx Operator · preview
     </span>

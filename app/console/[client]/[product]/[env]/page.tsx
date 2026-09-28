@@ -36,7 +36,8 @@ export default async function OverviewPage({ params }: { params: Promise<Params>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <a
             href={contextPath(ctx, "settings")}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#e3b85c] px-5 py-2.5 text-[14px] font-semibold text-black transition hover:bg-[#f2d68a]"
+            style={{ borderRadius: "21px 10px 10px 3px" }}
+            className="inline-flex items-center gap-2 bg-[#e3b85c] px-5 py-2.5 text-[14px] font-semibold text-black transition hover:bg-[#f2d68a]"
           >
             Connect your first integration
             <ArrowRight className="h-4 w-4" aria-hidden />
