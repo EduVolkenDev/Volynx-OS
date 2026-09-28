@@ -1,0 +1,53 @@
+/* VOLYNX Cloud Console — design tokens (Muse domain).
+   Extends the global dark-first system with operational semantics.
+   Status scale is independent from the brand accent: status is information,
+   never decoration. All status communication pairs color with icon + label. */
+
+.console-root {
+  --st-operational: #34d399;
+  --st-degraded: #fbbf24;
+  --st-incident: #f87171;
+  --st-maintenance: #7dd3fc;
+  --st-unknown: #a1a1aa;
+  --st-not-configured: #71717a;
+
+  --console-line: rgba(255, 255, 255, 0.1);
+  --console-surface: rgba(255, 255, 255, 0.025);
+  --console-surface-strong: rgba(255, 255, 255, 0.05);
+}
+
+/* Tabular numerals for metrics and timestamps — precision language. */
+.console-root .tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Skeleton shimmer for loading states (per-module, never full-page). */
+@keyframes console-shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+.console-root .console-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  background-size: 400px 100%;
+  animation: console-shimmer 1.4s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console-root .console-skeleton {
+    animation: none;
+  }
+}
+
+/* Focus visibility — keyboard navigation is a first-class path. */
+.console-root :focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.7);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

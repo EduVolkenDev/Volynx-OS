@@ -1,0 +1,122 @@
+import Link from "next/link";
+import type { ReactNode } from "react";
+import { Cloud } from "lucide-react";
+import type { ConsoleContext } from "@/lib/console/data";
+import { contextPath } from "@/lib/console/data";
+import { MOBILE_PRIMARY, SECTIONS } from "@/lib/console/nav";
+import { ContextSwitcher, NavLink } from "./ContextSwitcher";
+import { cn } from "@/lib/utils";
+
+function RoleBadge() {
+  // Mirrors the server-known role; the server decides, the UI only displays.
+  // Until authz lands (Codex), this is honestly labeled as a preview role.
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+      <span className="h-1.5 w-1.5 rounded-full bg-sky-300" aria-hidden />
+      Volynx Operator · preview
+    </span>
+  );
+}
+
+function SidebarNav({ ctx, activeSection }: { ctx: ConsoleContext; activeSection: string }) {
+  return (
+    <nav className="space-y-0.5" aria-label="Console sections">
+      {SECTIONS.map((s) => {
+        const Icon = s.icon;
+        const href = contextPath(ctx, s.slug);
+        const active = activeSection === s.slug;
+        return (
+          <NavLink key={s.slug || "overview"} href={href} active={active}>
+            <Icon className="h-4 w-4 shrink-0" aria-hidden />
+            {s.label}
+          </NavLink>
+        );
+      })}
+    </nav>
+  );
+}
+
+/**
+ * Console shell: desktop sidebar + mobile top/bottom nav (§3 navigation model).
+ * The operational environment is desktop; mobile keeps the 5 primary sections.
+ */
+export function ConsoleShell({ ctx, activeSection, children }: { ctx: ConsoleContext; activeSection: string; children: ReactNode }) {
+  const mobileSections = SECTIONS.filter((s) => MOBILE_PRIMARY.includes(s.slug));
+  return (
+    <div className="console-root min-h-screen bg-[#070807] text-zinc-100">
+      {/* Desktop sidebar */}
+      <aside className="fixed inset-y-0 left-0 hidden w-[264px] flex-col border-r border-white/10 bg-black/40 px-4 py-5 lg:flex">
+        <Link href="/console" className="flex items-center gap-2.5 px-1">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.05]">
+            <Cloud className="h-4 w-4 text-zinc-200" aria-hidden />
+          </span>
+          <span className="leading-tight">
+            <span className="block text-[13px] font-semibold tracking-[0.08em] text-white">VOLYNX CLOUD</span>
+            <span className="block text-[10px] uppercase tracking-[0.2em] text-zinc-500">Console</span>
+          </span>
+        </Link>
+        <div className="mt-6">
+          <ContextSwitcher ctx={ctx} />
+        </div>
+        <div className="mt-6 flex-1 overflow-y-auto">
+          <SidebarNav ctx={ctx} activeSection={activeSection} />
+        </div>
+        <div className="space-y-3 border-t border-white/[0.07] pt-4">
+          <RoleBadge />
+          <p className="px-1 text-[11px] leading-5 text-zinc-600">
+            Data sources pending.
+            <br />
+            Statuses show Unknown until connected.
+          </p>
+        </div>
+      </aside>
+
+      {/* Mobile top bar */}
+      <header className="sticky top-0 z-20 border-b border-white/10 bg-[#070807]/90 px-4 py-3 backdrop-blur lg:hidden">
+        <div className="flex items-center justify-between gap-3">
+          <Link href="/console" className="flex items-center gap-2">
+            <Cloud className="h-4 w-4 text-zinc-200" aria-hidden />
+            <span className="text-[13px] font-semibold tracking-[0.08em] text-white">VOLYNX CLOUD</span>
+          </Link>
+          <RoleBadge />
+        </div>
+        <p className="tnum mt-1.5 truncate text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+          {ctx.client.name} · {ctx.product.name} · {ctx.env} · {ctx.product.vlxId}
+        </p>
+      </header>
+
+      {/* Main */}
+      <main className="px-4 pb-28 pt-6 md:px-8 lg:pb-12 lg:pl-[264px] lg:pt-8">
+        <div className="mx-auto w-full max-w-6xl">{children}</div>
+      </main>
+
+      {/* Mobile bottom nav */}
+      <nav
+        className="fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-[#070807]/95 backdrop-blur lg:hidden"
+        aria-label="Console sections"
+      >
+        <div className="grid grid-cols-5">
+          {mobileSections.map((s) => {
+            const Icon = s.icon;
+            const href = contextPath(ctx, s.slug);
+            const active = activeSection === s.slug;
+            return (
+              <Link
+                key={s.slug || "overview"}
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium",
+                  active ? "text-white" : "text-zinc-500"
+                )}
+              >
+                <Icon className="h-5 w-5" aria-hidden />
+                {s.label}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+    </div>
+  );
+}
