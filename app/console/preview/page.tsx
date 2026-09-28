@@ -90,9 +90,8 @@ export default function ConsolePreviewPage() {
         />
 
         <section>
-          <h2 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Status scale (§12 — contract CLOUD_STATUS_VALUES)
-          </h2>
+          <p className="eyebrow mb-3 text-[#e3b85c]">Contract</p>
+          <h2 className="font-display mb-5 text-2xl text-white">Status scale <span className="text-zinc-500 text-lg">(CLOUD_STATUS_VALUES)</span></h2>
           <div className="flex flex-wrap gap-2">
             {CLOUD_STATUS_VALUES.map((s) => (
               <StatusPill key={s} status={s} />
@@ -101,11 +100,15 @@ export default function ConsolePreviewPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Module states — the contract&apos;s ModuleState union
-          </h2>
+          <p className="eyebrow mb-3 text-[#e3b85c]">Design gallery</p>
+          <h2 className="font-display mb-8 text-3xl text-white">Module states — the contract&apos;s ModuleState union</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            <ModuleCard title="Health (sample: ready → degraded)" module={readyHealth} action={{ label: "Details", href: "#" }}>
+            <ModuleCard
+              title="Health (sample: ready → degraded)"
+              module={readyHealth}
+              blurb="Is the product alive? Watches the app, database and storage — and says so in plain words."
+              action={{ label: "Details", href: "#" }}
+            >
               {(data) => (
                 <ul>
                   {data.components.map((c) => (
@@ -118,35 +121,58 @@ export default function ConsolePreviewPage() {
               )}
             </ModuleCard>
 
-            <ModuleCard title="Deployments (sample: stale)" module={staleDeployments} />
+            <ModuleCard
+              title="Deployments (sample: stale)"
+              module={staleDeployments}
+              blurb="What shipped, when, and whether it worked. Every release, with its story."
+            />
 
             <ModuleCard
               title="Backups (sample: empty)"
               module={{ state: "empty", source: "supabase", lastCheckedAt: sampleAgo(12) }}
+              blurb="If everything broke tomorrow, could you come back? That's what this answers."
             />
 
-            <ModuleCard title="Domain & SSL (sample: not_configured)" module={{ state: "not_configured", data: null }} />
+            <ModuleCard
+              title="Domain & SSL (sample: not_configured)"
+              module={{ state: "not_configured", data: null }}
+              blurb="Can customers reach you? Tracks your domain, DNS and certificate expiry."
+              guidance={{
+                title: "No domain connected",
+                body: "Point a domain at this product and we'll watch it for you: DNS resolving, certificate valid, CDN in front. One glance tells you if the front door is open.",
+                action: { label: "Connect a domain", href: "#" },
+              }}
+            />
 
-            <ModuleCard title="Care plan (sample: pending)" module={{ state: "pending", data: null }} />
+            <ModuleCard
+              title="Care plan (sample: pending)"
+              module={{ state: "pending", data: null }}
+              blurb="Who keeps this product healthy day to day — and what they're responsible for."
+            />
 
-            <ModuleCard title="Security (sample: loading)" module={{ state: "loading" }} />
+            <ModuleCard
+              title="Security (sample: loading)"
+              module={{ state: "loading" }}
+              blurb="Are the doors locked? Every protection claim shown with its evidence."
+            />
 
             <ModuleCard
               title="Incidents (sample: error, retryable)"
               module={{ state: "error", data: null, error: sampleError("provider_unavailable", true) }}
+              blurb="When something breaks, this is the timeline. What happened, what's being done."
             />
 
             <ModuleCard
               title="Support (sample: forbidden)"
               module={{ state: "forbidden", data: null, error: sampleError("permission_denied", false) }}
+              blurb="Talk to the humans who keep your product alive."
             />
           </div>
         </section>
 
         <section>
-          <h2 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Banners & permission
-          </h2>
+          <p className="eyebrow mb-3 text-[#e3b85c]">Feedback</p>
+          <h2 className="font-display mb-5 text-2xl text-white">Banners & permission</h2>
           <div className="space-y-4">
             <AttentionBanner
               tone="amber"
@@ -161,9 +187,8 @@ export default function ConsolePreviewPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Freshness chips (contract Observation fields)
-          </h2>
+          <p className="eyebrow mb-3 text-[#e3b85c]">Provenance</p>
+          <h2 className="font-display mb-5 text-2xl text-white">Freshness chips</h2>
           <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.025] p-4">
             <DataFreshness observation={sampleObservation("operational", 2, "cloudflare-api")} />
             <DataFreshness observation={{ ...sampleObservation("unknown", 180, "supabase"), stale: true }} />

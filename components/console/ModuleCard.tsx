@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ArrowRight } from "lucide-react";
 import { DataFreshness } from "./DataFreshness";
 import { StatusPill } from "./StatusPill";
 import {
@@ -10,11 +11,19 @@ import {
   PermissionState,
   StaleNotice,
 } from "./states";
-import type { ModuleState, Observation } from "@/lib/console/types";
+import type { CloudStatus, ModuleState, Observation } from "@/lib/console/types";
 import { cn } from "@/lib/utils";
+
+/** Plain-language guidance for a module that has nothing to show yet. */
+export type ModuleGuidance = {
+  title: string;
+  body: string;
+  action?: { label: string; href: string };
+};
 
 function Frame({
   title,
+  blurb,
   action,
   status,
   observation,
@@ -22,48 +31,71 @@ function Frame({
   children,
 }: {
   title: string;
+  blurb?: string;
   action?: { label: string; href: string };
-  status?: Observation["status"];
+  status?: CloudStatus;
   observation?: Pick<Observation, "source" | "lastCheckedAt" | "stale">;
   className?: string;
   children: ReactNode;
 }) {
   return (
-    <section className={cn("rounded-2xl border border-white/10 bg-white/[0.025]", className)}>
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.07] px-4 py-3">
-        <div className="flex items-center gap-2.5">
-          <h3 className="text-[13px] font-semibold uppercase tracking-[0.14em] text-zinc-300">{title}</h3>
-          {status ? <StatusPill status={status} /> : null}
+    <section className={cn("console-panel", className)}>
+      <header className="flex flex-wrap items-start justify-between gap-3 px-5 pb-4 pt-5 md:px-6">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h3 className="text-[15px] font-semibold tracking-[-0.01em] text-zinc-100">{title}</h3>
+            {status ? <StatusPill status={status} /> : null}
+          </div>
+          {blurb ? (
+            <p className="mt-1.5 max-w-md text-[13px] leading-6 text-zinc-500">{blurb}</p>
+          ) : null}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 pt-0.5">
           {observation ? <DataFreshness observation={observation} /> : null}
           {action ? (
-            <a href={action.href} className="text-[13px] font-medium text-zinc-300 underline-offset-4 hover:underline">
+            <a
+              href={action.href}
+              className="inline-flex items-center gap-1 text-[13px] font-medium text-zinc-300 underline-offset-4 transition hover:text-white hover:underline"
+            >
               {action.label}
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
             </a>
           ) : null}
         </div>
       </header>
-      <div className="p-4">{children}</div>
+      <div className="px-5 pb-5 md:px-6 md:pb-6">{children}</div>
     </section>
   );
 }
+
+const DEFAULT_GUIDANCE: ModuleGuidance = {
+  title: "Nothing connected here yet",
+  body: "This module starts working the moment you connect its data source. Until then we show nothing rather than guess — an empty screen is more honest than a fake green light.",
+};
 
 /**
  * Standard module frame driven by the contract's ModuleState (§18).
  * Every API state has an explicit rendering — loading is the only
  * client-owned state; everything else comes back from the server.
+ * The `blurb` explains the module in human words; `guidance` turns
+ * empty states into orientation instead of gray walls.
  */
 export function ModuleCard<T extends Observation>({
   title,
+  blurb,
   module,
   action,
+  guidance = DEFAULT_GUIDANCE,
   children,
   className,
 }: {
   title: string;
+  /** One human sentence: what this module watches and why it matters. */
+  blurb?: string;
   module: ModuleState<T>;
   action?: { label: string; href: string };
+  /** Plain-language guidance shown when the module has nothing to report. */
+  guidance?: ModuleGuidance;
   /** Rendered only for ready/stale, with the observation as `data`. */
   children?: (data: T) => ReactNode;
   className?: string;
@@ -71,60 +103,75 @@ export function ModuleCard<T extends Observation>({
   switch (module.state) {
     case "loading":
       return (
-        <Frame title={title} action={action} className={className}>
+        <Frame title={title} blurb={blurb} action={action} className={className}>
           <LoadingSkeleton />
         </Frame>
       );
     case "ready":
       return (
-        <Frame title={title} action={action} status={module.data.status} observation={module.data} className={className}>
+        <Frame
+          title={title}
+          blurb={blurb}
+          action={action}
+          status={module.data.status}
+          observation={module.data}
+          className={className}
+        >
           {children ? children(module.data) : null}
         </Frame>
       );
     case "stale":
       return (
-        <Frame title={title} action={action} status={module.data.status} observation={module.data} className={className}>
+        <Frame
+          title={title}
+          blurb={blurb}
+          action={action}
+          status={module.data.status}
+          observation={module.data}
+          className={className}
+        >
           <StaleNotice />
-          <div className="mt-3">{children ? children(module.data) : null}</div>
+          <div className="mt-4">{children ? children(module.data) : null}</div>
         </Frame>
       );
     case "empty":
       return (
-        <Frame title={title} action={action} className={className}>
+        <Frame title={title} blurb={blurb} action={action} className={className}>
           <EmptyState
-            title={`No ${title.toLowerCase()} yet`}
-            description="The source was checked and returned nothing. This is a real answer, not missing data."
+            title="We checked — there's nothing here"
+            description="The source was queried and returned nothing. That's a real answer, not missing data."
             observed={{ source: module.source, lastCheckedAt: module.lastCheckedAt }}
           />
         </Frame>
       );
     case "not_configured":
       return (
-        <Frame title={title} action={action} className={className}>
+        <Frame title={title} blurb={blurb} action={action} status="not_configured" className={className}>
           <NotConfiguredState
-            title={`${title} is not configured`}
-            description="No provider is connected for this module, so nothing is being observed. Connect one to activate it."
+            title={guidance.title}
+            description={guidance.body}
+            action={guidance.action}
           />
         </Frame>
       );
     case "pending":
       return (
-        <Frame title={title} action={action} className={className}>
+        <Frame title={title} blurb={blurb} action={action} className={className}>
           <PendingState
-            title={`Waiting for the first ${title.toLowerCase()} check`}
-            description="This module is configured, but no observation has arrived yet."
+            title="Connected — waiting for the first check"
+            description="This module is wired up, but no observation has arrived yet. Check back soon."
           />
         </Frame>
       );
     case "error":
       return (
-        <Frame title={title} action={action} className={className}>
+        <Frame title={title} blurb={blurb} action={action} className={className}>
           <ErrorState error={module.error} />
         </Frame>
       );
     case "forbidden":
       return (
-        <Frame title={title} action={action} className={className}>
+        <Frame title={title} blurb={blurb} action={action} className={className}>
           <PermissionState />
         </Frame>
       );

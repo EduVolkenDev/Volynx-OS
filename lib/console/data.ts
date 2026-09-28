@@ -60,15 +60,106 @@ export const DEMO_CONTEXTS: TenantContext[] = [
   { client: "volynx", product: "volynx-os", env: "staging" },
 ];
 
+/**
+ * Plain-language guide per module: what it watches, why it matters, and what
+ * to do when it's empty. Written for a brand-new employee, not an SRE.
+ */
+export const MODULE_GUIDE: Record<
+  string,
+  { blurb: string; guidance: { title: string; body: string } }
+> = {
+  health: {
+    blurb: "Is the product alive? Watches the app, database and storage — and says so in plain words.",
+    guidance: {
+      title: "No health checks yet",
+      body: "Connect a monitoring source and this module will tell you whether each part of your product is working. Until then we show nothing rather than guess — unknown is not operational.",
+    },
+  },
+  domain: {
+    blurb: "Can customers reach you? Tracks your domain, DNS and certificate expiry.",
+    guidance: {
+      title: "No domain connected",
+      body: "Point a domain at this product and we'll watch it for you: DNS resolving, certificate valid, CDN in front. One glance tells you if the front door is open.",
+    },
+  },
+  deployments: {
+    blurb: "What shipped, when, and whether it worked. Every release, with its story.",
+    guidance: {
+      title: "No deployment source",
+      body: "Connect your repository or hosting provider and every release appears here — what changed, who shipped it, and whether it succeeded. Failed deploys show their reason, never silently.",
+    },
+  },
+  backups: {
+    blurb: "If everything broke tomorrow, could you come back? That's what this answers.",
+    guidance: {
+      title: "Backup capability unknown",
+      body: "Tell us where backups live and how long they're kept. We track the last successful backup and whether a restore is actually possible. We never assume your git history counts as a backup.",
+    },
+  },
+  security: {
+    blurb: "Are the doors locked? Every protection claim shown with its evidence.",
+    guidance: {
+      title: "No security evidence yet",
+      body: "HTTPS, WAF and DDoS protection appear here only when we can show you the technical evidence behind each claim. No evidence, no badge — that's the rule.",
+    },
+  },
+  care: {
+    blurb: "Who keeps this product healthy day to day — and what they're responsible for.",
+    guidance: {
+      title: "No care plan attached",
+      body: "Attach a care plan to see what's covered: preventive maintenance, fixes, support channel and response times. Your product's safety net, spelled out.",
+    },
+  },
+  incidents: {
+    blurb: "When something breaks, this is the timeline. What happened, what's being done.",
+    guidance: {
+      title: "No incident tracking yet",
+      body: "Active incidents and their full lifecycle — detected, investigating, mitigating, resolved — appear here once monitoring is connected. No news is not good news; it's unknown news.",
+    },
+  },
+  products: {
+    blurb: "Every product under this client, with its identity and status.",
+    guidance: {
+      title: "No products registered",
+      body: "Products appear here once they're registered in the platform, each with its immutable Volynx ID.",
+    },
+  },
+  resources: {
+    blurb: "Every service this product runs on — databases, storage, repos and secrets.",
+    guidance: {
+      title: "No providers connected",
+      body: "Cloudflare, database and storage providers appear here once connected — with the resources each one manages.",
+    },
+  },
+  support: {
+    blurb: "Talk to the humans who keep your product alive.",
+    guidance: {
+      title: "Support isn't wired up yet",
+      body: "Past requests and their status will live here once the ticketing integration exists.",
+    },
+  },
+};
+
 export function getOverview(ctx: TenantContext): OverviewSnapshot {
-  const modules: OverviewSnapshot["modules"] = [
-    { key: "health", name: "Health", href: contextPath(ctx, "monitoring"), module: notConfigured<Observation>() },
-    { key: "domain", name: "Domain & SSL", href: contextPath(ctx, "infrastructure"), module: notConfigured<Observation>() },
-    { key: "deployments", name: "Deployments", href: contextPath(ctx, "deployments"), module: notConfigured<Observation>() },
-    { key: "backups", name: "Backups", href: contextPath(ctx, "backups"), module: notConfigured<Observation>() },
-    { key: "security", name: "Security", href: contextPath(ctx, "security"), module: notConfigured<Observation>() },
-    { key: "care", name: "Care", href: contextPath(ctx, "care"), module: notConfigured<Observation>() },
+  const defs = [
+    { key: "health", name: "Health", section: "monitoring" },
+    { key: "domain", name: "Domain & SSL", section: "infrastructure" },
+    { key: "deployments", name: "Deployments", section: "deployments" },
+    { key: "backups", name: "Backups", section: "backups" },
+    { key: "security", name: "Security", section: "security" },
+    { key: "care", name: "Care", section: "care" },
   ];
+  const modules: OverviewSnapshot["modules"] = defs.map((d) => ({
+    key: d.key,
+    name: d.name,
+    href: contextPath(ctx, d.section),
+    blurb: MODULE_GUIDE[d.key].blurb,
+    guidance: {
+      ...MODULE_GUIDE[d.key].guidance,
+      action: { label: `Open ${d.name}`, href: contextPath(ctx, d.section) },
+    },
+    module: notConfigured<Observation>(),
+  }));
   const pending = modules.filter((m) => m.module.state === "not_configured").length;
   return {
     identity: {

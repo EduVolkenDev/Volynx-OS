@@ -26,8 +26,14 @@ function SidebarNav({ ctx, activeSection }: { ctx: TenantContext; activeSection:
         const href = contextPath(ctx, s.slug);
         const active = activeSection === s.slug;
         return (
-          <NavLink key={s.slug || "overview"} href={href} active={active}>
-            <Icon className="h-4 w-4 shrink-0" aria-hidden />
+          <NavLink key={s.slug || "overview"} href={href} active={active} className="relative">
+            {active ? (
+              <span
+                className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-[#e3b85c]"
+                aria-hidden
+              />
+            ) : null}
+            <Icon className={cn("h-4 w-4 shrink-0", active ? "text-[#e3b85c]" : "")} aria-hidden />
             {s.name}
           </NavLink>
         );
@@ -45,23 +51,23 @@ export function ConsoleShell({ ctx, activeSection, children }: { ctx: TenantCont
   return (
     <div className="console-root min-h-screen bg-[#070807] text-zinc-100">
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 hidden w-[264px] flex-col border-r border-white/10 bg-black/40 px-4 py-5 lg:flex">
-        <Link href="/console" className="flex items-center gap-2.5 px-1">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.05]">
-            <Cloud className="h-4 w-4 text-zinc-200" aria-hidden />
+      <aside className="fixed inset-y-0 left-0 hidden w-[272px] flex-col border-r border-white/[0.07] bg-black/50 px-4 py-6 lg:flex">
+        <Link href="/console" className="flex items-center gap-3 px-1">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#e3b85c]/30 bg-[#e3b85c]/10">
+            <Cloud className="h-4 w-4 text-[#e3b85c]" aria-hidden />
           </span>
           <span className="leading-tight">
-            <span className="block text-[13px] font-semibold tracking-[0.08em] text-white">VOLYNX CLOUD</span>
-            <span className="block text-[10px] uppercase tracking-[0.2em] text-zinc-500">Console</span>
+            <span className="block text-[13px] font-semibold tracking-[0.1em] text-white">VOLYNX CLOUD</span>
+            <span className="block text-[10px] uppercase tracking-[0.28em] text-[#e3b85c]/80">Console</span>
           </span>
         </Link>
-        <div className="mt-6">
+        <div className="mt-7">
           <ContextSwitcher ctx={ctx} />
         </div>
-        <div className="mt-6 flex-1 overflow-y-auto">
+        <div className="console-scroll mt-7 flex-1 overflow-y-auto">
           <SidebarNav ctx={ctx} activeSection={activeSection} />
         </div>
-        <div className="space-y-3 border-t border-white/[0.07] pt-4">
+        <div className="space-y-3 border-t border-white/[0.07] pt-5">
           <RoleBadge />
           <p className="px-1 text-[11px] leading-5 text-zinc-600">
             Data sources pending.
@@ -86,7 +92,7 @@ export function ConsoleShell({ ctx, activeSection, children }: { ctx: TenantCont
       </header>
 
       {/* Main */}
-      <main className="px-4 pb-28 pt-6 md:px-8 lg:pb-12 lg:pl-[264px] lg:pt-8">
+      <main className="px-4 pb-28 pt-6 md:px-8 lg:pb-12 lg:pl-[272px] lg:pt-8">
         <div className="mx-auto w-full max-w-6xl">{children}</div>
       </main>
 
@@ -107,7 +113,7 @@ export function ConsoleShell({ ctx, activeSection, children }: { ctx: TenantCont
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium",
-                  active ? "text-white" : "text-zinc-500"
+                  active ? "text-[#e3b85c]" : "text-zinc-500"
                 )}
               >
                 <Icon className="h-5 w-5" aria-hidden />

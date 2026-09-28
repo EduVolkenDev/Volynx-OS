@@ -97,6 +97,8 @@ export type OverviewSnapshot = {
     key: string;
     name: string;
     href: string;
+    blurb: string;
+    guidance: { title: string; body: string; action?: { label: string; href: string } };
     module: ModuleState<Observation>;
   }>;
   attention: string[];

@@ -88,8 +88,10 @@ export function NavLink({ href, active, children, className }: { href: string; a
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition",
-        active ? "bg-white/[0.07] text-white" : "text-zinc-400 hover:bg-white/[0.04] hover:text-zinc-200",
+        "flex items-center gap-2.5 rounded-lg px-3 py-2 pl-4 text-[13px] font-medium transition",
+        active
+          ? "bg-[#e3b85c]/[0.08] text-white"
+          : "text-zinc-400 hover:bg-white/[0.04] hover:text-zinc-200",
         className
       )}
     >
